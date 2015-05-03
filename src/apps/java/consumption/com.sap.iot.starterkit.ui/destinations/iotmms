@@ -1,0 +1,8 @@
+Description=IoT MMS
+Type=HTTP
+Authentication=BasicAuthentication
+Name=iotmms
+CloudConnectorVersion=2
+ProxyType=Internet
+URL=https\://iotmms%account_id%.hanatrial.ondemand.com/com.sap.iotservices.mms/v1/api/http/push
+User=%user_id%

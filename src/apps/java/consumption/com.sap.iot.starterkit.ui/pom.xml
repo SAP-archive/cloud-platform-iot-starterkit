@@ -1,0 +1,60 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.sap.iot</groupId>
+	<artifactId>com.sap.iot.starterkit.ui</artifactId>
+	<version>1.0.0</version>
+	<packaging>war</packaging>
+
+	<description>A sample Java application showing IoT consumption and push capabilities.</description>
+	<licenses>
+		<license>
+			<name>SAP DEVELOPER LICENSE AGREEMENT</name>
+			<url>https://tools.hana.ondemand.com/developer-license-3.1.txt</url>
+		</license>
+	</licenses>
+
+	<properties>
+		<!-- Use 'neo-java-web-api' for Java Web and Java Web Tomcat 7 HCP SDKs -->
+		<!-- Use 'neo-javaee6-wp-api' for Java EE 6 Web Profile HCP SDK -->
+		<sap.cloud.sdk.name>neo-java-web-api</sap.cloud.sdk.name>
+		<!-- Specified the dedicated version or leave RELEASE so the latest available 
+			version is used. -->
+		<sap.cloud.sdk.version>RELEASE</sap.cloud.sdk.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.sap.cloud</groupId>
+			<artifactId>${sap.cloud.sdk.name}</artifactId>
+			<version>${sap.cloud.sdk.version}</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+						<manifestEntries>
+							<Web-ContextPath>/${project.artifactId}</Web-ContextPath>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

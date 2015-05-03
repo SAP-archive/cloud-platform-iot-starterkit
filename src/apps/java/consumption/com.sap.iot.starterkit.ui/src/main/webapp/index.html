@@ -1,0 +1,353 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+<meta charset="UTF-8" />
+<meta name="google" content="notranslate" />
+
+<link rel='shortcut icon' href='http://www.sap.com/favicon.ico' />
+
+<title>Internet of Things Services - Starter Kit Consumption
+	Interface (BETA)</title>
+
+<style type="text/css">
+.customPageSubHeaderLabel {
+	margin-left: 3em !important;
+}
+</style>
+
+<script type="text/javascript">
+	// Attach an error handler to show the error page, if UI5 bootstrap fails
+	window.onerror = function() {
+		window.location = "error.html";
+	}
+</script>
+
+<script id="sap-ui-bootstrap" type="text/javascript"
+	src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js"
+	data-sap-ui-theme="sap_bluecrystal" data-sap-ui-libs="sap.m,sap.viz"
+	data-sap-ui-language="en"></script>
+
+<script>
+	// Detach an error handler after UI5 bootstrap is done
+	window.onerror = undefined;
+</script>
+
+<script type="text/javascript">
+	function getData() {
+		var oPage = sap.ui.getCore().byId("iotpage");
+		var oSettings = oPage.getModel("settings").getData();
+		// force Device Type ID conversion to UPPER case so it matches the table name convention
+		var sDeviceTypeId = oSettings.deviceTypeId.toUpperCase();
+		var sUrl = "data".concat("/", sDeviceTypeId).concat("/",
+				oSettings.fromDeviceMessageTypeId);
+		jQuery
+				.ajax({
+					type : "GET",
+					dataType : "json",
+					url : sUrl,
+					error : function(jqXHR, textStatus, errorThrown) {
+						var sMessage = jqXHR.status + " " + jqXHR.statusText
+								+ " " + jqXHR.responseText;
+						jQuery.sap.log.error("getData()", sMessage,
+								"index.html");
+						sap.m.MessageToast.show(sMessage);
+					},
+					success : function(oData, textStatus, jqXHR) {
+						if (oData === null || oData === undefined) {
+							var sMessage = "WARNING. Received a null or undefined response object.";
+							jQuery.sap.log.warning("getData()", sMessage,
+									"index.html");
+							sap.m.MessageToast.show(sMessage);
+							return;
+						}
+						oData = oData.slice(0, 10);
+						oData = oData.reverse();
+						oPage.getModel("sensor").setData(oData);
+					}
+				});
+	}
+
+	function pushData(oData) {
+		var oPage = sap.ui.getCore().byId("iotpage");
+		var oSettings = oPage.getModel("settings").getData();
+		var sUrl = "data".concat("/", oSettings.deviceId);
+		oData.messageType = oSettings.toDeviceMessageTypeId;
+		jQuery
+				.ajax({
+					type : "POST",
+					contentType : "application/json",
+					data : JSON.stringify(oData),
+					url : sUrl,
+					error : function(jqXHR, textStatus, errorThrown) {
+						var sMessage = jqXHR.status + " " + jqXHR.statusText
+								+ " " + jqXHR.responseText;
+						jQuery.sap.log.error("pushData()", sMessage,
+								"index.html");
+						sap.m.MessageToast.show(sMessage);
+					},
+					success : function(oData, textStatus, jqXHR) {
+						if (oData === null || oData === undefined) {
+							var sMessage = "WARNING. Received a null or undefined response object.";
+							jQuery.sap.log.warning("pushData()", sMessage,
+									"index.html");
+							sap.m.MessageToast.show(sMessage);
+							return;
+						}
+						var sMessage = oData.msg;
+						jQuery.sap.log.info("pushData()", sMessage,
+								"index.html");
+						sap.m.MessageToast.show(sMessage);
+					}
+				});
+	}
+
+	function sendMessage(sMessage) {
+		var oData = {
+			"method" : "http",
+			"sender" : "My IoT application",
+			"messageType" : "",
+			"messages" : [ {
+				"opcode" : "display",
+				"operand" : sMessage
+			} ]
+		};
+		pushData(oData);
+	}
+
+	function switchLED(bState) {
+		var operand = bState == true ? "1" : "0";
+		var oData = {
+			"method" : "http",
+			"sender" : "My IoT application",
+			"messageType" : "",
+			"messages" : [ {
+				"opcode" : "led",
+				"operand" : operand
+			} ]
+		};
+		pushData(oData);
+	}
+
+	function createList() {
+		return new sap.m.List({
+			inset : true,
+			headerToolbar : new sap.m.Toolbar({
+				content : [ new sap.m.Label({
+					text : "Data to be sent to the device"
+				}) ]
+			}),
+			items : [ new sap.m.InputListItem({
+				label : "Switch LED State",
+				content : new sap.m.Switch({
+					change : function(oEvent) {
+						var bState = oEvent.getParameter("state");
+						switchLED(bState);
+					}
+				})
+			}), new sap.m.InputListItem({
+				label : "Send message",
+				content : new sap.m.FlexBox({
+					direction : sap.m.FlexDirection.Row,
+					displayInline : true,
+					items : [ new sap.m.Input("iotinput", {
+						valueState : sap.ui.core.ValueState.Success,
+						width : "500px"
+					}), new sap.m.Button({
+						text : "Send",
+						type : sap.m.ButtonType.Accept,
+						press : function(oEvent) {
+							var oInput = sap.ui.getCore().byId("iotinput");
+							var sValue = oInput.getValue();
+							sendMessage(sValue);
+						}
+					}) ]
+				})
+			}) ]
+		});
+	}
+
+	function calculateChartHeight() {
+		var pageHeaderHeight = 48;
+		var pageSubHeaderHeight = 48;
+		var listHeight = 208;
+		var staticHeight = pageHeaderHeight + pageSubHeaderHeight + listHeight;
+		var windowHeight = $(window).height();
+		return (windowHeight - staticHeight) + "px";
+	}
+
+	function createDimensionFeed() {
+		return new sap.viz.ui5.controls.common.feeds.FeedItem({
+			"uid" : "axisLabels",
+			"type" : "Dimension",
+			"values" : [ "Timestamp" ]
+		});
+	}
+
+	function createMeasureFeed() {
+		return new sap.viz.ui5.controls.common.feeds.FeedItem({
+			"uid" : "primaryValues",
+			"type" : "Measure",
+			"values" : [ "Slider Value" ]
+		});
+	}
+
+	function createDataSet() {
+		return new sap.viz.ui5.data.FlattenedDataset({
+			dimensions : [ {
+				name : "Timestamp",
+				value : "{sensor>G_CREATED}"
+			} ],
+			measures : [ {
+				name : "Slider Value",
+				value : "{sensor>C_VALUE}"
+			} ],
+			data : {
+				path : "sensor>/"
+			}
+		});
+	}
+
+	function createVizFrame() {
+		var sHeight = calculateChartHeight();
+		var oVizFrame = new sap.viz.ui5.controls.VizFrame({
+			width : "100%",
+			height : sHeight,
+			vizType : "line",
+			vizProperties : {
+				plotArea : {
+					dataLabel : {
+						visible : false
+					}
+				},
+				legend : {
+					visible : false
+				},
+				title : {
+					visible : false
+				},
+				categoryAxis : {
+					title : {
+						visible : false
+					}
+				}
+			},
+			xAxis : {
+				title : {
+					visible : false
+				}
+			},
+			yAxis : new sap.viz.ui5.types.Axis({
+				scale : new sap.viz.ui5.types.Axis_scale({
+					fixedRange : true,
+					minValue : 0,
+					maxValue : 100
+				})
+			}),
+			dataset : createDataSet()
+		});
+		oVizFrame.addFeed(createDimensionFeed());
+		oVizFrame.addFeed(createMeasureFeed());
+		$(window).resize(function() {
+			var sHeight = calculateChartHeight();
+			oVizFrame.setHeight(sHeight);
+		});
+		return oVizFrame;
+	}
+
+	function createSettings() {
+		return new sap.m.Page({
+			title : "Settings",
+			backgroundDesign : sap.m.PageBackgroundDesign.List,
+			content : new sap.m.List({
+				items : [ new sap.m.InputListItem({
+					label : "Device ID",
+					content : new sap.m.Input({
+						value : "{settings>/deviceId}"
+					})
+				}), new sap.m.InputListItem({
+					label : "Device Type ID",
+					content : new sap.m.Input({
+						value : "{settings>/deviceTypeId}"
+					})
+				}), new sap.m.InputListItem({
+					label : "Message Type ID (From Device)",
+					content : new sap.m.Input({
+						value : "{settings>/fromDeviceMessageTypeId}"
+					})
+				}), new sap.m.InputListItem({
+					label : "Message Type ID (To Device)",
+					content : new sap.m.Input({
+						value : "{settings>/toDeviceMessageTypeId}"
+					})
+				}) ]
+			})
+		});
+	}
+
+	function createResponsivePopover() {
+		return new sap.m.ResponsivePopover("iotpopover", {
+			showHeader : false,
+			contentWidth : "542px",
+			contentHeight : "242px",
+			placement : sap.m.PlacementType.Bottom,
+			content : createSettings()
+		});
+	}
+
+	function createPage() {
+		var oLabel = new sap.m.Label({
+			text : "Data received from the device"
+		});
+		oLabel.addStyleClass("customPageSubHeaderLabel");
+		var oPage = new sap.m.Page(
+				"iotpage",
+				{
+					title : "Internet of Things Services - Starter Kit Consumption Interface (BETA)",
+					headerContent : new sap.m.Button({
+						icon : "sap-icon://settings",
+						press : function(oEvent) {
+							var oPopover = sap.ui.getCore().byId("iotpopover");
+							if (!oPopover.isOpen()) {
+								oPopover.openBy(oEvent.getSource());
+							} else {
+								oPopover.close();
+							}
+						}
+					}),
+					subHeader : new sap.m.Toolbar({
+						content : [ oLabel ]
+					}),
+					content : [ createVizFrame(), createList() ]
+				});
+		oPage.setModel(new sap.ui.model.json.JSONModel(), "sensor");
+		var oSettingsModel = new sap.ui.model.json.JSONModel();
+		oSettingsModel.setData({
+			"deviceId" : "1",
+			"deviceTypeId" : "2",
+			"fromDeviceMessageTypeId" : "1",
+			"toDeviceMessageTypeId" : "2",
+		});
+		oPage.setModel(oSettingsModel, "settings");
+		oPage.addDependent(createResponsivePopover());
+		return oPage;
+	}
+
+	sap.ui.getCore().attachInit(function() {
+		var oShell = sap.m.Shell({
+			app : createPage()
+		});
+		oShell.placeAt("content");
+		setInterval(function() {
+			getData();
+		}, 2000);
+	});
+</script>
+
+</head>
+<body class="sapUiBody">
+	<div id="content"></div>
+</body>
+</html>
