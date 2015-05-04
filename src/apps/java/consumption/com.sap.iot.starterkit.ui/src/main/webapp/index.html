@@ -63,9 +63,10 @@
 							sap.m.MessageToast.show(sMessage);
 							return;
 						}
-						oData = oData.slice(0, 10);
+						oData = oData.slice(0, 500);
 						oData = oData.reverse();
 						oPage.getModel("sensor").setData(oData);
+						oPage.getModel("sensor").updateBindings(false);
 					}
 				});
 	}

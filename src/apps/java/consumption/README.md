@@ -39,7 +39,7 @@ IoT Services Cockpit as shown below.
 
 ![UI .war file deployment](../../../../images/ui_war_file_deployment.png?raw=true "UI .war file deployment")
 
-* Select the application and go to ```Destinations > Import from file``` to correctly route requests from your User Interface to the ```iotmms``` application providing the MMS Services
+* Select the application and go to ```Destinations > Import from file``` (use the provided file [iotmms](./com.sap.iot.starterkit.ui/destinations/iotmms) in the ```com.sap.iot.starterkit.ui/destinations``` folder) to correctly route requests from your User Interface to the ```iotmms``` application providing the MMS Services
 
 ![Destination configuration](../../../../images/destination_configuration_01.png?raw=true "Destination configuration")
 

@@ -5,9 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
-import java.net.Proxy;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -442,12 +440,9 @@ extends HttpServlet {
 	 */
 	private HttpURLConnection openURLConnection(URL url)
 	throws IOException {
-		String proxyHost = System.getProperty("http.proxyHost");
-		int proxyPort = Integer.parseInt(System.getProperty("http.proxyPort"));
-		Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
 		HttpURLConnection urlConnection = null;
 		try {
-			urlConnection = (HttpURLConnection) url.openConnection(proxy);
+			urlConnection = (HttpURLConnection) url.openConnection();
 		}
 		catch (IOException e) {
 			throw new IOException("Failed to open a HTTP URL connection to the destination.", e);
