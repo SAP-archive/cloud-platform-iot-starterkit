@@ -53,10 +53,25 @@ Before you can use the services you have to enable them in your HANA Cloud Platf
 
 ![HCP Cockpit - IoT Service Entry](images/cockpit_entry.png)
 
- * Deploying Message Management Service (MMS) - this step needs to be done from the ```Install Message Management Service``` tile in the IoT Services Cockpit and deploys/starts the Message Management Service that takes care of receiving data from IoT Devices and sending to these. Once MMS is deployed it appears as iotmms Java application in your HCP Cockpit.
+ * Deploy the Message Management Service (MMS) - this step needs to be done from the ```Install Message Management Service``` tile in the IoT Services Cockpit and deploys/starts the Message Management Service that takes care of receiving data from IoT Devices and sending to these. 
+<br />
+<br />
+![IoT Services Cockpit](images/iot_cockpit.png)
 
-![IoT Cockpit](images/iot_cockpit.png)
+ * Assign the Role IoT-MMS-User for the newly deployed ```iotmms``` Java Application (otherwise you will be denied access to the ```iotmms``` Application URL with an HTTP Status 403 Error) - to do so: Go to the Java Applications tab in your SAP HANA Cloud Platform cockpit of your account; Choose the ```iotmms``` application; Choose the Roles tab of the Application details.
+<br />
+<br />
+![Role assignment for MMS](images/mms_role_assignment_01.png)
 
+ * Assign the Role IoT-MMS-User to your user.
+<br />
+<br />
+![Role assignment for MMS](images/mms_role_assignment_02.png)
+
+ * Once MMS is deployed and you have correctly done the role assignment you can click on the ```iotmms``` Java application URL in your HCP Cockpit and get to the MMS Cockpit as shown below. It provides access to the MMS API as well as a "Display stored messages" tile for the access to data received from IoT Devices.
+<br />
+<br />
+![MMS Cockpit](images/mms_dashboard.png?raw=true "MMS Cockpit")
 
 ### Create Device Information in Internet of Things Services Cockpit
 
@@ -186,7 +201,7 @@ With the usage of
 - a program to send messages to the simulated device and switch its LED on or off that you start with ```python iot_starterkit_push_ui.py``` and that produces the User Interface shown below
 
 ![Push UI](images/push_ui.jpg?raw=true "Push UI")
-- the "Display stored messages" tile functionality in the MMS dashboard as a simple way to show the values that are received from the simulated device 
+- the "Display stored messages" tile functionality in the MMS Cockpit as a simple way to show the values that are received from the simulated device 
 
 ![MMS Consumption Example](images/mms_consumption_01.png?raw=true "MMS Consumption Example")
 
@@ -215,9 +230,9 @@ Basic Consumption and User Interface alternatives
 In addition to interacting with the HCP IoT Services via their network service
 API there are various alternatives to consume the data that attached IoT
 devices produce. A basic graphical interface for doing so exists with the MMS
-dashboard.
+Cockpit.
 
-![MMS Dashboard](images/mms_dashboard.png?raw=true "MMS Dashboard")
+![MMS Cockpit](images/mms_dashboard.png?raw=true "MMS Cockpit")
 
 As shown in the following screenshot it lists the interfaces exposed by MMS and lets you interact via built-in sample clients.
 
