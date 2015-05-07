@@ -102,7 +102,7 @@ def build_and_start_ui():
 try:
 	urllib3.disable_warnings()
 except:
-	print('urllib3.disable_warnings() failed - get a recent enough urllib3 version to avoid potential InsecureRequestWarning warnings! Can and will continue though.')
+	print("urllib3.disable_warnings() failed - get a recent enough urllib3 version to avoid potential InsecureRequestWarning warnings! Can and will continue though.")
 
 # use with or without proxy
 if (config.proxy_url == ''):

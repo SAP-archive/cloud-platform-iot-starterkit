@@ -51,28 +51,36 @@ def poll_from_hcp():
 	# print(r.data)
 	json_string='{"all_messages":'+(r.data).decode("utf-8")+'}'
 	# print(json_string)
-	json_string_parsed=json.loads(json_string)
-	# take care: if multiple messages arrive in 1 payload - their order is last in / first out - so we need to traverse in reverese order
-	for single_message in reversed(json_string_parsed["all_messages"]):
-		# print(single_message)
-		payload=single_message["messages"][0]
-		opcode=payload["opcode"]
-		operand=payload["operand"]
-		# print(opcode)
-		# print(operand)
-		# now do things depending on the opcode
-		if (opcode == "display"):
-			t1.config(state=NORMAL)
-			t1.delete(1.0, END)
-			t1.insert(END, operand)
-			t1.config(state=DISABLED)
-		if (opcode == "led"):
-			f4_cb1.config(state=NORMAL)
-			if (operand == "0"):
-                		f4_cb1.deselect()
-			if (operand == "1"):
-                		f4_cb1.select()
-			f4_cb1.config(state=DISABLED)
+	try:
+		json_string_parsed=json.loads(json_string)
+		# print(json_string_parsed)
+		# take care: if multiple messages arrive in 1 payload - their order is last in / first out - so we need to traverse in reverese order
+		try:
+			messages_reversed=reversed(json_string_parsed["all_messages"])
+			for single_message in messages_reversed:
+				# print(single_message)
+				payload=single_message["messages"][0]
+				opcode=payload["opcode"]
+				operand=payload["operand"]
+				# print(opcode)
+				# print(operand)
+				# now do things depending on the opcode
+				if (opcode == "display"):
+					t1.config(state=NORMAL)
+					t1.delete(1.0, END)
+					t1.insert(END, operand)
+					t1.config(state=DISABLED)
+				if (opcode == "led"):
+					f4_cb1.config(state=NORMAL)
+					if (operand == "0"):
+		                		f4_cb1.deselect()
+					if (operand == "1"):
+		                		f4_cb1.select()
+					f4_cb1.config(state=DISABLED)
+		except TypeError:
+			print("Problem decoding the message " + (r.data).decode("utf-8") + " retrieved with poll_from_hcp()! Can and will continue though.")
+	except ValueError:
+		print("Problem decoding the message " + (r.data).decode("utf-8") + " retrieved with poll_from_hcp()! Can and will continue though.")
 		
 def handle_slider(event):
 	global do_send
@@ -181,7 +189,7 @@ def build_and_start_ui_with_timers():
 try:
 	urllib3.disable_warnings()
 except:
-	print('urllib3.disable_warnings() failed - get a recent enough urllib3 version to avoid potential InsecureRequestWarning warnings! Can and will continue though.')
+	print("urllib3.disable_warnings() failed - get a recent enough urllib3 version to avoid potential InsecureRequestWarning warnings! Can and will continue though.")
 
 # use with or without proxy
 if (config.proxy_url == ''):
