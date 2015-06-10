@@ -4,8 +4,8 @@ try:
 except ImportError:
 	print("Please copy template-config.py to config.py and configure appropriately !"); exit();
 
-# print_communication_status_codes=1
-print_communication_status_codes=0
+# debug_communication=1
+debug_communication=0
 
 import urllib3
 import time
@@ -24,17 +24,17 @@ def send_to_hcp(http, url, headers, value):
 	body='{"mode":"async", "messageType":"' + str(config.message_type_id_From_device) + '", "messages":[{"sensor":"slider_device", "value":"' + str(value) + '", "timestamp":' + str(timestamp) + '}]}'
 	# print(body)
 	r = http.urlopen('POST', url, body=body, headers=headers)
-	if (print_communication_status_codes == 1):
+	if (debug_communication == 1):
 		print("send_to_hcp():" + str(r.status))
-	# print(r.data)
+		print(r.data)
 
 def poll_from_hcp(http, url, headers):
 	global msg_string
 
 	r = http.urlopen('GET', url, headers=headers)
-	if (print_communication_status_codes == 1):
+	if (debug_communication == 1):
 		print("poll_from_hcp():" + str(r.status))
-	# print(r.data)
+		print(r.data)
 	json_string='{"all_messages":'+(r.data).decode("utf-8")+'}'
 	# print(json_string)
 

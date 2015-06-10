@@ -5,8 +5,8 @@ except ImportError:
 	print("Please copy template-config.py to config.py and configure appropriately !"); exit();
 
 # this can be used to activate debugging
-# print_communication_status_codes=1
-print_communication_status_codes=0
+# debug_communication=1
+debug_communication=0
 
 try:
     # for Python2
@@ -20,7 +20,7 @@ import time
 import urllib3
 
 def send_to_hcp():
-	global print_communication_status_codes
+	global debug_communication
 	global http
 	global url
 	global headers
@@ -32,12 +32,12 @@ def send_to_hcp():
 	body='{"mode":"async", "messageType":"' + str(config.message_type_id_From_device) + '", "messages":[{"sensor":"slider_desktop", "value":"' + str(s1.get()) + '", "timestamp":' + str(timestamp) + '}]}'
 	# print(body)
 	r = http.urlopen('POST', url, body=body, headers=headers)
-	if (print_communication_status_codes == 1):
+	if (debug_communication == 1):
 		print("send_to_hcp():" + str(r.status))
-	# print(r.data)
+		print(r.data)
 
 def poll_from_hcp():
-	global print_communication_status_codes
+	global debug_communication
 	global http
 	global url
 	global headers
@@ -46,9 +46,9 @@ def poll_from_hcp():
 	global f4_cb1
 
 	r = http.urlopen('GET', url, headers=headers)
-	if (print_communication_status_codes == 1):
+	if (debug_communication == 1):
 		print("poll_from_hcp():" + str(r.status))
-	# print(r.data)
+		print(r.data)
 	json_string='{"all_messages":'+(r.data).decode("utf-8")+'}'
 	# print(json_string)
 	try:

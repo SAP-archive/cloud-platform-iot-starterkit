@@ -5,8 +5,8 @@ except ImportError:
 	print("Please copy template-config.py to config.py and configure appropriately !"); exit();
 
 # this can be used to activate debugging
-# print_communication_status_codes=1
-print_communication_status_codes=0
+# debug_communication=1
+debug_communication=0
 
 try:
     # for Python2
@@ -18,7 +18,7 @@ except ImportError:
 import urllib3
 
 def send_to_hcp(opcode, operand):
-	global print_communication_status_codes
+	global debug_communication
 	global http
 	global push_url
 	global headers
@@ -29,9 +29,9 @@ def send_to_hcp(opcode, operand):
 	body='{"method":"http", "sender":"Push test UI", "messageType":"' + str(config.message_type_id_To_device) + '", "messages":[{"opcode":"' + opcode + '", "operand":"' + operand + '"}]}'
 	# print(body)
 	r = http.urlopen('POST', push_url, body=body, headers=headers)
-	if (print_communication_status_codes == 1):
+	if (debug_communication == 1):
 		print("send_to_hcp():" + str(r.status))
-	# print(r.data)
+		print(r.data)
 
 def handle_checkbutton():
 	global cb_value
