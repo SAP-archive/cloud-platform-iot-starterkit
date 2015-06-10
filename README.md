@@ -55,9 +55,9 @@ Before you can use the services you have to enable them in your HANA Cloud Platf
 
 ### Deploy the Message Management Service (MMS) 
 
-The deployment of the Message Management Service (MMS) step needs to be done from the ```Install Message Management Service``` tile in the IoT Services Cockpit and deploys/starts the Message Management Service that takes care of receiving data from IoT Devices and sending to these. 
+The deployment of the Message Management Service (MMS) step needs to be done from the ```Deploy Message Management Service``` tile in the IoT Services Cockpit and deploys/starts the Message Management Service that takes care of receiving data from IoT Devices and sending to these. 
 
-![IoT Services Cockpit](images/iot_cockpit.png)
+![IoT Services Cockpit](images/iot_cockpit_v11.png)
 
 Then assign the Role IoT-MMS-User for the newly deployed ```iotmms``` Java Application (otherwise you will be denied access to the ```iotmms``` Application URL with an HTTP Status 403 Error). To do so: 
 * Go to the Java Applications tab in your SAP HANA Cloud Platform cockpit of your account
@@ -88,7 +88,7 @@ Authentication Configuration for the Push service you can click on the
 Cockpit as shown below. It provides access to the MMS API as well as a "Display
 stored messages" tile for the access to data received from IoT Devices.
 
-![MMS Cockpit](images/mms_dashboard.png?raw=true "MMS Cockpit")
+![MMS Cockpit](images/mms_dashboard_v11.png?raw=true "MMS Cockpit")
 
 ### Create Device Information in Internet of Things Services Cockpit
 
@@ -169,7 +169,7 @@ Further information: [`Internet of Things Services`](https://help.hana.ondemand.
 * Final result
  * You should now have created at least 1 Device Type with 2 associated Message Types and 1 Device instance.
 
-![IoT Cockpit - Example Configuration](images/iot_cockpit_final.png?raw=true "IoT Cockpit - Example Configuration")
+![IoT Cockpit - Example Configuration](images/iot_cockpit_final_v11.png?raw=true "IoT Cockpit - Example Configuration")
 
 
 ### Authentication mechanisms
@@ -249,7 +249,7 @@ API there are various alternatives to consume the data that attached IoT
 devices produce. A basic graphical interface for doing so exists with the MMS
 Cockpit.
 
-![MMS Cockpit](images/mms_dashboard.png?raw=true "MMS Cockpit")
+![MMS Cockpit](images/mms_dashboard_v11.png?raw=true "MMS Cockpit")
 
 As shown in the following screenshot it lists the interfaces exposed by MMS and lets you interact via built-in sample clients.
 
