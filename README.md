@@ -1,4 +1,4 @@
-Starter Kit for the SAP HANA Cloud Platform Internet of Things (IoT) Services
+Starter Kit for the SAP HANA Cloud Platform Internet of Things (IoT) Services some text
 =============================================================================
 
 A Starter Kit for working with the
