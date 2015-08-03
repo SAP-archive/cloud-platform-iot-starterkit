@@ -1,0 +1,3 @@
+service {
+	"NEO_<schema_id>"."T_IOT_<message_type_id>" key generate local "GEN_ID";
+}

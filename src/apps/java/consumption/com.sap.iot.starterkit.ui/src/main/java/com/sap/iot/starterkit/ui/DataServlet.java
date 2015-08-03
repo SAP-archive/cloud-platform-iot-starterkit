@@ -1,5 +1,6 @@
 package com.sap.iot.starterkit.ui;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,6 +16,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -23,6 +25,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sap.core.connectivity.api.configuration.ConnectivityConfiguration;
 import com.sap.core.connectivity.api.configuration.DestinationConfiguration;
@@ -40,17 +45,34 @@ extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * Logging API.
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(DataServlet.class);
+
+	/**
+	 * Key values for the expected path parameters.
+	 */
+	private static final String KEY_DEVICE_ID = "deviceId";
+	private static final String KEY_DEVICE_TYPE_ID = "deviceTypeId";
+	private static final String KEY_MESSAGE_TYPE_ID = "messageTypeId";
+
+	/**
 	 * A factory for connections to the physical data source.
 	 */
 	private DataSource dataSource;
 
 	/**
-	 * A configuration for data communication via HTTP destination.
+	 * A configuration for data communication via HTTP destination with IoT MMS.
 	 */
-	private DestinationConfiguration destinationConfiguration;
+	private DestinationConfiguration destinationConfigurationMMS;
 
 	/**
-	 * Initialized the Java Servlet.
+	 * A configuration for data communication via HTTP destination with IoT RDMS.
+	 */
+	private DestinationConfiguration destinationConfigurationRDMS;
+
+	/**
+	 * Initializes the Java Servlet.
 	 */
 	@Override
 	public void init()
@@ -61,13 +83,19 @@ extends HttpServlet {
 
 			ConnectivityConfiguration connectivityConfiguration = (ConnectivityConfiguration) initialContext
 				.lookup("java:comp/env/connectivityConfiguration");
-			destinationConfiguration = connectivityConfiguration.getConfiguration("iotmms");
+			destinationConfigurationMMS = connectivityConfiguration.getConfiguration("iotmms");
+			destinationConfigurationRDMS = connectivityConfiguration.getConfiguration("iotrdms");
 		}
 		catch (NamingException e) {
 			throw new ServletException("Failed to establish a connectivity to the data source.");
 		}
-		if (destinationConfiguration == null) {
-			throw new ServletException("Failed to establish a connectivity to the destination.");
+		if (destinationConfigurationMMS == null) {
+			throw new ServletException(
+				"Failed to establish a connectivity to the IoT MMS destination.");
+		}
+		if (destinationConfigurationRDMS == null) {
+			throw new ServletException(
+				"Failed to establish a connectivity to the IoT RDMS destination.");
 		}
 	}
 
@@ -77,20 +105,51 @@ extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
-		// check for path parameters and construct a table name out of them
-		String tableName = null;
+		String pathInfo = request.getPathInfo();
+		if (pathInfo == null) {
+			printError(response, "Unsupported operation.");
+			return;
+		}
+		// get data of the specific table
+		if (pathInfo.startsWith("/table")) {
+			doGetData(request, response);
+		}
+		// get all registered devices
+		else if (pathInfo.startsWith("/devices")) {
+			doGetDevices(request, response);
+		}
+		// get all message types
+		else if (pathInfo.startsWith("/messagetypes")) {
+			doGetMessageTypes(request, response);
+		}
+		else {
+			printError(response, "Unsupported operation.");
+		}
+	}
+
+	/**
+	 * Gets a content of the DB table as JSON string.
+	 */
+	protected void doGetData(HttpServletRequest request, HttpServletResponse response)
+	throws ServletException, IOException {
+		// check for path parameters and construct properties out of them
+		Properties properties = null;
 		try {
-			tableName = buildTableNameFromRequest(request);
+			properties = buildProperties(request.getPathInfo(), KEY_DEVICE_ID, KEY_DEVICE_TYPE_ID,
+				KEY_MESSAGE_TYPE_ID);
 		}
 		catch (IllegalArgumentException e) {
 			printError(response, e.getMessage());
 			return;
 		}
 		// check if a table with the specified name exists in the data base
+		String tableName = buildTableName(properties);
 		try {
 			if (!isTableExists(tableName)) {
 				printError(response, "A table with the name [" + tableName +
-					"] does not exist in the data base.");
+					"] does not exist in the data base. Please, send some messages of type '" +
+					properties.getProperty(KEY_MESSAGE_TYPE_ID) +
+					"' first on behalf of the device.");
 				return;
 			}
 		}
@@ -101,7 +160,7 @@ extends HttpServlet {
 		// execute SQL select to get the table contents and build JSON string out of it
 		String tableData = null;
 		try {
-			tableData = selectTableData(tableName);
+			tableData = selectTableData(properties);
 		}
 		catch (SQLException e) {
 			printError(response, e.getMessage());
@@ -111,29 +170,254 @@ extends HttpServlet {
 		printJson(response, tableData);
 	}
 
+	/**
+	 * Gets all registered devices as JSON string.
+	 */
+	protected void doGetDevices(HttpServletRequest request, HttpServletResponse response)
+	throws ServletException, IOException {
+		// build a HTTP URL referring to the destination
+		String destinationURL = destinationConfigurationRDMS.getProperty("URL");
+		if (destinationURL.endsWith("/")) {
+			destinationURL = destinationURL.substring(0, destinationURL.length() - 1);
+		}
+		destinationURL = destinationURL.concat("/devices");
+		URL url = null;
+		try {
+			url = new URL(destinationURL);
+		}
+		catch (MalformedURLException e) {
+			printError(response,
+				"Failed to build a HTTP URL for the IoT RDMS Registered Devices API request.");
+			return;
+		}
+		// open a HTTP connection to the destination
+		HttpURLConnection httpURLConnection = null;
+		try {
+			httpURLConnection = openURLConnection(url, destinationConfigurationRDMS);
+		}
+		catch (IOException e) {
+			printError(response, e.getMessage());
+			return;
+		}
+		// forward an original request and handle the destination response
+		try {
+			forwardGet(httpURLConnection, request, response);
+		}
+		catch (IOException e) {
+			printError(response, e.getMessage());
+			return;
+		}
+		finally {
+			closeURLConnection(httpURLConnection);
+		}
+	}
+
+	/**
+	 * Gets all registered message types as JSON string.
+	 */
+	protected void doGetMessageTypes(HttpServletRequest request, HttpServletResponse response)
+	throws ServletException, IOException {
+		// build a HTTP URL referring to the destination
+		String destinationURL = destinationConfigurationRDMS.getProperty("URL");
+		if (destinationURL.endsWith("/")) {
+			destinationURL = destinationURL.substring(0, destinationURL.length() - 1);
+		}
+		destinationURL = destinationURL.concat("/messagetypes");
+		URL url = null;
+		try {
+			url = new URL(destinationURL);
+		}
+		catch (MalformedURLException e) {
+			printError(response,
+				"Failed to build a HTTP URL for the IoT RDMS Message Types API request.");
+			return;
+		}
+		// open a HTTP connection to the destination
+		HttpURLConnection httpURLConnection = null;
+		try {
+			httpURLConnection = openURLConnection(url, destinationConfigurationRDMS);
+		}
+		catch (IOException e) {
+			printError(response, e.getMessage());
+			return;
+		}
+		// forward an original request and handle the destination response
+		try {
+			forwardGet(httpURLConnection, request, response);
+		}
+		catch (IOException e) {
+			printError(response, e.getMessage());
+			return;
+		}
+		finally {
+			closeURLConnection(httpURLConnection);
+		}
+	}
+
+	/**
+	 * Handles HTTP POST request from a client.
+	 */
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	throws ServletException, IOException {
+		String pathInfo = request.getPathInfo();
+		if (pathInfo == null) {
+			printError(response, "Unsupported operation.");
+			return;
+		}
+		// push message to the device
+		if (pathInfo.startsWith("/push")) {
+			doPushData(request, response);
+		}
+		else {
+			printError(response, "Unsupported operation.");
+		}
+	}
+
+	/**
+	 * Pushes messages to the device.
+	 */
+	protected void doPushData(HttpServletRequest request, HttpServletResponse response)
+	throws ServletException, IOException {
+		// check for path parameters and construct properties out of them
+		Properties properties = null;
+		try {
+			properties = buildProperties(request.getPathInfo(), KEY_DEVICE_ID);
+		}
+		catch (IllegalArgumentException e) {
+			printError(response, e.getMessage());
+			return;
+		}
+		// build a HTTP URL referring to the destination
+		String destinationURL = destinationConfigurationMMS.getProperty("URL");
+		if (destinationURL.endsWith("/")) {
+			destinationURL = destinationURL.substring(0, destinationURL.length() - 1);
+		}
+		// backward compatibility
+		if (!destinationURL.endsWith("http/push")) {
+			destinationURL = destinationURL.concat("/http/push");
+		}
+		destinationURL = destinationURL.concat("/").concat(properties.getProperty(KEY_DEVICE_ID));
+		URL url = null;
+		try {
+			url = new URL(destinationURL);
+		}
+		catch (MalformedURLException e) {
+			printError(response, "Failed to build a HTTP URL for the IoT MMS Push API request.");
+			return;
+		}
+		// open a HTTP connection to the destination
+		HttpURLConnection httpURLConnection = null;
+		try {
+			httpURLConnection = openURLConnection(url, destinationConfigurationMMS);
+		}
+		catch (IOException e) {
+			printError(response, e.getMessage());
+			return;
+		}
+		// forward an original request and handle the destination response
+		try {
+			forwardPost(httpURLConnection, request, response);
+		}
+		catch (IOException e) {
+			printError(response, e.getMessage());
+			return;
+		}
+		finally {
+			closeURLConnection(httpURLConnection);
+		}
+	}
+
 	/*
-	 * HTTP GET relevant functionality goes here.
+	 * Common functionality goes here.
 	 */
 
 	/**
-	 * Selects the data for the given table name from the data base. All entries will have the DESC
-	 * sorting order according to 'G_CREATED' column value which is added to all IoT tables by
-	 * default.
+	 * Build properties set out of the HTTP request path string.
 	 * 
-	 * @param tableName
-	 *            a data base table name
+	 * @param pathInfo
+	 *            a HTTP request path string
+	 * @param keys
+	 *            an order of path parameters expected in the request
+	 * @return a properties set
+	 * @throws IllegalArgumentException
+	 *             if wrong number of path parameters were received in the request
+	 */
+	private Properties buildProperties(String pathInfo, String... keys) {
+		pathInfo = pathInfo.replaceFirst("/", "");
+		pathInfo = pathInfo.substring(pathInfo.indexOf("/") + 1, pathInfo.length());
+		String[] parts = pathInfo.split("/");
+		if (parts.length != keys.length) {
+			throw new IllegalArgumentException("Wrong number of path parameters.");
+		}
+		Properties properties = new Properties();
+		for (int i = 0; i < keys.length; i++) {
+			properties.put(keys[i], parts[i]);
+		}
+		return properties;
+	}
+
+	/**
+	 * Opens a connection to the data source.
+	 * 
+	 * @return a connection to the data source
+	 * @throws SQLException
+	 *             if fails to open a connection
+	 */
+	private Connection openDSConnection()
+	throws SQLException {
+		Connection connection = null;
+		try {
+			connection = dataSource.getConnection();
+		}
+		catch (SQLException e) {
+			throw new SQLException("Failed to open a connection to the data source.", e);
+		}
+		return connection;
+	}
+
+	/**
+	 * Closes a connection to the data source.
+	 * 
+	 * @param connection
+	 *            a connection to be closed
+	 * @throws SQLException
+	 *             if fails to close a connection
+	 */
+	private void closeDSConnection(Connection connection)
+	throws SQLException {
+		if (connection != null) {
+			try {
+				connection.close();
+			}
+			catch (SQLException e) {
+				throw new SQLException("Failed to close a connection to the data source.", e);
+			}
+		}
+	}
+
+	/**
+	 * Selects the data for the given Message Type ID filtered by Device ID from the data base. All
+	 * entries will have the DESC sorting order according to 'G_CREATED' column value which is added
+	 * to all IoT tables by default.
+	 * 
+	 * @param properties
+	 *            a set of path parameters
 	 * @return a JSON array with JSON objects containing the table column-value pairs represented as
 	 *         JSON string
 	 * @throws SQLException
 	 *             if a database access error occurs
 	 */
-	private String selectTableData(String tableName)
+	private String selectTableData(Properties properties)
 	throws SQLException {
-		Connection connection = openConnection();
+		String tableName = buildTableName(properties);
+		String sql = String.format("SELECT * FROM %1$s WHERE G_DEVICE = ? ORDER BY G_CREATED DESC",
+			tableName);
+		Connection connection = openDSConnection();
 		StringBuilder sb = new StringBuilder();
 		try {
-			String sql = String.format("SELECT * FROM %1$s ORDER BY G_CREATED DESC", tableName);
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, properties.getProperty(KEY_DEVICE_ID));
 			ResultSet resultSet = preparedStatement.executeQuery();
 			ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
 			List<String> columnNames = new ArrayList<String>();
@@ -164,9 +448,23 @@ extends HttpServlet {
 				tableName + "] from the data base.", e);
 		}
 		finally {
-			closeConnection(connection);
+			closeDSConnection(connection);
 		}
 		return sb.toString();
+	}
+
+	/**
+	 * Builds an IoT table name out of the HTTP request path parameters. Device Type ID and Message
+	 * Type ID are expected only. All IoT tables have the next pattern for their names
+	 * 'T_IOT_%message_type_id(in UPPER case)%'.
+	 * 
+	 * @param properties
+	 *            a set of path parameters
+	 * @return a table name
+	 */
+	private String buildTableName(Properties properties) {
+		return String.format("T_IOT_%1$s", properties.get(KEY_MESSAGE_TYPE_ID).toString()
+			.toUpperCase());
 	}
 
 	/**
@@ -180,7 +478,7 @@ extends HttpServlet {
 	 */
 	private boolean isTableExists(String tableName)
 	throws SQLException {
-		Connection connection = openConnection();
+		Connection connection = openDSConnection();
 		try {
 			DatabaseMetaData metaData = connection.getMetaData();
 			ResultSet resultSet = metaData.getTables(null, null, tableName, null);
@@ -197,128 +495,104 @@ extends HttpServlet {
 				"] exists in the data base.", e);
 		}
 		finally {
-			closeConnection(connection);
+			closeDSConnection(connection);
 		}
 	}
 
 	/**
-	 * Opens a connection to the data source.
+	 * Opens a HTTP URL connection to the destination.
 	 * 
-	 * @return a connection to the data source
-	 * @throws SQLException
+	 * @param url
+	 *            a URL to the destination service
+	 * @param destinationConfiguration
+	 *            a destination configuration instance
+	 * @return a HTTP URL connection
+	 * @throws IOException
 	 *             if fails to open a connection
 	 */
-	private Connection openConnection()
-	throws SQLException {
-		Connection connection = null;
+	private HttpURLConnection openURLConnection(URL url,
+		DestinationConfiguration destinationConfiguration)
+	throws IOException {
+		HttpURLConnection urlConnection = null;
 		try {
-			connection = dataSource.getConnection();
-		}
-		catch (SQLException e) {
-			throw new SQLException("Failed to open a connection to the data source.", e);
-		}
-		return connection;
-	}
-
-	/**
-	 * Closes a connection to the data source.
-	 * 
-	 * @param connection
-	 *            a connection to be closed
-	 * @throws SQLException
-	 *             if fails to close a connection
-	 */
-	private void closeConnection(Connection connection)
-	throws SQLException {
-		if (connection != null) {
-			try {
-				connection.close();
-			}
-			catch (SQLException e) {
-				throw new SQLException("Failed to close a connection to the data source.", e);
-			}
-		}
-	}
-
-	/**
-	 * Builds an IoT table name out of the HTTP request path parameters. Device Type ID and Message
-	 * Type ID are expected only. All IoT tables have the next pattern for their names
-	 * 'T_IOT_%device_type_id(in UPPER case)%_%message_type_id%'.
-	 * 
-	 * @param request
-	 *            a HTTP servlet request instance
-	 * @return a table name
-	 * @throws IllegalArgumentException
-	 *             if no or wrong number of path parameters were received in the request
-	 */
-	private String buildTableNameFromRequest(HttpServletRequest request) {
-		String pathInfo = request.getPathInfo();
-		if (pathInfo == null) {
-			throw new IllegalArgumentException(
-				"Missing path parameters. Device Type ID and Message Type ID are expected.");
-		}
-		pathInfo = pathInfo.replaceFirst("/", "");
-		String[] parts = pathInfo.split("/");
-		if (parts.length != 2) {
-			throw new IllegalArgumentException(
-				"Wrong number of path parameters. Device Type ID and Message Type ID are expected.");
-		}
-		String deviceId = parts[0];
-		String messageTypeId = parts[1];
-		return String.format("T_IOT_%1$s_%2$s", deviceId, messageTypeId);
-	}
-
-	/**
-	 * Handles HTTP POST request from a client.
-	 */
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-	throws ServletException, IOException {
-		// check for path parameters and build a HTTP URL referring to the destination
-		URL url = null;
-		try {
-			url = buildURLFromRequest(request);
-		}
-		catch (IllegalArgumentException e) {
-			printError(response, e.getMessage());
-			return;
-		}
-		catch (MalformedURLException e) {
-			printError(response, e.getMessage());
-			return;
-		}
-		// open a HTTP connection to the destination
-		HttpURLConnection httpURLConnection = null;
-		try {
-			httpURLConnection = openURLConnection(url);
+			urlConnection = (HttpURLConnection) url.openConnection();
 		}
 		catch (IOException e) {
-			printError(response, e.getMessage());
-			return;
+			throw new IOException("Failed to open a HTTP URL connection to the destination [" +
+				destinationConfiguration.getProperty("Name") + "]", e);
 		}
-		// forward an original request and handle the destination response
-		try {
-			forwardRequest(httpURLConnection, request, response);
+		String user = destinationConfiguration.getProperty("User");
+		String password = destinationConfiguration.getProperty("Password");
+		if (user == null || password == null || user.trim().isEmpty() || password.trim().isEmpty()) {
+			throw new IOException("User credentails are not specified for the destination [" +
+				destinationConfiguration.getProperty("Name") + "]");
 		}
-		catch (IOException e) {
-			printError(response, e.getMessage());
-			return;
-		}
-		finally {
-			closeURLConnection(httpURLConnection);
-		}
+		@SuppressWarnings("restriction")
+		String base64 = new sun.misc.BASE64Encoder().encode((user + ":" + password).getBytes());
+		urlConnection.setRequestProperty("Authorization", "Basic " + base64);
+		return urlConnection;
 	}
 
-	/*
-	 * HTTP POST relevant functionality goes here.
-	 */
-
 	/**
-	 * Forwards an original HTTP request to the destination, handles the response and transmits it
-	 * back to a client.
+	 * Closes a HTTP URL connection.
 	 * 
 	 * @param urlConnection
-	 *            a URL connection instance
+	 *            a URL connection to be closed
+	 */
+	private void closeURLConnection(HttpURLConnection urlConnection) {
+		if (urlConnection != null) {
+			urlConnection.disconnect();
+		}
+	}
+
+	/**
+	 * Closes this stream and releases any system resources associated with it.
+	 * 
+	 * @param stream
+	 *            a stream to close
+	 */
+	private void closeStream(Closeable stream) {
+		if (stream != null) {
+			try {
+				stream.close();
+			}
+			catch (IOException e) {
+				logger.error("Failed to close an I/O stream.", e);
+			}
+		}
+	}
+
+	/**
+	 * Copies (writes) an input stream to an output stream.
+	 * 
+	 * @param is
+	 *            an input stream to copy from
+	 * @param os
+	 *            an output stream to copy to
+	 * @throws IOException
+	 *             if copying operation fail
+	 */
+	private void copyStream(InputStream is, OutputStream os)
+	throws IOException {
+		try {
+			byte[] buffer = new byte[1024];
+			int len;
+			while ((len = is.read(buffer)) != -1) {
+				os.write(buffer, 0, len);
+			}
+		}
+		catch (IOException e) {
+			throw new IOException(
+				"Failed to copy the input stream's content into an output stream.", e);
+		}
+	}
+
+	/**
+	 * Forwards an original HTTP POST request to the destination, handles the response and transmits
+	 * it back to a client.
+	 * 
+	 * @param urlConnection
+	 *            a HTTP URL connection instance
 	 * @param request
 	 *            a HTTP servlet request instance
 	 * @param response
@@ -326,7 +600,7 @@ extends HttpServlet {
 	 * @throws IOException
 	 *             if fails to forward the request or handle the response properly
 	 */
-	private void forwardRequest(HttpURLConnection urlConnection, HttpServletRequest request,
+	private void forwardPost(HttpURLConnection urlConnection, HttpServletRequest request,
 		HttpServletResponse response)
 	throws IOException {
 		// prepare for HTTP POST
@@ -343,30 +617,71 @@ extends HttpServlet {
 		try {
 			ois = request.getInputStream();
 			fos = urlConnection.getOutputStream();
-			copy(ois, fos);
+			copyStream(ois, fos);
 			fos.flush();
 		}
 		catch (IOException e) {
-			throw new IOException("Failed to forward an original request to the destination.", e);
+			logger.error("HTTP POST request forward error.", e);
+			throw new IOException("Failed to forward an original POST request to the destination.",
+				e);
 		}
 		finally {
-			if (ois != null) {
-				try {
-					ois.close();
-				}
-				catch (IOException e) {
-					throw new IOException("Failed to close an output stream.", e);
-				}
-			}
-			if (fos != null) {
-				try {
-					fos.close();
-				}
-				catch (IOException e) {
-					throw new IOException("Failed to close an input stream.", e);
-				}
-			}
+			closeStream(ois);
+			closeStream(fos);
 		}
+
+		int responseCode = urlConnection.getResponseCode();
+		if (responseCode == 400) {
+			throw new IOException("Failed to forward HTTP POST. Bad request. Check your payload.");
+		}
+		if (responseCode == 409) {
+			throw new IOException(
+				"Failed to forward HTTP POST. Conflict. Check if you use the right IDs.");
+		}
+
+		// reset HTTP code and content type
+		response.setStatus(responseCode);
+		response.setContentType(urlConnection.getContentType());
+
+		// copy the content of the destination response to an original response
+		InputStream fis = null;
+		OutputStream oos = null;
+		try {
+			fis = urlConnection.getInputStream();
+			oos = response.getOutputStream();
+			copyStream(fis, oos);
+			oos.flush();
+		}
+		catch (IOException e) {
+			logger.error("HTTP POST response forward error.", e);
+			throw new IOException(
+				"Failed to forward a POST response from the destination to an origin.", e);
+		}
+		finally {
+			closeStream(fis);
+			closeStream(oos);
+		}
+	}
+
+	/**
+	 * Forwards an original HTTP GET request to the destination, handles the response and transmits
+	 * it back to a client.
+	 * 
+	 * @param urlConnection
+	 *            a HTTP URL connection instance
+	 * @param request
+	 *            a HTTP servlet request instance
+	 * @param response
+	 *            a HTTP servlet response instance
+	 * @throws IOException
+	 *             if fails to forward the request or handle the response properly
+	 */
+	private void forwardGet(HttpURLConnection urlConnection, HttpServletRequest request,
+		HttpServletResponse response)
+	throws IOException {
+		// prepare for HTTP GET
+		urlConnection.setUseCaches(false);
+		urlConnection.setRequestMethod("GET");
 
 		// reset HTTP code and content type
 		response.setStatus(urlConnection.getResponseCode());
@@ -378,136 +693,19 @@ extends HttpServlet {
 		try {
 			fis = urlConnection.getInputStream();
 			oos = response.getOutputStream();
-			copy(fis, oos);
+			copyStream(fis, oos);
 			oos.flush();
 		}
 		catch (IOException e) {
-			throw new IOException("Failed to forward a destination response to an origin.", e);
+			logger.error("HTTP GET response forward error.", e);
+			throw new IOException(
+				"Failed to forward a GET response from the destination to an origin.", e);
 		}
 		finally {
-			if (fis != null) {
-				try {
-					fis.close();
-				}
-				catch (IOException e) {
-					throw new IOException("Failed to close an input stream.", e);
-				}
-			}
-			if (oos != null) {
-				try {
-					oos.close();
-				}
-				catch (IOException e) {
-					throw new IOException("Failed to close an output stream.", e);
-				}
-			}
+			closeStream(fis);
+			closeStream(oos);
 		}
 	}
-
-	/**
-	 * Copies (writes) an input stream to an output stream.
-	 * 
-	 * @param is
-	 *            an input stream to copy from
-	 * @param os
-	 *            an output stream to copy to
-	 * @throws IOException
-	 *             if copying operation fail
-	 */
-	private void copy(InputStream is, OutputStream os)
-	throws IOException {
-		try {
-			byte[] buffer = new byte[1024];
-			int len;
-			while ((len = is.read(buffer)) != -1) {
-				os.write(buffer, 0, len);
-			}
-		}
-		catch (IOException e) {
-			throw new IOException(
-				"Failed to copy the input stream's content into an output stream.", e);
-		}
-	}
-
-	/**
-	 * Opens a connection to the destination.
-	 * 
-	 * @param url
-	 *            a URL to the destination service
-	 * @return a URL connection
-	 * @throws IOException
-	 *             if fails to open a connection
-	 */
-	private HttpURLConnection openURLConnection(URL url)
-	throws IOException {
-		HttpURLConnection urlConnection = null;
-		try {
-			urlConnection = (HttpURLConnection) url.openConnection();
-		}
-		catch (IOException e) {
-			throw new IOException("Failed to open a HTTP URL connection to the destination.", e);
-		}
-		String user = destinationConfiguration.getProperty("User");
-		String password = destinationConfiguration.getProperty("Password");
-		@SuppressWarnings("restriction")
-		String base64 = new sun.misc.BASE64Encoder().encode((user + ":" + password).getBytes());
-		urlConnection.setRequestProperty("Authorization", "Basic " + base64);
-		return urlConnection;
-	}
-
-	/**
-	 * Closes a connection to the destination.
-	 * 
-	 * @param urlConnection
-	 *            a URL connection to be closed
-	 */
-	private void closeURLConnection(HttpURLConnection urlConnection) {
-		if (urlConnection != null) {
-			urlConnection.disconnect();
-		}
-	}
-
-	/**
-	 * Builds a URL for the internal HTTP request out of the original HTTP request path parameters.
-	 * Device ID is expected only.
-	 * 
-	 * @param request
-	 *            a HTTP servlet request instance
-	 * @return a final URL to be used for the HTTP internal request
-	 * @throws IllegalArgumentException
-	 *             if no or wrong number of path parameters were received in the request
-	 * @throws MalformedURLException
-	 *             if a URL cannot be constructed
-	 */
-	private URL buildURLFromRequest(HttpServletRequest request)
-	throws MalformedURLException {
-		String pathInfo = request.getPathInfo();
-		if (pathInfo == null) {
-			throw new IllegalArgumentException("Missing path parameter. Device ID is expected.");
-		}
-		pathInfo = pathInfo.replaceFirst("/", "");
-		String[] parts = pathInfo.split("/");
-		if (parts.length != 1) {
-			throw new IllegalArgumentException(
-				"Wrong number of path parameters. Device ID is expected.");
-		}
-		String deviceId = parts[0];
-		String destinationURL = destinationConfiguration.getProperty("URL");
-		if (destinationURL.endsWith("/")) {
-			destinationURL = destinationURL.substring(0, destinationURL.length() - 1);
-		}
-		try {
-			return new URL(destinationURL.concat("/").concat(deviceId));
-		}
-		catch (MalformedURLException e) {
-			throw new MalformedURLException(
-				"Failed to build a HTTP URL for the destination request.");
-		}
-	}
-
-	/*
-	 * Common functionality goes here.
-	 */
 
 	/**
 	 * Flushes a JSON string output to a client with HTTP 200 code.
@@ -519,7 +717,7 @@ extends HttpServlet {
 	 * @throws IOException
 	 *             if an input or output exception occurred
 	 */
-	protected void printJson(HttpServletResponse response, String message)
+	private void printJson(HttpServletResponse response, String message)
 	throws IOException {
 		response.setContentType("application/json");
 		response.setStatus(HttpServletResponse.SC_OK);
@@ -536,7 +734,7 @@ extends HttpServlet {
 	 * @throws IOException
 	 *             if an input or output exception occurred
 	 */
-	protected void printError(HttpServletResponse response, String message)
+	private void printError(HttpServletResponse response, String message)
 	throws IOException {
 		response.setContentType("text/html");
 		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -553,7 +751,7 @@ extends HttpServlet {
 	 * @throws IOException
 	 *             if an input or output exception occurred
 	 */
-	protected void print(HttpServletResponse response, String message)
+	private void print(HttpServletResponse response, String message)
 	throws IOException {
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter writer = response.getWriter();

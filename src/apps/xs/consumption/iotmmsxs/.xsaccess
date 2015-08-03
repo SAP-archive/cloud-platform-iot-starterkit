@@ -1,0 +1,7 @@
+{
+	"exposed" : true,
+	"authentication" : [ {
+		"method" : "Form"
+	} ],
+	"authorization" : [ "<user_id>trial.iotmmsxs::Basic" ]
+}
