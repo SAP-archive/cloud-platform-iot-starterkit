@@ -1,0 +1,8 @@
+Description=IoT RDMS API
+Type=HTTP
+Authentication=BasicAuthentication
+Name=iotrdms
+CloudConnectorVersion=2
+ProxyType=Internet
+URL=https\://iotrdmsiotservices-%account_id%.hanatrial.ondemand.com/com.sap.iotservices.dms/v1/api
+User=%user_id%
