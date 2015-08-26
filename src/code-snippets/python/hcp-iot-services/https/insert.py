@@ -1,14 +1,18 @@
 import urllib3
-# disable InsecureRequestWarning if your are working without certificate verification
-# see https://urllib3.readthedocs.org/en/latest/security.html
-# be sure to use a recent enough urllib3 version if this fails
-try:
-	urllib3.disable_warnings()
-except:
-	print('urllib3.disable_warnings() failed - get a recent enough urllib3 version to avoid potential InsecureRequestWarning warnings! Can and will continue though.')
+import certifi
+
+# It is absolutely CRITICAL that you use certificate validation to ensure and guarantee that
+# 1. you are indeed sending the message to *.hanatrial.ondemand.com and
+# 2. that you avoid the possibility of TLS/SSL MITM attacks which would allow a malicious person to capture the OAuth token
+# URLLIB3 DOES NOT VERIFY CERTIFICATES BY DEFAULT
+# Therefore, install urllib3 and certifi and specify the PoolManager as below to enforce certificate check
+# See https://urllib3.readthedocs.org/en/latest/security.html for more details
 
 # use with or without proxy
-http = urllib3.PoolManager()
+http = urllib3.PoolManager(
+	cert_reqs='CERT_REQUIRED', # Force certificate check.
+	ca_certs=certifi.where(),  # Path to the Certifi bundle.
+)
 # http = urllib3.proxy_from_url('http://proxy_host:proxy_port')
 
 # interaction for a specific Device instance - replace 1 with your specific Device ID
@@ -23,8 +27,10 @@ headers['Content-Type'] = 'application/json;charset=utf-8'
 
 # send message of Message Type 1 and the corresponding payload layout that you defined in the IoT Services Cockpit
 body='{"mode":"async", "messageType":"1", "messages":[{"sensor":"sensor1", "value":"20", "timestamp":1413191650}]}'
-
-r = http.urlopen('POST', url, body=body, headers=headers)
-
-print(r.status)
-print(r.data)
+try:
+	r = http.urlopen('POST', url, body=body, headers=headers)
+	print(r.status)
+	print(r.data)
+except urllib3.exceptions.SSLError as e:
+	print e
+	
