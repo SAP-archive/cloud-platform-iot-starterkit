@@ -91,11 +91,11 @@ extends HttpServlet {
 		}
 		if (destinationConfigurationMMS == null) {
 			throw new ServletException(
-				"Failed to establish a connectivity to the IoT MMS destination.");
+				"Failed to establish a connectivity to the IoT MMS destination. Check your 'iotmms' destination.");
 		}
 		if (destinationConfigurationRDMS == null) {
 			throw new ServletException(
-				"Failed to establish a connectivity to the IoT RDMS destination.");
+				"Failed to establish a connectivity to the IoT RDMS destination. Check your 'iotrdms' destination.");
 		}
 	}
 
@@ -528,7 +528,8 @@ extends HttpServlet {
 				destinationConfiguration.getProperty("Name") + "]");
 		}
 		@SuppressWarnings("restriction")
-		String base64 = new sun.misc.BASE64Encoder().encode((user + ":" + password).getBytes());
+		String base64 = new sun.misc.BASE64Encoder().encode((user + ":" + password)
+			.getBytes("UTF-8"));
 		urlConnection.setRequestProperty("Authorization", "Basic " + base64);
 		return urlConnection;
 	}
@@ -622,8 +623,7 @@ extends HttpServlet {
 		}
 		catch (IOException e) {
 			logger.error("HTTP POST request forward error.", e);
-			throw new IOException("Failed to forward an original POST request to the destination.",
-				e);
+			throw new IOException(e.getMessage(), e);
 		}
 		finally {
 			closeStream(ois);
@@ -632,11 +632,10 @@ extends HttpServlet {
 
 		int responseCode = urlConnection.getResponseCode();
 		if (responseCode == 400) {
-			throw new IOException("Failed to forward HTTP POST. Bad request. Check your payload.");
+			throw new IOException("HTTP 400. Bad request. Check your original payload.");
 		}
 		if (responseCode == 409) {
-			throw new IOException(
-				"Failed to forward HTTP POST. Conflict. Check if you use the right IDs.");
+			throw new IOException("HTTP 409. Conflict. Check if you use the right IDs.");
 		}
 
 		// reset HTTP code and content type
@@ -654,8 +653,7 @@ extends HttpServlet {
 		}
 		catch (IOException e) {
 			logger.error("HTTP POST response forward error.", e);
-			throw new IOException(
-				"Failed to forward a POST response from the destination to an origin.", e);
+			throw new IOException(e.getMessage(), e);
 		}
 		finally {
 			closeStream(fis);
@@ -698,8 +696,7 @@ extends HttpServlet {
 		}
 		catch (IOException e) {
 			logger.error("HTTP GET response forward error.", e);
-			throw new IOException(
-				"Failed to forward a GET response from the destination to an origin.", e);
+			throw new IOException(e.getMessage(), e);
 		}
 		finally {
 			closeStream(fis);
