@@ -83,6 +83,10 @@ Further information: [`Internet of Things Services`](https://help.hana.ondemand.
 
 ![IoT Cockpit - Example Configuration](../../../images/iot_cockpit_02.png?raw=true "IoT Cockpit - Example Configuration")
 
+## Automated Device Registration with Python and RDMS API
+
+The steps described above could be automated with the exposed RDMS RESTful API. Following the link you will find a [Python Script](../../examples/python/device_registration_via_api) responsible for respective Device Type, Message Types and Device registration. 
+
 ### Authentication mechanisms
 Communication with the HCP IoT Services is protected by 2 different authentication mechanisms.
 * IoT Devices use OAuth authentication with a respective OAuth token for an individual device provided via the IoT Cockpit
