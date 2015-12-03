@@ -1,15 +1,3 @@
->The SAP HANA Cloud Platform Internet of Things (IoT) Services are continously
-developed further and thus a new version of the Message Management Service (MMS)
-becomes available from time to time. The availability of such an update is
-indicated in the respective MMS User Interface and an update is highly
-recommended. Please deploy a new version of MMS from the IoT Services Cockpit
-into your HCP account. Please also pay attention that the naming convention for the
-IoT tables has been changed in the transition from BETA to General Availability.
-IoT tables are named according to the following pattern now
-```T_IOT_<MESSAGE_TYPE_ID>```. You might need to adapt the consumption part of
-your IoT Business Applications.  For more information, please see the
-documentation at https://help.hana.ondemand.com/iot
-
 # Starter Kit for the SAP HANA Cloud Platform Internet of Things (IoT) Services
 
 A Starter Kit for working with the [SAP HANA Cloud Platform IoT Services](http://help.hana.ondemand.com/iot)
@@ -26,6 +14,7 @@ well as how to send messages and how to receive push messages. Moreover, the sam
 * [Pushing messages to the device](#pushing-messages-to-the-device)
 * [Receiving the messages sent to the device](#receiving-the-messages-sent-to-the-device)
 * [Integrated examples for IoT Devices](#integrated-examples-for-iot-devices)
+* [Revision history and related advice](#revision-history-and-related-advice)
 * [What comes next](#what-comes-next)
 
 ## HCP IoT Services Overview
@@ -115,6 +104,10 @@ output. You should be able to comfortably purchase these components and assemble
 
 Please follow these [steps to setup and use the Raspberry Pi](./src/hardware/raspberry-pi/README.md) with the shown peripherals and the 
 [example application](src/examples/python/iot-starterkit-for-pi-and-grove-peripherals/iot_starterkit_pi_and_grove_peripherals.py).
+
+## Revision history and related advice
+
+The HCP IoT Services are continously developed further. Please pay attention to the dedicated page [Revision history and related advice](./misc/revision-history/README.md) to ensure you get specific information about potentially necessary modifications to your older usage examples.
 
 ## What comes next
 
