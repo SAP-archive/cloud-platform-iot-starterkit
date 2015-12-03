@@ -14,6 +14,7 @@ well as how to send messages and how to receive push messages. Moreover, the sam
 * [Pushing messages to the device](#pushing-messages-to-the-device)
 * [Receiving the messages sent to the device](#receiving-the-messages-sent-to-the-device)
 * [Integrated examples for IoT Devices](#integrated-examples-for-iot-devices)
+* [Security Aspects](#security-aspects)
 * [Revision history and related advice](#revision-history-and-related-advice)
 * [What comes next](#what-comes-next)
 
@@ -105,9 +106,25 @@ output. You should be able to comfortably purchase these components and assemble
 Please follow these [steps to setup and use the Raspberry Pi](./src/hardware/raspberry-pi/README.md) with the shown peripherals and the 
 [example application](src/examples/python/iot-starterkit-for-pi-and-grove-peripherals/iot_starterkit_pi_and_grove_peripherals.py).
 
+## Security aspects
+
+Security plays a very important role for the deployment of IoT scenarios in
+productive scenarios. The Starterkit examples concentrate of the aspect of
+demonstrating basic IoT Services mechanisms. Inherently, specific usable
+security mechanisms differ for different programming languages, frameworks or
+hardware platforms. Before making use of code snippets or integrated examples
+in productive scenarios please pay additional attention on hardening against
+potential attacks. We will continously provide further guidance on potential
+attack vectors and how to harden your solution on the dedicated [Security
+aspects](./misc/security/README.md) page.
+
 ## Revision history and related advice
 
-The HCP IoT Services are continously developed further. Please pay attention to the dedicated page [Revision history and related advice](./misc/revision-history/README.md) to ensure you get specific information about potentially necessary modifications to your older usage examples.
+The HCP IoT Services are continously developed further. Please pay attention to
+the dedicated page [Revision history and related
+advice](./misc/revision-history/README.md) to ensure you get specific
+information about potentially necessary modifications to your older usage
+examples.
 
 ## What comes next
 
