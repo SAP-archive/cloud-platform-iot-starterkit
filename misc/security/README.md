@@ -1,8 +1,8 @@
 # Security aspects
 
 Security plays a very important role for the deployment of IoT scenarios in
-productive scenarios. The Starterkit examples concentrate of the aspect of
-demonstrating basic IoT Services mechanisms. Whereas e.g. some code-snippets
+productive environments. The Starterkit examples concentrate of the aspect of
+demonstrating basic IoT Services mechanisms. Whereas some code snippets
 show how to harden a solution against e.g. Man-in-the-Middle attacks that try
 to spoof a HCP server in order to get access to sensitive payloads or
 credentials this is not generally the case for all examples and other security

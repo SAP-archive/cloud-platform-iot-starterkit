@@ -109,14 +109,14 @@ Please follow these [steps to setup and use the Raspberry Pi](./src/hardware/ras
 ## Security aspects
 
 Security plays a very important role for the deployment of IoT scenarios in
-productive scenarios. The Starterkit examples concentrate of the aspect of
+productive environments. The Starterkit examples concentrate of the aspect of
 demonstrating basic IoT Services mechanisms. Inherently, specific usable
 security mechanisms differ for different programming languages, frameworks or
-hardware platforms. Before making use of code snippets or integrated examples
-in productive scenarios please pay additional attention on hardening against
-potential attacks. We will continously provide further guidance on potential
-attack vectors and how to harden your solution on the dedicated [Security
-aspects](./misc/security/README.md) page.
+hardware platforms. Thus, before making use of code snippets or integrated
+examples in productive scenarios please pay additional attention on hardening
+against potential attacks. We will continously provide further guidance on
+potential attack vectors and how to harden your solution on the dedicated
+[Security aspects](./misc/security/README.md) page.
 
 ## Revision history and related advice
 
