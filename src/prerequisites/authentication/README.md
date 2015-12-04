@@ -1,6 +1,8 @@
+>Please, be advised that starting from MMS version 2.6.0 this configuration step is unnecessary.
+
 # Getting started in the Cloud
 
-## Authentication Configuration (MMS Push API)
+## Authentication Configuration (MMS Push and OData API)
 
 >Previous Step [Deploy the Message Management Service (MMS)](../mms)
 

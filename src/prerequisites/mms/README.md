@@ -28,4 +28,4 @@ stored messages" tile for the access to data received from IoT Devices.
 
 ![MMS Cockpit](../../../images/mms_cockpit.png?raw=true "MMS Cockpit")
 
->Next Step [Authentication Configuration (MMS Push API)](../authentication)
+>Next Step [Authentication Configuration (MMS Push and OData API)](../authentication)
