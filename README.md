@@ -47,7 +47,6 @@ IoT Business Applications can be built using either the HANA XS, the Java or HTM
 2. [Enable Internet of Things Services](src/prerequisites/service)
 3. [Create Device Information in Internet of Things Services Cockpit](src/prerequisites/cockpit)
 4. [Deploy the Message Management Service (MMS)](src/prerequisites/mms)
-5. [Authentication Configuration (MMS Push and OData API)](src/prerequisites/authentication)
 
 ## Sending messages from the device
 

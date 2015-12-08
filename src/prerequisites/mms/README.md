@@ -27,5 +27,3 @@ Cockpit as shown below. It provides access to the MMS API as well as a "Display
 stored messages" tile for the access to data received from IoT Devices.
 
 ![MMS Cockpit](../../../images/mms_cockpit.png?raw=true "MMS Cockpit")
-
->Next Step [Authentication Configuration (MMS Push and OData API)](../authentication)
