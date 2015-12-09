@@ -45,7 +45,7 @@ The examples in the Starter Kit use the following specific Message Types that yo
 ```
 	sensor:string
 	value:string
-	timestamp:long
+	timestamp:date
 ```
 
 ![IoT Cockpit - Outbound Message Type Example](../../../images/iot_cockpit_add_message_type_01.png?raw=true "IoT Cockpit - Outbound Message Type Example")
