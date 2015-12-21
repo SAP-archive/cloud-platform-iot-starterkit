@@ -105,7 +105,7 @@ output. You should be able to comfortably purchase these components and assemble
 Please follow these [steps to setup and use the Raspberry Pi](./src/hardware/raspberry-pi/README.md) with the shown peripherals and the 
 [example application](src/examples/python/iot-starterkit-for-pi-and-grove-peripherals/iot_starterkit_pi_and_grove_peripherals.py).
 
-In addition to the Raspberry Pi we have already used the HCP IoT Services on a [variety of other hardware](./src/hardware/README.md).
+In addition to the Raspberry Pi we have already used the HCP IoT Services on a [variety of other hardware](./src/hardware).
 
 ## Security aspects
 
