@@ -12,3 +12,5 @@ devices produce. A basic graphical interface for doing so exists with the MMS Co
 * Select the respective IoT table referencing your Message Type
 
 ![MMS Consume Embedded](../../../../images/mms_consume_embedded_02.png)
+
+![MMS Consume Embedded](../../../../images/mms_consume_embedded_02a.png)
