@@ -40,7 +40,7 @@ public class DataServlet
 extends HttpServlet {
 
 	/**
-	 * A default serial version ID.
+	 * A default serial version ID
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -50,29 +50,29 @@ extends HttpServlet {
 	private static final Logger logger = LoggerFactory.getLogger(DataServlet.class);
 
 	/**
-	 * Key values for the expected path parameters.
+	 * Key values for the expected path parameters
 	 */
 	private static final String KEY_DEVICE_ID = "deviceId";
 	private static final String KEY_DEVICE_TYPE_ID = "deviceTypeId";
 	private static final String KEY_MESSAGE_TYPE_ID = "messageTypeId";
 
 	/**
-	 * A factory for connections to the physical data source.
+	 * A factory for connections to the physical data source
 	 */
 	private DataSource dataSource;
 
 	/**
-	 * A configuration for data communication via HTTP destination with IoT MMS.
+	 * A configuration for data communication via HTTP destination with IoT MMS
 	 */
 	private DestinationConfiguration destinationConfigurationMMS;
 
 	/**
-	 * A configuration for data communication via HTTP destination with IoT RDMS.
+	 * A configuration for data communication via HTTP destination with IoT RDMS
 	 */
 	private DestinationConfiguration destinationConfigurationRDMS;
 
 	/**
-	 * Initializes the Java Servlet.
+	 * Initializes the Java Servlet
 	 */
 	@Override
 	public void init()
@@ -87,27 +87,27 @@ extends HttpServlet {
 			destinationConfigurationRDMS = connectivityConfiguration.getConfiguration("iotrdms");
 		}
 		catch (NamingException e) {
-			throw new ServletException("Failed to establish a connectivity to the data source.");
+			throw new ServletException("Unable to establish a connectivity to the data source");
 		}
 		if (destinationConfigurationMMS == null) {
 			throw new ServletException(
-				"Failed to establish a connectivity to the IoT MMS destination. Check your 'iotmms' destination.");
+				"Unable to establish a connectivity to the IoT MMS destination. Check your 'iotmms' destination.");
 		}
 		if (destinationConfigurationRDMS == null) {
 			throw new ServletException(
-				"Failed to establish a connectivity to the IoT RDMS destination. Check your 'iotrdms' destination.");
+				"Unable to establish a connectivity to the IoT RDMS destination. Check your 'iotrdms' destination.");
 		}
 	}
 
 	/**
-	 * Handles HTTP GET request from a client.
+	 * Handles HTTP GET request from a client
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		String pathInfo = request.getPathInfo();
 		if (pathInfo == null) {
-			printError(response, "Unsupported operation.");
+			printError(response, "Unsupported operation");
 			return;
 		}
 		// get data of the specific table
@@ -123,12 +123,12 @@ extends HttpServlet {
 			doGetMessageTypes(request, response);
 		}
 		else {
-			printError(response, "Unsupported operation.");
+			printError(response, "Unsupported operation");
 		}
 	}
 
 	/**
-	 * Gets a content of the DB table as JSON string.
+	 * Gets a content of the DB table as JSON string
 	 */
 	protected void doGetData(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
@@ -171,7 +171,7 @@ extends HttpServlet {
 	}
 
 	/**
-	 * Gets all registered devices as JSON string.
+	 * Gets all registered devices as JSON string
 	 */
 	protected void doGetDevices(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
@@ -187,7 +187,7 @@ extends HttpServlet {
 		}
 		catch (MalformedURLException e) {
 			printError(response,
-				"Failed to build a HTTP URL for the IoT RDMS Registered Devices API request.");
+				"Unable to build a HTTP URL for the IoT RDMS Registered Devices API request");
 			return;
 		}
 		// open a HTTP connection to the destination
@@ -213,7 +213,7 @@ extends HttpServlet {
 	}
 
 	/**
-	 * Gets all registered message types as JSON string.
+	 * Gets all registered message types as JSON string
 	 */
 	protected void doGetMessageTypes(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
@@ -229,7 +229,7 @@ extends HttpServlet {
 		}
 		catch (MalformedURLException e) {
 			printError(response,
-				"Failed to build a HTTP URL for the IoT RDMS Message Types API request.");
+				"Unable to build a HTTP URL for the IoT RDMS Message Types API request");
 			return;
 		}
 		// open a HTTP connection to the destination
@@ -255,14 +255,14 @@ extends HttpServlet {
 	}
 
 	/**
-	 * Handles HTTP POST request from a client.
+	 * Handles HTTP POST request from a client
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		String pathInfo = request.getPathInfo();
 		if (pathInfo == null) {
-			printError(response, "Unsupported operation.");
+			printError(response, "Unsupported operation");
 			return;
 		}
 		// push message to the device
@@ -270,12 +270,12 @@ extends HttpServlet {
 			doPushData(request, response);
 		}
 		else {
-			printError(response, "Unsupported operation.");
+			printError(response, "Unsupported operation");
 		}
 	}
 
 	/**
-	 * Pushes messages to the device.
+	 * Pushes messages to the device
 	 */
 	protected void doPushData(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
@@ -303,7 +303,7 @@ extends HttpServlet {
 			url = new URL(destinationURL);
 		}
 		catch (MalformedURLException e) {
-			printError(response, "Failed to build a HTTP URL for the IoT MMS Push API request.");
+			printError(response, "Unable to build a HTTP URL for the IoT MMS Push API request");
 			return;
 		}
 		// open a HTTP connection to the destination
@@ -333,7 +333,7 @@ extends HttpServlet {
 	 */
 
 	/**
-	 * Build properties set out of the HTTP request path string.
+	 * Build properties set out of the HTTP request path string
 	 * 
 	 * @param pathInfo
 	 *            a HTTP request path string
@@ -358,7 +358,7 @@ extends HttpServlet {
 	}
 
 	/**
-	 * Opens a connection to the data source.
+	 * Opens a connection to the data source
 	 * 
 	 * @return a connection to the data source
 	 * @throws SQLException
@@ -371,13 +371,13 @@ extends HttpServlet {
 			connection = dataSource.getConnection();
 		}
 		catch (SQLException e) {
-			throw new SQLException("Failed to open a connection to the data source.", e);
+			throw new SQLException("Unable to open a connection to the data source", e);
 		}
 		return connection;
 	}
 
 	/**
-	 * Closes a connection to the data source.
+	 * Closes a connection to the data source quietly
 	 * 
 	 * @param connection
 	 *            a connection to be closed
@@ -444,8 +444,8 @@ extends HttpServlet {
 			sb.append("]");
 		}
 		catch (SQLException e) {
-			throw new SQLException("Failed to select the data for a table with the name [" +
-				tableName + "] from the data base.", e);
+			throw new SQLException("Unable to select the data for a table with the name [" +
+				tableName + "] from the data base", e);
 		}
 		finally {
 			closeDSConnection(connection);
@@ -491,8 +491,8 @@ extends HttpServlet {
 			return false;
 		}
 		catch (SQLException e) {
-			throw new SQLException("Failed to check if a table with the name [" + tableName +
-				"] exists in the data base.", e);
+			throw new SQLException("Unable to check if a table with the name [" + tableName +
+				"] exists in the data base", e);
 		}
 		finally {
 			closeDSConnection(connection);
@@ -518,7 +518,7 @@ extends HttpServlet {
 			urlConnection = (HttpURLConnection) url.openConnection();
 		}
 		catch (IOException e) {
-			throw new IOException("Failed to open a HTTP URL connection to the destination [" +
+			throw new IOException("Unable to open a HTTP URL connection to the destination [" +
 				destinationConfiguration.getProperty("Name") + "]", e);
 		}
 		String user = destinationConfiguration.getProperty("User");
@@ -535,7 +535,7 @@ extends HttpServlet {
 	}
 
 	/**
-	 * Closes a HTTP URL connection.
+	 * Closes a HTTP URL connection
 	 * 
 	 * @param urlConnection
 	 *            a URL connection to be closed
@@ -547,7 +547,7 @@ extends HttpServlet {
 	}
 
 	/**
-	 * Closes this stream and releases any system resources associated with it.
+	 * Closes this stream quietly and releases any system resources associated with it
 	 * 
 	 * @param stream
 	 *            a stream to close
@@ -558,7 +558,7 @@ extends HttpServlet {
 				stream.close();
 			}
 			catch (IOException e) {
-				logger.error("Failed to close an I/O stream.", e);
+				logger.error("Unable to close an I/O stream", e);
 			}
 		}
 	}
@@ -583,136 +583,106 @@ extends HttpServlet {
 			}
 		}
 		catch (IOException e) {
-			throw new IOException(
-				"Failed to copy the input stream's content into an output stream.", e);
+			throw new IOException("Unable to copy the content of an stream into an output stream",
+				e);
 		}
 	}
 
 	/**
-	 * Forwards an original HTTP POST request to the destination, handles the response and transmits
-	 * it back to a client.
-	 * 
-	 * @param urlConnection
-	 *            a HTTP URL connection instance
-	 * @param request
-	 *            a HTTP servlet request instance
-	 * @param response
-	 *            a HTTP servlet response instance
-	 * @throws IOException
-	 *             if fails to forward the request or handle the response properly
+	 * Forwards HTTP POST requests
 	 */
 	private void forwardPost(HttpURLConnection urlConnection, HttpServletRequest request,
 		HttpServletResponse response)
 	throws IOException {
-		// prepare for HTTP POST
+		// prepare HTTP POST
 		urlConnection.setDoOutput(true);
 		urlConnection.setDoInput(true);
 		urlConnection.setUseCaches(false);
 		urlConnection.setRequestMethod("POST");
-		urlConnection.setRequestProperty("Content-Type", request.getContentType() +
-			";charset=UTF-8");
+		urlConnection.setRequestProperty("Content-Type", request.getContentType());
 
-		// copy the content of an original request to the destination request
-		InputStream ois = null;
-		OutputStream fos = null;
-		try {
-			ois = request.getInputStream();
-			fos = urlConnection.getOutputStream();
-			copyStream(ois, fos);
-			fos.flush();
-		}
-		catch (IOException e) {
-			logger.error("HTTP POST request forward error.", e);
-			throw new IOException(e.getMessage(), e);
-		}
-		finally {
-			closeStream(ois);
-			closeStream(fos);
-		}
-
-		int responseCode = urlConnection.getResponseCode();
-		if (responseCode == 400) {
-			throw new IOException("HTTP 400. Bad request. Check your original payload.");
-		}
-		if (responseCode == 409) {
-			throw new IOException("HTTP 409. Conflict. Check if you use the right IDs.");
-		}
-
-		// reset HTTP code and content type
-		response.setStatus(responseCode);
-		response.setContentType(urlConnection.getContentType());
-
-		// copy the content of the destination response to an original response
-		InputStream fis = null;
-		OutputStream oos = null;
-		try {
-			fis = urlConnection.getInputStream();
-			oos = response.getOutputStream();
-			copyStream(fis, oos);
-			oos.flush();
-		}
-		catch (IOException e) {
-			logger.error("HTTP POST response forward error.", e);
-			throw new IOException(e.getMessage(), e);
-		}
-		finally {
-			closeStream(fis);
-			closeStream(oos);
-		}
+		handleHttpRequest(urlConnection, request, response);
+		handleHttpResponse(urlConnection, request, response);
 	}
 
 	/**
-	 * Forwards an original HTTP GET request to the destination, handles the response and transmits
-	 * it back to a client.
-	 * 
-	 * @param urlConnection
-	 *            a HTTP URL connection instance
-	 * @param request
-	 *            a HTTP servlet request instance
-	 * @param response
-	 *            a HTTP servlet response instance
-	 * @throws IOException
-	 *             if fails to forward the request or handle the response properly
+	 * Forwards HTTP GET requests
 	 */
 	private void forwardGet(HttpURLConnection urlConnection, HttpServletRequest request,
 		HttpServletResponse response)
 	throws IOException {
-		// prepare for HTTP GET
+		// prepare HTTP GET
 		urlConnection.setUseCaches(false);
 		urlConnection.setRequestMethod("GET");
 
-		// reset HTTP code and content type
-		response.setStatus(urlConnection.getResponseCode());
-		response.setContentType(urlConnection.getContentType());
+		handleHttpResponse(urlConnection, request, response);
+	}
 
-		// copy the content of the destination response to an original response
-		InputStream fis = null;
-		OutputStream oos = null;
+	/**
+	 * Handles an actual HTTP request from <b>Starter Kit UI</b> and pushes its content further to
+	 * the backend side <b>MMS/RDMS</b>
+	 */
+	private void handleHttpRequest(HttpURLConnection urlConnection, HttpServletRequest request,
+		HttpServletResponse response)
+	throws IOException {
+		InputStream is = null;
+		OutputStream os = null;
 		try {
-			fis = urlConnection.getInputStream();
-			oos = response.getOutputStream();
-			copyStream(fis, oos);
-			oos.flush();
+			is = request.getInputStream();
+			os = urlConnection.getOutputStream();
+			copyStream(is, os);
+			os.flush();
 		}
 		catch (IOException e) {
-			logger.error("HTTP GET response forward error.", e);
-			throw new IOException(e.getMessage(), e);
+			logger.error("Unable to handle the HTTP request", e);
+			throw e;
 		}
 		finally {
-			closeStream(fis);
-			closeStream(oos);
+			closeStream(is);
+			closeStream(os);
 		}
 	}
 
 	/**
-	 * Flushes a JSON string output to a client with HTTP 200 code.
-	 * 
-	 * @param response
-	 *            a HTTP servlet response instance
-	 * @param message
-	 *            an JSON string to be sent to a client
-	 * @throws IOException
-	 *             if an input or output exception occurred
+	 * Handles an actual HTTP response from <b>MMS/RDMS</b> and pushes its content back to the
+	 * client side <b>Starter Kit UI</b>
+	 */
+	private void handleHttpResponse(HttpURLConnection urlConnection, HttpServletRequest request,
+		HttpServletResponse response)
+	throws IOException {
+		int responseCode = urlConnection.getResponseCode();
+		String contentType = urlConnection.getContentType();
+
+		// copy headers
+		response.setStatus(responseCode);
+		response.setContentType(contentType);
+
+		// copy body
+		InputStream is = null;
+		OutputStream os = null;
+		try {
+			if (responseCode > HttpServletResponse.SC_ACCEPTED) {
+				is = urlConnection.getErrorStream();
+			}
+			else {
+				is = urlConnection.getInputStream();
+			}
+			os = response.getOutputStream();
+			copyStream(is, os);
+			os.flush();
+		}
+		catch (IOException e) {
+			logger.error("Unable to handle the HTTP response", e);
+			throw e;
+		}
+		finally {
+			closeStream(is);
+			closeStream(os);
+		}
+	}
+
+	/**
+	 * Flushes a JSON string output to the client with HTTP 200 code
 	 */
 	private void printJson(HttpServletResponse response, String message)
 	throws IOException {
@@ -722,14 +692,7 @@ extends HttpServlet {
 	}
 
 	/**
-	 * Flushes a text output to a client with HTTP 500 code.
-	 * 
-	 * @param response
-	 *            a HTTP servlet response instance
-	 * @param message
-	 *            an error message to be sent to a client
-	 * @throws IOException
-	 *             if an input or output exception occurred
+	 * Flushes a text output to the client with HTTP 500 code
 	 */
 	private void printError(HttpServletResponse response, String message)
 	throws IOException {
@@ -739,14 +702,7 @@ extends HttpServlet {
 	}
 
 	/**
-	 * Flushes an output to a client using UTF-8 encoding.
-	 * 
-	 * @param response
-	 *            a HTTP servlet response instance
-	 * @param message
-	 *            a message to be sent to a client
-	 * @throws IOException
-	 *             if an input or output exception occurred
+	 * Flushes an output to the client using UTF-8 encoding
 	 */
 	private void print(HttpServletResponse response, String message)
 	throws IOException {
