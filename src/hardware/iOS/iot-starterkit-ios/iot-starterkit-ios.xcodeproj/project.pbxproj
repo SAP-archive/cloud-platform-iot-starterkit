@@ -1,0 +1,307 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		760F47B41C69D34A00A6316D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 760F47B31C69D34A00A6316D /* main.m */; };
+		760F47B71C69D34A00A6316D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 760F47B61C69D34A00A6316D /* AppDelegate.m */; };
+		760F47BA1C69D34A00A6316D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 760F47B91C69D34A00A6316D /* ViewController.m */; };
+		760F47BD1C69D34A00A6316D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 760F47BB1C69D34A00A6316D /* Main.storyboard */; };
+		760F47BF1C69D34A00A6316D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 760F47BE1C69D34A00A6316D /* Assets.xcassets */; };
+		760F47C21C69D34A00A6316D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 760F47C01C69D34A00A6316D /* LaunchScreen.storyboard */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		760F47AF1C69D34A00A6316D /* iot-starterkit-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iot-starterkit-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		760F47B31C69D34A00A6316D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		760F47B51C69D34A00A6316D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		760F47B61C69D34A00A6316D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		760F47B81C69D34A00A6316D /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		760F47B91C69D34A00A6316D /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		760F47BC1C69D34A00A6316D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		760F47BE1C69D34A00A6316D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		760F47C11C69D34A00A6316D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		760F47C31C69D34A00A6316D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		760F47AC1C69D34A00A6316D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		760F47A61C69D34900A6316D = {
+			isa = PBXGroup;
+			children = (
+				760F47B11C69D34A00A6316D /* iot-starterkit-ios */,
+				760F47B01C69D34A00A6316D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		760F47B01C69D34A00A6316D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				760F47AF1C69D34A00A6316D /* iot-starterkit-ios.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		760F47B11C69D34A00A6316D /* iot-starterkit-ios */ = {
+			isa = PBXGroup;
+			children = (
+				760F47B51C69D34A00A6316D /* AppDelegate.h */,
+				760F47B61C69D34A00A6316D /* AppDelegate.m */,
+				760F47B81C69D34A00A6316D /* ViewController.h */,
+				760F47B91C69D34A00A6316D /* ViewController.m */,
+				760F47BB1C69D34A00A6316D /* Main.storyboard */,
+				760F47BE1C69D34A00A6316D /* Assets.xcassets */,
+				760F47C01C69D34A00A6316D /* LaunchScreen.storyboard */,
+				760F47C31C69D34A00A6316D /* Info.plist */,
+				760F47B21C69D34A00A6316D /* Supporting Files */,
+			);
+			path = "iot-starterkit-ios";
+			sourceTree = "<group>";
+		};
+		760F47B21C69D34A00A6316D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				760F47B31C69D34A00A6316D /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		760F47AE1C69D34A00A6316D /* iot-starterkit-ios */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 760F47C61C69D34A00A6316D /* Build configuration list for PBXNativeTarget "iot-starterkit-ios" */;
+			buildPhases = (
+				760F47AB1C69D34A00A6316D /* Sources */,
+				760F47AC1C69D34A00A6316D /* Frameworks */,
+				760F47AD1C69D34A00A6316D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "iot-starterkit-ios";
+			productName = "iot-starterkit-ios";
+			productReference = 760F47AF1C69D34A00A6316D /* iot-starterkit-ios.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		760F47A71C69D34900A6316D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = "SAP SE";
+				TargetAttributes = {
+					760F47AE1C69D34A00A6316D = {
+						CreatedOnToolsVersion = 7.2;
+					};
+				};
+			};
+			buildConfigurationList = 760F47AA1C69D34900A6316D /* Build configuration list for PBXProject "iot-starterkit-ios" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 760F47A61C69D34900A6316D;
+			productRefGroup = 760F47B01C69D34A00A6316D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				760F47AE1C69D34A00A6316D /* iot-starterkit-ios */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		760F47AD1C69D34A00A6316D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				760F47C21C69D34A00A6316D /* LaunchScreen.storyboard in Resources */,
+				760F47BF1C69D34A00A6316D /* Assets.xcassets in Resources */,
+				760F47BD1C69D34A00A6316D /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		760F47AB1C69D34A00A6316D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				760F47BA1C69D34A00A6316D /* ViewController.m in Sources */,
+				760F47B71C69D34A00A6316D /* AppDelegate.m in Sources */,
+				760F47B41C69D34A00A6316D /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		760F47BB1C69D34A00A6316D /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				760F47BC1C69D34A00A6316D /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		760F47C01C69D34A00A6316D /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				760F47C11C69D34A00A6316D /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		760F47C41C69D34A00A6316D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		760F47C51C69D34A00A6316D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		760F47C71C69D34A00A6316D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "iot-starterkit-ios/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sap.iot-starterkit-ios";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		760F47C81C69D34A00A6316D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "iot-starterkit-ios/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sap.iot-starterkit-ios";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		760F47AA1C69D34900A6316D /* Build configuration list for PBXProject "iot-starterkit-ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				760F47C41C69D34A00A6316D /* Debug */,
+				760F47C51C69D34A00A6316D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		760F47C61C69D34A00A6316D /* Build configuration list for PBXNativeTarget "iot-starterkit-ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				760F47C71C69D34A00A6316D /* Debug */,
+				760F47C81C69D34A00A6316D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 760F47A71C69D34900A6316D /* Project object */;
+}
