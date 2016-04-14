@@ -1,6 +1,7 @@
 We have successfully used the HCP IoT Services on
 * Desktop Systems
-* Smart Phones
+* Smart Phones 
+* [iOS] (./iOS)
 * [Raspberry Pi](./raspberry-pi)
 * Intel Galileo or Edison
 * Beaglebone
