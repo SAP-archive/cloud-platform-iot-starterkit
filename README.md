@@ -52,6 +52,7 @@ IoT Business Applications can be built using either the HANA XS, the Java or HTM
 
 * [Send messages with MMS embedded sample client using HTTP API](src/apps/embedded/sending/http)
 * [Send messages with MMS embedded sample client using WebSocket API](src/apps/embedded/sending/ws)
+* [Send messages with MMS embedded sample client using MQTT WebSocket API](src/apps/embedded/sending/mqttws)
 * [Send messages with Python client using HTTP API](src/apps/python/sending/http)
 * [Send messages with Python client using WebSocket API](src/apps/python/sending/ws)
 
