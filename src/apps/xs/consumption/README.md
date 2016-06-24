@@ -1,107 +1,142 @@
-This directory has the sources for a XS and OData services that expose the IOT data out the data storage.
+This directory has the sources for a XSODATA and XSJS services that expose the IOT data out the data storage.
 
 ### Message Storage
 
 Messages can be send to the HCP IoT Services using the Message Management Service (MMS) component deployed in the consumer account. By default MMS stores incoming messages into a relational database. 
-The respective message tables are automatically created by MMS based on the device type and message type definitions. More details can be found in the IoT Services documentation.
+The respective message tables are automatically created by MMS based on the message type definitions. More details can be found in the IoT Services documentation.
 By default, MMS uses the automatically created database (schema) for storing data and the default data source binding for accessing this schema. 
 The name of the underlying database schema is displayed in the "Databases & Schemas" section of the HCP Cockpit. The default data source bindings for this schema are also displayed on this page. 
 In the example below, MMS is bound to a shared HANA instance.
 
-![Message Storage](../../../../images/xs_odata_01.jpg?raw=true "Message Storage")
+![](../../../../images/xs/0001.png)
 
-The default schema binding can be changed to point to a dedicated HANA instance or any other database available in HCP.
+The default schema binding can be changed to point to a dedicated HANA instance or any other database available in HCP. HANA MDC will be used in this example.
 
-### Creating a HANA XS instance
+### Creating and configuring HANA MDC instance
 
-For the purpose of HANA XS development, a HANA XS database instance will be provided on HCP account-level in HCP. The instance can be created using the HCP cockpit.
+Click on New, select HANA MDC Database, give it a name i.e. "iotmmsxs" and specify a password for your Database user. Please, note that your Database user is "SYSTEM" be default.
 
-![Creating a HANA XS instance](../../../../images/xs_odata_02.jpg?raw=true "Creating a HANA XS instance")
+![](../../../../images/xs/0002.png)
 
-In the example below a HANA XS instance called “iotmmsxs” is created.
+Wait until the Database is created and started
 
-![Creating a HANA XS instance](../../../../images/xs_odata_03.jpg?raw=true "Creating a HANA XS instance")
+![](../../../../images/xs/0003.png)
 
-The HANA XS instance will also show up as a new schema in the “Databases and Schemas” section.
+Navigate to Overview, re-check the Database state and then click on SAP HANA Cockpit at the bottom
 
-![Creating a HANA XS instance](../../../../images/xs_odata_04.jpg?raw=true "Creating a HANA XS instance")
+![](../../../../images/xs/0004.png)
+
+Once prompted, specify your Database user "SYSTEM" and password you have given above when creating MDC
+
+![](../../../../images/xs/0005.png)
+
+Click OK to be assigned with the necessary Administration roles
+
+![](../../../../images/xs/0006.png)
+
+Continue after successful message popup is shown
+
+![](../../../../images/xs/0007.png)
+
+This will navigate you to SAP HANA Cockpit
+
+![](../../../../images/xs/0008.png)
+
+Select "Manage Roles and Users" tile, choose your user "SYSTEM" and assign it with the roles required for the Web-based Tools, like stated in the [documentation](https://help.hana.ondemand.com/help/frameset.htm?d7c4ca5dac4f4dbbb47901eebe9ea0d1.html) 
+
+![](../../../../images/xs/0009.png)
 
 ### Changing the database binding of MMS
 
-In order to switch the MMS database binding from HANA to HANA XS, select the HANA schema and remove the “iotmms” binding. After that, select the new “iotmmsxs” schema and 
-add a new <DEFAULT> binding to “iotmms”.
+Navigate to Java Applications, select "iotmms" and stop it
 
-![Changing the database binding of MMS](../../../../images/xs_odata_05.jpg?raw=true "Changing the database binding of MMS")
+![](../../../../images/xs/0010.png)
 
-After doing that MMS needs to be restarted. As soon as MMS will receive data from devices it will automatically create all tables in the new HANA XS instance. 
-Hence, all the data can be accessed via HANA XS application running in the same HANA instance.
+Select "Data Source Bindings" and delete the default binding for HANA system
+
+![](../../../../images/xs/0011.png)
+
+Create a new default binding to the HANA MDC "iotmmsxs", specify your Database user "SYSTEM" and password as Custom Logon, save your changes
+
+![](../../../../images/xs/0012.png)
+
+Start your "iotmms" Java application
+
+![](../../../../images/xs/0013.png) 
+
+Launch "iotmms", navigate to HTTP Sample Client and send some data on behalf of the embedded device (or use a real one). With that a T_IOT* table is created in the Database under your user schema (it has a "SYSTEM" name same to your user).
+
+![](../../../../images/xs/0014.png) 
+
+In order to check Database content, navigate to HANA MDC Overview and click on SAP HANA Web-based Development Workbench at the bottom
+
+![](../../../../images/xs/0004.png) 
+
+Select "Catalog" tile
+
+![](../../../../images/xs/0015.png) 
+
+Find your Database user schema "SYSTEM", expand its Tables and show the content of the T_IOT table
+
+ ![](../../../../images/xs/0016.png) 
 
 ### HANA XS Development
 
-Now we are ready for XS development. Only the browser based tools will be used for that. Click on Development Tools link available for your XS instance.
+Now we are ready for XS development. Only the browser based tools will be used for that.
 
-![HANA XS Development](../../../../images/xs_odata_06.jpg?raw=true "HANA XS Development")
+Select "Editor" tile
 
-This will open an Editor tool for you showing your account specific package.
+![](../../../../images/xs/0015.png) 
 
-![HANA XS Development](../../../../images/xs_odata_07.jpg?raw=true "HANA XS Development")
+Create a new package under Content
 
-Right away open another web based tool which we will use in the next steps. Click on a black arrow right to green plus and select ‘Catalog’
+![](../../../../images/xs/0017.png) 
 
-![HANA XS Development](../../../../images/xs_odata_08.jpg?raw=true "HANA XS Development")
+Give it a name i.e. "iotmmsxs" and press Create
 
-This will open a Catalog tool for you showing your DB schemas with their content. 
+![](../../../../images/xs/0018.png) 
 
-![HANA XS Development](../../../../images/xs_odata_09.jpg?raw=true "HANA XS Development")
+[Drag and drop or create the missing files](iotmmsxs) in the following order:
 
-Pay your attention that NEO_% schema is a real name of your (iotmmsxs) schema displayed in your HCP Cockpit. All T_IOT_% tables are landed there.
+- .xsapp
+- .xsprivileges
+- .xsaccess
+- iotservice.xsodata
 
-![HANA XS Development](../../../../images/xs_odata_10.jpg?raw=true "HANA XS Development")
+Do not forget to activate them.
 
-Return back to Editor, right click on (iotmmsxs) and select Create Application.
+The content of your package should look as follows
 
-![HANA XS Development](../../../../images/xs_odata_11.jpg?raw=true "HANA XS Development")
+![](../../../../images/xs/0019.png) 
 
-Select ‘Create in selected package’ option (this is not mandatory) and choose ‘Blank Application’ template. This will create a blank XS application for you. 
+If you try to run your XSODATA service immediately by clicking on green run button on top, this will result in 403 Forbidden error, because Application privileges are missing for your user.
 
-![HANA XS Development](../../../../images/xs_odata_12.jpg?raw=true "HANA XS Development")
+![](../../../../images/xs/0020.png) 
 
-[Drag and drop or create the missing files](iotmmsxs). The content of your package should look as follows:
+Select "Security" tile
 
-![HANA XS Development](../../../../images/xs_odata_13.jpg?raw=true "HANA XS Development")
+![](../../../../images/xs/0015.png) 
 
-Adapt all necessary files and activate them.
+Choose your user "SYSTEM" and navigate to "Application Privileges" tab
 
-### Grant Roles
+![](../../../../images/xs/0021.png) 
 
-Return back to Catalog tool and select a SQL button on top.
+Select "iotmmsxs::Basic" privilege form the list and confirm your changes
 
-![Grant Roles](../../../../images/xs_odata_14.jpg?raw=true "Grant Roles")
+![](../../../../images/xs/0022.png) 
 
-Insert the [following SQL script](sql/grant_role.sql) there, adapt it and press green execute button. This should result in success execution.
+Now when launching XSODATA service, it will return you the Service Root
 
-### Start XS application
+![](../../../../images/xs/0023.png) 
 
-Return back to HCP Cockpit and navigate to HANA XS Application. 
+Adding /$metadata at the end of the URL will give you the Metadata
 
-![Start XS application](../../../../images/xs_odata_15.jpg?raw=true "Start XS application")
+![](../../../../images/xs/0024.png)
 
-Click on application URL. This will open a default index.html file located in your XS application.
+And Entity Set is then accessible when adding a concrete one at the end of the URL
 
-Add /iotservice.xsodata at the end of that URL. This will point you to OData service.
-https://&lt;system_id>hanaxs.hanatrial.ondemand.com/&lt;user_id&gt;trial/iotmmsxs/iotservice.xsodata
+![](../../../../images/xs/0025.png)
+ 
+You may also consume the data with XSJS after activating and launching the [iotservices.xsjs](iotmmsxs) script
 
-The next link shows OData service metadata
-https://&lt;system_id&gt;hanaxs.hanatrial.ondemand.com/&lt;user_id&gt;trial/iotmmsxs/iotservice.xsodata/$metadata 
-
-The next link shows entity content in XML format
-https://&lt;system_id&gt;hanaxs.hanatrial.ondemand.com/&lt;user_id&gt;trial/iotmmsxs/iotservice.xsodata/T_IOT_&lt;MESSAGE_TYPE_ID&gt;
-
-The next link shows entity content in JSON format
-https://&lt;system_id&gt;hanaxs.hanatrial.ondemand.com/&lt;user_id&gt;trial/iotmmsxs/iotservice.xsodata/T_IOT_&lt;MESSAGE_TYPE_ID&gt;?$format=json
-
-XSJS Service based on old ```$.db``` interface
-https://&lt;system_id&gt;hanaxs.hanatrial.ondemand.com/&lt;user_id&gt;trial/iotmmsxs/iotserviceolddbapi.xsjs
-
-XSJS Service based on new ```$.hdb``` interface (available starting from HANA XS SP09)
-https://&lt;system_id&gt;hanaxs.hanatrial.ondemand.com/&lt;user_id&gt;trial/iotmmsxs/iotservicenewhdbapi.xsjs
+![](../../../../images/xs/0026.png)

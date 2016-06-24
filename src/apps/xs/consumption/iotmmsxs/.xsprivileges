@@ -1,5 +1,5 @@
 {
-	"privileges" : [ {
+    "privileges" : [ {
 		"name" : "Basic",
 		"description" : "Basic IoT MMS privilege"
 	} ]

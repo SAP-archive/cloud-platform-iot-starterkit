@@ -1,1 +1,0 @@
-call "HCP"."HCP_GRANT_ROLE_TO_USER"('<user_id>trial.iotmmsxs::iotaccess', '<user_id>');
