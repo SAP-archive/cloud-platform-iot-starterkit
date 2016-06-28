@@ -123,7 +123,7 @@
 
 	function sendMessage( sMessage ) {
 		var oData = {
-			"method": "http",
+			"method": "ws-mqtt",
 			"sender": "My IoT application",
 			"messageType": "",
 			"messages": [ {
@@ -137,7 +137,7 @@
 	function switchLED( bState ) {
 		var operand = bState == true ? "1" : "0";
 		var oData = {
-			"method": "http",
+			"method": "ws-mqtt",
 			"sender": "My IoT application",
 			"messageType": "",
 			"messages": [ {
