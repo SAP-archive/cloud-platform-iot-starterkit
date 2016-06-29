@@ -106,6 +106,7 @@
 
 		var sDeviceId = oPushModelData.deviceId;
 		var sMessageTypeId = oPushModelData.messageTypeId;
+		var sMethod = oPushModelData.method;
 
 		if ( sDeviceId === null || sMessageTypeId === null || sDeviceId.trim() === ""
 			|| sMessageTypeId.trim() === "" ) {
@@ -113,6 +114,7 @@
 		}
 
 		oData.messageType = sMessageTypeId;
+		oData.method = sMethod;
 
 		var sUrl = "data/push/".concat( sDeviceId );
 		var successHandler = function( oData, textStatus, jqXHR ) {
@@ -123,7 +125,6 @@
 
 	function sendMessage( sMessage ) {
 		var oData = {
-			"method": "http",
 			"sender": "My IoT application",
 			"messageType": "",
 			"messages": [ {
@@ -137,7 +138,6 @@
 	function switchLED( bState ) {
 		var operand = bState == true ? "1" : "0";
 		var oData = {
-			"method": "http",
 			"sender": "My IoT application",
 			"messageType": "",
 			"messages": [ {
@@ -334,7 +334,7 @@
 	}
 
 	function createConsumptionPanel() {
-		var oLabel = new sap.m.Label( {
+		var oTitle = new sap.m.Title( {
 			text: "Data received from the device"
 		} );
 		var oSelectDevices = createDevicesSelect( function( oEvent ) {
@@ -398,7 +398,7 @@
 			filters: [ oFilter ]
 		} );
 		var oToolbar = new sap.m.Toolbar( {
-			content: [ oLabel, new sap.m.ToolbarSpacer(), oSelectDevices, oSelectMessageTypes ]
+			content: [ oTitle, new sap.m.ToolbarSpacer(), oSelectDevices, oSelectMessageTypes ]
 		} );
 		return new sap.m.Panel( {
 			headerToolbar: oToolbar,
@@ -407,8 +407,8 @@
 	}
 
 	function createPushPanel() {
-		var oLabel = new sap.m.Label( {
-			text: "Data to be sent to the device"
+		var oTitle = new sap.m.Title( {
+			text: "Data to be sent to the device through "
 		} );
 		var oSelectDevices = createDevicesSelect( function( oEvent ) {
 			var oSelectedItem = oEvent.getParameter( "selectedItem" );
@@ -470,8 +470,27 @@
 			template: oItem,
 			filters: [ oFilter ]
 		} );
+		var oSegmentedButton = new sap.m.SegmentedButton( {
+			selectedKey: "http",
+			items: [ new sap.m.SegmentedButtonItem( {
+				key: "http",
+				text: "HTTP"
+			} ), new sap.m.SegmentedButtonItem( {
+				key: "ws",
+				text: "WS"
+			} ), new sap.m.SegmentedButtonItem( {
+				key: "ws-mqtt",
+				text: "MQTT"
+			} ) ],
+			select: function( oEvent ) {
+				var oData = sap.ui.getCore().getModel( "pushModel" ).getData();
+				var sKey = oEvent.getSource().getSelectedKey();
+				oData.method = sKey;
+			}
+		} );
 		var oToolbar = new sap.m.Toolbar( {
-			content: [ oLabel, new sap.m.ToolbarSpacer(), oSelectDevices, oSelectMessageTypes ]
+			content: [ oTitle, oSegmentedButton, new sap.m.ToolbarSpacer(), oSelectDevices,
+				oSelectMessageTypes ]
 		} );
 		return new sap.m.Panel( {
 			headerToolbar: oToolbar,
@@ -503,7 +522,8 @@
 		oPushModel.setData( {
 			"deviceId": null,
 			"deviceTypeId": null,
-			"messageTypeId": null
+			"messageTypeId": null,
+			"method": "http"
 		} );
 		sap.ui.getCore().setModel( oPushModel, "pushModel" );
 	}
