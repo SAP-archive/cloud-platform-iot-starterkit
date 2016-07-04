@@ -63,6 +63,7 @@ IoT Business Applications can be built using either the HANA XS, the Java or HTM
 * [Consume the messages with HANA XS using XSODATA and XSJS](src/apps/xs/consumption)
 * [Consume the messages with Python using PyHDB](src/apps/python/consumption)
 * [Consume the messages with Node.js using NodeHDB](src/apps/nodejs/consumption)
+* [Consume the messages with ODATA](src/apps/odata/consumption)
 
 ## Pushing messages to the device
 
