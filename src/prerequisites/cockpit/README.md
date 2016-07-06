@@ -19,15 +19,29 @@ applications.
 Further information: [`Internet of Things Services`](https://help.hana.ondemand.com/iot) > Getting Started > Accessing the Internet of Things Services Cockpit 
 
 
+* Create Device Type
+ * Press on Device Types tile in your Internet of Things Services Cockpit.
+ * Press on the + button to add a new device type.
+ * Enter a Name for the device type.
+ * Press on Create to continue.
+
+![IoT Cockpit - Device Type Example](../../../images/iot_cockpit_add_device_type.png?raw=true "IoT Cockpit - Device Type Example")
+
+Further information: [`Internet of Things Services`](https://help.hana.ondemand.com/iot) > Internet of Things Services Cockpit > Configuring Device Type.
+
+
 * Create Message Type
  * Press on Message Types tile in your Internet of Things Services Cockpit.
  * Press on the + button to add a new message type.
  * Enter a Name for the message type.
+ * Select a Device Type from the dropdown list.
+ * Select a Direction from the dropdownlist.
  * Enter a Name and select a Type for the first row of the Fields table.
  * Optional: Add additional Fields by pressing on the + button on the top right corner of the Fields table.
  * Press on Create to continue.
 
 The examples in the Starter Kit use the following specific Message Types that you should also create in order to make the code working without any necessary modification:
+* for the communication ```from Device```:
 ```
 	sensor:string
 	value:string
@@ -36,6 +50,7 @@ The examples in the Starter Kit use the following specific Message Types that yo
 
 ![IoT Cockpit - Outbound Message Type Example](../../../images/iot_cockpit_add_message_type_01.png?raw=true "IoT Cockpit - Outbound Message Type Example")
 
+* for the communication ```to Device```:
 ```
 	opcode:string
 	operand:string
@@ -44,33 +59,6 @@ The examples in the Starter Kit use the following specific Message Types that yo
 ![IoT Cockpit - Inbound Message Example](../../../images/iot_cockpit_add_message_type_02.png?raw=true "IoT Cockpit - Inbound Message Example")
 
 Further information: [`Internet of Things Services`](https://help.hana.ondemand.com/iot) > Internet of Things Services Cockpit > Configuring Message Type.
-
-
-* Create Device Type
-  * Press on Device Types tile in your Internet of Things Services Cockpit.
-  * Press on the + button to add a new device type.
-  * Enter a Name for the device type.
-  * Press the + button in the Message Types table to add message type assignments
-    * Enter an optional assignment name. If left empty, the message type name is used as assignment name.
-    * Choose the message type you want to assign.
-    * Choose the message direction.
-  * Press on Create to continue.
-
-For the example in the Starter Kit create a new Device Type with the following two message type assignments:
-* Assignment 1
-```
-	Message Type: OutboundMessage
- 	Direction: From Device
-```
-* Assignment 2
-```
-	Message Type: InboundMessage
-	Direction: To Device
-```
-
-![IoT Cockpit - Device Type Example](../../../images/iot_cockpit_add_device_type.png?raw=true "IoT Cockpit - Device Type Example")
-
-Further information: [`Internet of Things Services`](https://help.hana.ondemand.com/iot) > Internet of Things Services Cockpit > Configuring Device Type.
 
 
 * Create Device
