@@ -8,10 +8,7 @@ sap.ui.jsview( "js.view.main", {
 		this.setDisplayBlock( true );
 
 		var oOutboundView = sap.ui.jsview( "js.view.outbound" );
-		// this.addDependent( oOutboundView );
-
 		var oInboundView = sap.ui.jsview( "js.view.inbound" );
-		// this.addDependent( oInboundView );
 
 		return new sap.m.Page( {
 			title: "{i18n>TITLE}",

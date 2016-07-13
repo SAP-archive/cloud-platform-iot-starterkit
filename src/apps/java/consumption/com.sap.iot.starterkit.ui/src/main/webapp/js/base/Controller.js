@@ -8,39 +8,49 @@ sap.ui.core.mvc.Controller.extend( "js.base.Controller", {
 		return oResourceBundle.getText( sKey, oValues );
 	},
 
-	doGet: function( url, successHandler, errorHandler ) {
-		this.doHttp( "GET", url, undefined, successHandler, errorHandler );
+	doGet: function( sUrl, successHandler, errorHandler ) {
+		this.doHttp( "GET", sUrl, undefined, successHandler, errorHandler );
 	},
 
-	doPost: function( url, data, successHandler, errorHandler ) {
-		this.doHttp( "POST", url, data, successHandler, errorHandler );
+	doPost: function( sUrl, oData, successHandler, errorHandler ) {
+		this.doHttp( "POST", sUrl, oData, successHandler, errorHandler );
 	},
 
-	doHttp: function( type, url, data, successHandler, errorHandler ) {
+	doHttp: function( sType, sUrl, oData, successHandler, errorHandler ) {
 		if ( errorHandler === undefined ) {
 			errorHandler = function( jqXHR, textStatus, errorThrown ) {
 				// empty implementation
 			}
 		}
 
-		if ( data !== undefined ) {
-			data = JSON.stringify( data );
+		if ( oData !== undefined ) {
+			oData = JSON.stringify( oData );
 		}
 
 		jQuery.ajax( {
-			type: type,
+			type: sType,
 			dataType: "json",
 			contentType: "application/json",
-			data: data,
-			url: url,
+			data: oData,
+			url: sUrl,
 			error: function( jqXHR, textStatus, errorThrown ) {
-				var sMessage = "".concat( jqXHR.status, " ", jqXHR.statusText, " ", jqXHR.responseText );
-				sap.m.MessageToast.show( sMessage );
+				if ( jqXHR.status === 0 || jqXHR.status === 500 ) {
+					return;
+				}
+				sap.m.MessageToast.show( "[".concat( jqXHR.status, "] ", jqXHR.statusText, " ", jqXHR.responseText ) );
 				errorHandler.apply( this, [ jqXHR, textStatus, errorThrown ] );
+			},
+			statusCode: {
+				0: function( jqXHR, textStatus, errorThrown ) {
+					sap.m.MessageToast.show( "[ERROR] Connection refused" );
+				},
+				500: function( jqXHR, textStatus, errorThrown ) {
+					sap.m.MessageToast.show( "[".concat( jqXHR.status, "] ", jqXHR.statusText, " Check java servlet logs for details" ) );
+				}
 			},
 			success: function( oData, textStatus, jqXHR ) {
 				if ( oData === null || oData === undefined ) {
-					sap.m.MessageToast.show( "WARNING. Received a null or undefined response object." );
+					sap.m.MessageToast.show( "[WARNING] Received a null or undefined response object" );
 					return;
 				}
 				successHandler.apply( this, [ oData, textStatus, jqXHR ] );
