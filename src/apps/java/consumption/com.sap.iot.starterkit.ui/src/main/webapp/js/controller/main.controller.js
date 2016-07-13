@@ -2,6 +2,8 @@ jQuery.sap.require( 'js.base.Controller' );
 
 js.base.Controller.extend( "js.controller.main", {
 
+	oDeviceInterval: undefined,
+
 	onInit: function() {
 		var that = this;
 
@@ -20,16 +22,20 @@ js.base.Controller.extend( "js.controller.main", {
 			that.getView().getModel( "device" ).setData( oData );
 		};
 
-		// var sUrl = "data/devices";
-		console.warn( "change url to " + "data/devices" );
-		var sUrl = "device.json";
+		var errorHandler = function( jqXHR, textStatus, errorThrown ) {
+			clearInterval( that.oDeviceInterval );
+		};
+
+		var sUrl = "data/devices";
+		// console.warn( "change url to " + "data/devices" );
+		// var sUrl = "device.json";
 
 		that.doGet( sUrl, successHandler );
-		setInterval( function() {
-			that.doGet( sUrl, successHandler );
+		that.oDeviceInterval = setInterval( function() {
+			that.doGet( sUrl, successHandler, errorHandler );
 		}, 5000 );
 
-		console.debug( "init js.controller.main" );
+		// console.debug( "init js.controller.main" );
 	}
 
 } );

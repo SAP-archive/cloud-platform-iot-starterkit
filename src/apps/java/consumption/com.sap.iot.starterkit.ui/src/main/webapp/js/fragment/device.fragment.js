@@ -13,7 +13,7 @@ sap.ui.jsfragment( "js.fragment.device", {
 		} );
 		oItem.addCustomData( new sap.ui.core.CustomData( {
 			key: "type",
-			value: "{device>device_type}"
+			value: "{device>deviceType}"
 		} ) );
 
 		var oSelect = new sap.m.Select( {

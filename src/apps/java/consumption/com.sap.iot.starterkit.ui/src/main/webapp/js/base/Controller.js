@@ -34,18 +34,16 @@ sap.ui.core.mvc.Controller.extend( "js.base.Controller", {
 			data: oData,
 			url: sUrl,
 			error: function( jqXHR, textStatus, errorThrown ) {
-				if ( jqXHR.status === 0 || jqXHR.status === 500 ) {
-					return;
+				if ( jqXHR.status === 0 ) {
+					// handled separately
+				} else {
+					sap.m.MessageToast.show( "[".concat( jqXHR.status, "] ", jqXHR.statusText, " ", jqXHR.responseText ) );
 				}
-				sap.m.MessageToast.show( "[".concat( jqXHR.status, "] ", jqXHR.statusText, " ", jqXHR.responseText ) );
 				errorHandler.apply( this, [ jqXHR, textStatus, errorThrown ] );
 			},
 			statusCode: {
 				0: function( jqXHR, textStatus, errorThrown ) {
 					sap.m.MessageToast.show( "[ERROR] Connection refused" );
-				},
-				500: function( jqXHR, textStatus, errorThrown ) {
-					sap.m.MessageToast.show( "[".concat( jqXHR.status, "] ", jqXHR.statusText, " Check java servlet logs for details" ) );
 				}
 			},
 			success: function( oData, textStatus, jqXHR ) {

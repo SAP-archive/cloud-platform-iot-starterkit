@@ -1,11 +1,1 @@
-[ 
-	{
-		"id": "d1",
-		"name": "device1",
-		"device_type": "dt1"
-	}, {
-		"id": "d2",
-		"name": "device2",
-		"device_type": "dt2"
-	} 
-]
+[{"id":"545f39f7-6220-40a9-b9ab-07a3077f073f","name":"TestD","deviceType":"d801c257fdf84cd6f9ba"},{"id":"9a4d0873-d7f9-49e9-a10f-444180193b12","name":"EmptyD","deviceType":"3720f32a159c0f3e5c6d"},{"id":"d18cdf1f-5419-4025-b443-088274288cfe","name":"MyGrovePi","deviceType":"16349c5dce794db14b4c"}]

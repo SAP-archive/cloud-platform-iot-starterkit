@@ -29,9 +29,9 @@
 			<groupId>com.sap.cloud</groupId>
 			<artifactId>${sap.cloud.sdk.name}</artifactId>
 			<version>${sap.cloud.sdk.version}</version>
-			 <!--  
+			  
 			<scope>provided</scope>
-			-->
+		
 		</dependency>
 	</dependencies>
 

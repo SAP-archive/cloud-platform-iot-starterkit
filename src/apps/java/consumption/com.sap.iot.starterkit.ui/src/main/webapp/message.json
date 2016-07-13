@@ -1,11 +1,1 @@
-[ 
-	{
-		"id": "m1",
-		"name": "message1",
-		"device_type": "dt1"
-	}, {
-		"id": "m2",
-		"name": "message2",
-		"device_type": "dt2"
-	} 
-]
+[{"id":"16349c5dce794db14b4c","name":"GrovePi","messageTypes":[{"id":"0887e6c1572d3d70cc99","name":"InboundMessage","direction":"toDevice"},{"id":"0abc533890a648425e73","name":"OBM2","direction":"fromDevice"},{"id":"ae2ee222fbc9ec1e5406","name":"DD350_Fieldtest","direction":"fromDevice"},{"id":"f8ab2e5baa51ea836373","name":"OutboundMessage","direction":"fromDevice"}],"authentication":{"type":"oauth","token":"1136da5728485db7426caa9c90801bbc"}},{"id":"3720f32a159c0f3e5c6d","name":"EmptyDT","messageTypes":[],"authentication":{"type":"oauth","token":"dbe6aab1e1ca32ee6afd3b727bc814f"}},{"id":"d801c257fdf84cd6f9ba","name":"TestDT","messageTypes":[{"id":"73bfb3a564706576abe2","name":"TestMT","direction":"toDevice"},{"id":"c8c410895ee5ebdb5484","name":"bider","direction":"bidirectional"}],"authentication":{"type":"oauth","token":"1bc34b26da997f6d1e2994b8d4b27db"}}]

@@ -23,7 +23,7 @@
 		<res-ref-name>jdbc/DefaultDB</res-ref-name>
 		<res-type>javax.sql.DataSource</res-type>
 	</resource-ref>
-	 <!--  
+	   
 	<login-config>
 		<auth-method>FORM</auth-method>
 	</login-config>
@@ -36,5 +36,5 @@
 			<role-name>Everyone</role-name>
 		</auth-constraint>
 	</security-constraint>
-	-->
+	
 </web-app>

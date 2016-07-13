@@ -8,22 +8,21 @@ sap.ui.jsfragment( "js.fragment.message", {
 		}
 
 		var oFilter = new sap.ui.model.Filter( {
-			path: "device_type",
+			path: "direction",
 			test: function( sValue ) {
-				return true;
+				sDirection = oController.direction;
+				console.log( sValue + " | " + sDirection.toUpperCase() + " > "
+					+ (sValue === sDirection.toUpperCase()) );
 
-				if ( sValue != null ) {
-					sValue = sValue.toUpperCase();
-				}
-				if ( "PLEASE_SELECT" == sValue ) {
+				if ( sDirection === null || sDirection === undefined ) {
 					return true;
 				}
-				var oData = sap.ui.getCore().getModel( "pushModel" ).getData();
-				var sDeviceTypeId = oData.deviceTypeId;
-				if ( sDeviceTypeId != null ) {
-					sDeviceTypeId = sDeviceTypeId.toUpperCase();
+
+				if ( sValue === "BIDIRECTIONAL" ) {
+					return true;
 				}
-				return (sValue === sDeviceTypeId);
+
+				return (sValue === sDirection.toUpperCase());
 			}
 		} );
 
@@ -36,9 +35,8 @@ sap.ui.jsfragment( "js.fragment.message", {
 			tooltip: "{i18n>TOOLTIP_MESSAGES}",
 			width: "150px",
 			enabled: {
-				path: "message>/",
+				path: "message>messageTypes",
 				formatter: function( oValue ) {
-					console.log( oValue );
 					if ( oValue === null || oValue === undefined || oValue.length === 0
 						|| jQuery.isEmptyObject( oValue ) ) {
 						return false;
@@ -49,9 +47,9 @@ sap.ui.jsfragment( "js.fragment.message", {
 			change: oController.onSelectChange
 		} );
 		oSelect.bindAggregation( "items", {
-			path: "message>/",
+			path: "message>messageTypes",
 			template: oItem,
-		/* filters: [ oFilter ] */
+			filters: [ oFilter ]
 		} );
 
 		return oSelect;

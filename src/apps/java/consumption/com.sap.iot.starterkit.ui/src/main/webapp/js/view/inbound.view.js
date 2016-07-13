@@ -58,7 +58,8 @@ sap.ui.jsview( "js.view.inbound", {
 		this.oMessageSelect = sap.ui.jsfragment( "js.fragment.message", {
 			onSelectChange: function( oEvent ) {
 				oController.onMessageSelectChange( oEvent );
-			}
+			},
+			direction: "toDevice"
 		} );
 
 		this.oSegmentedButton = new sap.m.SegmentedButton( {

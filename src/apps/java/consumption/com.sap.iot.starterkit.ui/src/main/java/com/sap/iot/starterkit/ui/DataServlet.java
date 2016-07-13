@@ -179,9 +179,15 @@ extends HttpServlet {
 		// build a HTTP URL referring to the destination
 		String destinationURL = destinationConfigurationRDMS.getProperty("URL");
 		if (destinationURL.endsWith("/")) {
-			destinationURL = destinationURL.substring(0, destinationURL.length() - 1);
+			destinationURL = destinationURL.substring(0, destinationURL.length() - "/".length());
 		}
-		destinationURL = destinationURL.concat("/devices");
+		// backward compatibility
+		if (destinationURL.endsWith("v1/api")) {
+			destinationURL = destinationURL.substring(0,
+				destinationURL.length() - "v1/api".length());
+		}
+		destinationURL = destinationURL.concat("v2/api/devices");
+		// logger.error(destinationURL);
 		URL url = null;
 		try {
 			url = new URL(destinationURL);
@@ -221,9 +227,15 @@ extends HttpServlet {
 		// build a HTTP URL referring to the destination
 		String destinationURL = destinationConfigurationRDMS.getProperty("URL");
 		if (destinationURL.endsWith("/")) {
-			destinationURL = destinationURL.substring(0, destinationURL.length() - 1);
+			destinationURL = destinationURL.substring(0, destinationURL.length() - "/".length());
 		}
-		destinationURL = destinationURL.concat("/messagetypes");
+		// backward compatibility
+		if (destinationURL.endsWith("v1/api")) {
+			destinationURL = destinationURL.substring(0,
+				destinationURL.length() - "v1/api".length());
+		}
+		destinationURL = destinationURL.concat("v2/api/deviceTypes");
+		// logger.error(destinationURL);
 		URL url = null;
 		try {
 			url = new URL(destinationURL);

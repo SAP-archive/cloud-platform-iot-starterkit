@@ -9,7 +9,7 @@ js.base.Controller.extend( "js.controller.outbound", {
 		this.getView().setModel( new sap.ui.model.json.JSONModel(), "message" );
 		this.getView().setModel( new sap.ui.model.json.JSONModel(), "data" );
 
-		console.debug( "init js.controller.outbound" );
+		// console.debug( "init js.controller.outbound" );
 	},
 
 	onDeviceSelectChange: function( oEvent ) {
@@ -24,26 +24,38 @@ js.base.Controller.extend( "js.controller.outbound", {
 			console.log( "device placeholder selected" );
 
 			that.getView().getModel( "message" ).setData( [] );
+			that.getView().oMessageSelect.setSelectedItem( null );
+			that.getView().oMessageSelect.setSelectedItemId( undefined );
+			that.getView().oMessageSelect.setSelectedKey( undefined );
+
 			that.getView().getModel( "data" ).setData( [] );
 			that.getView().oExportButton.setEnabled( false );
 
 			return;
 		}
 
-		var successHandler = function( oData, textStatus, jqXHR ) {
-			oData.unshift( {
-				id: "placeholder",
-				name: that.getText( "TEXT_SELECT" )
-			} );
-
-			that.getView().getModel( "message" ).setData( oData );
-		};
-
 		var sDeviceType = oSelectedItem.getCustomData()[0].getValue();
 
-		console.warn( "change url to  " + "data/messagetypes/".concat( sDeviceType ) );
-		// var sUrl = "data/messagetypes/".concat( sDeviceType );
-		var sUrl = "message.json";
+		var successHandler = function( oData, textStatus, jqXHR ) {
+			var oFilteredData = oData.filter( function( next ) {
+				return sDeviceType === next.id;
+			} );
+
+			// console.debug( that.getBindingPathById( sDeviceType, oData ) );
+
+			oFilteredData[0].messageTypes.unshift( {
+				id: "placeholder",
+				name: that.getText( "TEXT_SELECT" ),
+				direction: "bidirectional"
+			} );
+
+			that.getView().oMessageSelect.bindElement( "message>/0" );
+			that.getView().getModel( "message" ).setData( oFilteredData );
+		};
+
+		// console.warn( "change url to " + "data/messagetypes/".concat( sDeviceType ) );
+		var sUrl = "data/messagetypes/".concat( sDeviceType );
+		// var sUrl = "message.json";
 
 		this.doGet( sUrl, successHandler );
 	},
@@ -84,9 +96,10 @@ js.base.Controller.extend( "js.controller.outbound", {
 		var sDeviceType = this.getView().oDeviceSelect.getSelectedItem().getCustomData()[0].getValue();
 		var sMessageType = sKey;
 
-		console.warn( "change url to  " + "data/table/".concat( sDevice, "/", sDeviceType, "/", sMessageType ) );
-		// var sUrl = "data/table/".concat( sDevice, "/", sDeviceType, "/", sMessageType );
-		var sUrl = "data.json";
+		// console.warn( "change url to " + "data/table/".concat( sDevice, "/", sDeviceType, "/", sMessageType
+		// ) );
+		var sUrl = "data/table/".concat( sDevice, "/", sDeviceType, "/", sMessageType );
+		// var sUrl = "data.json";
 
 		that.oMessageInterval = setInterval( function() {
 			that.doGet( sUrl, successHandler, errorHandler );

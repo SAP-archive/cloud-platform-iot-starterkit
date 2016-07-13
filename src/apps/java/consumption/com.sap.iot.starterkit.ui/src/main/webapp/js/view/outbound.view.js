@@ -101,10 +101,11 @@ sap.ui.jsview( "js.view.outbound", {
 			}
 		} );
 
-		var oMessageSelect = sap.ui.jsfragment( "js.fragment.message", {
+		this.oMessageSelect = sap.ui.jsfragment( "js.fragment.message", {
 			onSelectChange: function( oEvent ) {
 				oController.onMessageSelectChange( oEvent );
-			}
+			},
+			direction: "fromDevice"
 		} );
 
 		this.oExportButton = new sap.m.Button( {
@@ -119,7 +120,7 @@ sap.ui.jsview( "js.view.outbound", {
 		return new sap.m.Toolbar( {
 			content: [ new sap.m.Title( {
 				text: "{i18n>TEXT_OUTBOUND_BEG}"
-			} ), this.oDeviceSelect, oMessageSelect, new sap.m.Title( {
+			} ), this.oDeviceSelect, this.oMessageSelect, new sap.m.Title( {
 				text: "{i18n>TEXT_OUTBOUND_END}"
 			} ), new sap.m.ToolbarSpacer(), this.oExportButton ]
 		} );
