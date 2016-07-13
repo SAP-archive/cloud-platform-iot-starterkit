@@ -146,10 +146,11 @@ extends HttpServlet {
 		String tableName = buildTableName(properties);
 		try {
 			if (!isTableExists(tableName)) {
-				printError(response, "A table with the name [" + tableName +
-					"] does not exist in the data base. Please, send some messages of type '" +
-					properties.getProperty(KEY_MESSAGE_TYPE_ID) +
-					"' first on behalf of the device.");
+				printError(response,
+					"A table with the name [" + tableName +
+						"] does not exist in the data base. Please, send some messages of type '" +
+						properties.getProperty(KEY_MESSAGE_TYPE_ID) +
+						"' first on behalf of the device.");
 				return;
 			}
 		}
@@ -411,7 +412,8 @@ extends HttpServlet {
 	private String selectTableData(Properties properties)
 	throws SQLException {
 		String tableName = buildTableName(properties);
-		String sql = String.format("SELECT * FROM %1$s WHERE G_DEVICE = ? ORDER BY G_CREATED DESC",
+		String sql = String.format(
+			"SELECT * FROM %1$s WHERE G_DEVICE = ? ORDER BY G_CREATED DESC LIMIT 500 OFFSET 0",
 			tableName);
 		Connection connection = openDSConnection();
 		StringBuilder sb = new StringBuilder();
@@ -440,7 +442,10 @@ extends HttpServlet {
 				sb.append("}");
 				sb.append(",");
 			}
-			sb.deleteCharAt(sb.lastIndexOf(","));
+			int commaIndex = sb.lastIndexOf(",");
+			if (commaIndex > -1) {
+				sb.deleteCharAt(sb.lastIndexOf(","));
+			}
 			sb.append("]");
 		}
 		catch (SQLException e) {
@@ -463,8 +468,8 @@ extends HttpServlet {
 	 * @return a table name
 	 */
 	private String buildTableName(Properties properties) {
-		return String.format("T_IOT_%1$s", properties.get(KEY_MESSAGE_TYPE_ID).toString()
-			.toUpperCase());
+		return String.format("T_IOT_%1$s",
+			properties.get(KEY_MESSAGE_TYPE_ID).toString().toUpperCase());
 	}
 
 	/**
@@ -523,13 +528,14 @@ extends HttpServlet {
 		}
 		String user = destinationConfiguration.getProperty("User");
 		String password = destinationConfiguration.getProperty("Password");
-		if (user == null || password == null || user.trim().isEmpty() || password.trim().isEmpty()) {
+		if (user == null || password == null || user.trim().isEmpty() ||
+			password.trim().isEmpty()) {
 			throw new IOException("User credentails are not specified for the destination [" +
 				destinationConfiguration.getProperty("Name") + "]");
 		}
 		@SuppressWarnings("restriction")
-		String base64 = new sun.misc.BASE64Encoder().encode((user + ":" + password)
-			.getBytes("UTF-8"));
+		String base64 = new sun.misc.BASE64Encoder()
+			.encode((user + ":" + password).getBytes("UTF-8"));
 		urlConnection.setRequestProperty("Authorization", "Basic " + base64);
 		return urlConnection;
 	}

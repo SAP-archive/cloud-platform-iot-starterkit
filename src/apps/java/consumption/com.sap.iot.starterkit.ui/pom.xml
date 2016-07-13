@@ -29,12 +29,14 @@
 			<groupId>com.sap.cloud</groupId>
 			<artifactId>${sap.cloud.sdk.name}</artifactId>
 			<version>${sap.cloud.sdk.version}</version>
+			 <!--  
 			<scope>provided</scope>
+			-->
 		</dependency>
 	</dependencies>
 
 	<build>
-		<finalName>${project.artifactId}</finalName>
+		<finalName>iotstarterkit</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>

@@ -1,0 +1,11 @@
+[ 
+	{
+		"id": "m1",
+		"name": "message1",
+		"device_type": "dt1"
+	}, {
+		"id": "m2",
+		"name": "message2",
+		"device_type": "dt2"
+	} 
+]

@@ -1,0 +1,11 @@
+[ 
+	{
+		"id": "d1",
+		"name": "device1",
+		"device_type": "dt1"
+	}, {
+		"id": "d2",
+		"name": "device2",
+		"device_type": "dt2"
+	} 
+]
