@@ -19,8 +19,6 @@ js.base.Controller.extend( "js.controller.outbound", {
 		var sKey = oSelectedItem.getKey();
 		if ( "placeholder" === sKey ) {
 
-			console.log( "device placeholder selected" );
-
 			that.getView().getModel( "message" ).setData( [] );
 			that.getView().oMessageSelect.setSelectedItem( null );
 			that.getView().oMessageSelect.setSelectedItemId( undefined );
@@ -39,9 +37,9 @@ js.base.Controller.extend( "js.controller.outbound", {
 				return sDeviceType === next.id;
 			} );
 
-			// check for empty array
-
-			// console.debug( that.getBindingPathById( sDeviceType, oData ) );
+			if ( oFilteredData.length === 0 ) {
+				return;
+			}
 
 			oFilteredData[0].messageTypes.unshift( {
 				id: "placeholder",
@@ -53,10 +51,7 @@ js.base.Controller.extend( "js.controller.outbound", {
 			that.getView().getModel( "message" ).setData( oFilteredData );
 		};
 
-		// console.warn( "change url to " + "data/messagetypes/".concat( sDeviceType ) );
-		// var sUrl = "data/messagetypes/".concat( sDeviceType );
 		var sUrl = "rdms/v2/api/deviceTypes";
-		// var sUrl = "message.json";
 
 		this.doGet( sUrl, successHandler );
 	},
@@ -70,8 +65,6 @@ js.base.Controller.extend( "js.controller.outbound", {
 		clearInterval( that.oMessageInterval );
 
 		if ( "placeholder" === sKey ) {
-
-			console.log( "message placeholder selected" );
 
 			that.getView().getModel( "data" ).setData( [] );
 			that.getView().oExportButton.setEnabled( false );
@@ -93,14 +86,12 @@ js.base.Controller.extend( "js.controller.outbound", {
 			clearInterval( that.oMessageInterval );
 		};
 
-		var sDevice = this.getView().oDeviceSelect.getSelectedItem().getKey();
-		var sDeviceType = this.getView().oDeviceSelect.getSelectedItem().getCustomData()[0].getValue();
+		var sDevice = that.getView().oDeviceSelect.getSelectedItem().getKey();
+		var sDeviceType = that.getView().oDeviceSelect.getSelectedItem().getCustomData()[0].getValue();
 		var sMessageType = sKey;
+		var iLimit = 500;
 
-		// console.warn( "change url to " + "data/table/".concat( sDevice, "/", sDeviceType, "/", sMessageType
-		// ) );
-		var sUrl = "data/".concat( sDevice, "/", sDeviceType, "/", sMessageType, "/", "500" );
-		// var sUrl = "data.json";
+		var sUrl = "data/".concat( sDevice, "/", sDeviceType, "/", sMessageType, "/", iLimit );
 
 		that.oMessageInterval = setInterval( function() {
 			that.doGet( sUrl, successHandler, errorHandler );

@@ -11,8 +11,6 @@ js.base.Controller.extend( "js.controller.inbound", {
 		var sKey = oSelectedItem.getKey();
 		if ( "placeholder" === sKey ) {
 
-			console.log( "device placeholder selected" );
-
 			that.getView().getModel( "message" ).setData( [] );
 			that.getView().oMessageSelect.setSelectedItem( null );
 			that.getView().oMessageSelect.setSelectedItemId( undefined );
@@ -30,12 +28,12 @@ js.base.Controller.extend( "js.controller.inbound", {
 			return;
 		}
 
+		var sDeviceType = oSelectedItem.getCustomData()[0].getValue();
+
 		var successHandler = function( oData, textStatus, jqXHR ) {
 			var oFilteredData = oData.filter( function( next ) {
 				return sDeviceType === next.id;
 			} );
-
-			// console.debug( that.getBindingPathById( sDeviceType, oData ) );
 
 			oFilteredData[0].messageTypes.unshift( {
 				id: "placeholder",
@@ -45,15 +43,9 @@ js.base.Controller.extend( "js.controller.inbound", {
 
 			that.getView().oMessageSelect.bindElement( "message>/0" );
 			that.getView().getModel( "message" ).setData( oFilteredData );
-
 		};
 
-		var sDeviceType = oSelectedItem.getCustomData()[0].getValue();
-
-		// console.warn( "change url to " + "data/messagetypes/".concat( sDeviceType ) );
-		// var sUrl = "data/messagetypes/".concat( sDeviceType );
 		var sUrl = "rdms/v2/api/deviceTypes";
-		// var sUrl = "message.json";
 
 		this.doGet( sUrl, successHandler );
 	},
@@ -63,10 +55,7 @@ js.base.Controller.extend( "js.controller.inbound", {
 
 		var oSelectedItem = oEvent.getParameter( "selectedItem" );
 		var sKey = oSelectedItem.getKey();
-
 		if ( "placeholder" === sKey ) {
-
-			console.log( "message placeholder selected" );
 
 			that.getView().oSegmentedButton.setEnabled( false );
 			that.getView().oSwitch.setEnabled( false );
@@ -84,7 +73,6 @@ js.base.Controller.extend( "js.controller.inbound", {
 		that.getView().oSwitch.setEnabled( true );
 		that.getView().oInput.setEnabled( true );
 		that.getView().oButton.setEnabled( true );
-
 	},
 
 	onSwitchChange: function( oEvent ) {
@@ -111,16 +99,12 @@ js.base.Controller.extend( "js.controller.inbound", {
 			} ]
 		};
 
-		console.debug( oData );
-
 		var successHandler = function( oData, textStatus, jqXHR ) {
 			sap.m.MessageToast.show( oData.msg );
 		};
 
 		var sDevice = this.getView().oDeviceSelect.getSelectedItem().getKey();
-
 		var sUrl = "mms/v1/api/http/push/".concat( sDevice );
-		console.debug( sUrl );
 
 		this.doPost( sUrl, oData, successHandler );
 	}
