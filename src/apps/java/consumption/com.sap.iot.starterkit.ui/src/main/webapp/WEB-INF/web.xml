@@ -3,18 +3,38 @@
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	version="3.0">
-	<display-name>com.sap.iot.starterkit.ui</display-name>
+	<display-name>iotstarterkit</display-name>
+
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
+
 	<servlet>
 		<servlet-name>DataServlet</servlet-name>
 		<servlet-class>com.sap.iot.starterkit.ui.DataServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>MmsDispatcherServlet</servlet-name>
+		<servlet-class>com.sap.iot.starterkit.ui.MmsDispatcherServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>RdmsDispatcherServlet</servlet-name>
+		<servlet-class>com.sap.iot.starterkit.ui.RdmsDispatcherServlet</servlet-class>
+	</servlet>
+
 	<servlet-mapping>
 		<servlet-name>DataServlet</servlet-name>
 		<url-pattern>/data/*</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>MmsDispatcherServlet</servlet-name>
+		<url-pattern>/mms/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>RdmsDispatcherServlet</servlet-name>
+		<url-pattern>/rdms/*</url-pattern>
+	</servlet-mapping>
+
 	<resource-ref>
 		<res-ref-name>connectivityConfiguration</res-ref-name>
 		<res-type>com.sap.core.connectivity.api.configuration.ConnectivityConfiguration</res-type>
@@ -23,9 +43,11 @@
 		<res-ref-name>jdbc/DefaultDB</res-ref-name>
 		<res-type>javax.sql.DataSource</res-type>
 	</resource-ref>
+
 	<login-config>
 		<auth-method>FORM</auth-method>
 	</login-config>
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>SAML Protected</web-resource-name>
@@ -35,4 +57,5 @@
 			<role-name>Everyone</role-name>
 		</auth-constraint>
 	</security-constraint>
+
 </web-app>
