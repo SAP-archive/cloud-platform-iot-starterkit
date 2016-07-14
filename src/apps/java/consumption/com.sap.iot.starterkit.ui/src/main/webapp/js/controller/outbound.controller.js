@@ -95,7 +95,7 @@ js.base.Controller.extend( "js.controller.outbound", {
 
 		that.oMessageInterval = setInterval( function() {
 			that.doGet( sUrl, successHandler, errorHandler );
-		}, 1000 );
+		}, 2000 );
 	},
 
 	onExportButtonPress: function( oEvent ) {
