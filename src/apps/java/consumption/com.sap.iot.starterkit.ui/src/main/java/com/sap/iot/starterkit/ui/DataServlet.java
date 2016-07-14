@@ -38,7 +38,6 @@ extends AbstractBaseServlet {
 	private static final String KEY_TABLE_NAME = "tableName";
 
 	private DataSource dataSource;
-	private Properties properties;
 
 	/**
 	 * Initializes the Java servlet
@@ -66,18 +65,6 @@ extends AbstractBaseServlet {
 			return;
 		}
 
-		// check for path parameters and construct properties out of them
-		try {
-			properties = buildProperties(request.getPathInfo(), KEY_DEVICE_ID, KEY_DEVICE_TYPE_ID,
-				KEY_MESSAGE_TYPE_ID, KEY_LIMIT);
-			properties.put(KEY_TABLE_NAME, String.format(Locale.ENGLISH, "T_IOT_%1$s",
-				properties.getProperty(KEY_MESSAGE_TYPE_ID).toUpperCase(Locale.ENGLISH)));
-		}
-		catch (IllegalArgumentException e) {
-			printError(response, e.getMessage());
-			return;
-		}
-
 		doGetData(request, response);
 	}
 
@@ -86,11 +73,21 @@ extends AbstractBaseServlet {
 	 */
 	protected void doGetData(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
+		// check for path parameters and construct properties out of them
+		Properties properties = null;
+		try {
+			properties = buildProperties(request.getPathInfo(), KEY_DEVICE_ID, KEY_DEVICE_TYPE_ID,
+				KEY_MESSAGE_TYPE_ID, KEY_LIMIT);
+		}
+		catch (IllegalArgumentException e) {
+			printError(response, e.getMessage());
+			return;
+		}
 
 		// check if a table with the specified name exists in the data base
 		try {
 			String tableName = properties.getProperty(KEY_TABLE_NAME);
-			if (!isTableExists()) {
+			if (!isTableExists(tableName)) {
 				printError(response,
 					"A table with the name [" + tableName +
 						"] does not exist in the data base. Please, send some messages of type '" +
@@ -107,7 +104,7 @@ extends AbstractBaseServlet {
 		// execute SQL select to get the table contents and build JSON string out of it
 		String tableData = null;
 		try {
-			tableData = selectTableData();
+			tableData = selectTableData(properties);
 		}
 		catch (SQLException e) {
 			printError(response, e.getMessage());
@@ -140,6 +137,9 @@ extends AbstractBaseServlet {
 		for (int i = 0; i < keys.length; i++) {
 			properties.put(keys[i], parts[i]);
 		}
+
+		properties.put(KEY_TABLE_NAME, String.format(Locale.ENGLISH, "T_IOT_%1$s",
+			properties.getProperty(KEY_MESSAGE_TYPE_ID).toUpperCase(Locale.ENGLISH)));
 
 		return properties;
 	}
@@ -188,12 +188,14 @@ extends AbstractBaseServlet {
 	 * entries will have the DESC sorting order according to 'G_CREATED' column value which is added
 	 * to all IoT tables by default.
 	 * 
+	 * @param properties
+	 *            a set of path parameters
 	 * @return a JSON array with JSON objects containing the table column-value pairs represented as
 	 *         JSON string
 	 * @throws SQLException
 	 *             if a database access error occurs
 	 */
-	private String selectTableData()
+	private String selectTableData(Properties properties)
 	throws SQLException {
 		Connection connection = openConnection();
 		String driverName = connection.getMetaData().getDatabaseProductName()
@@ -249,14 +251,14 @@ extends AbstractBaseServlet {
 	/**
 	 * Checks if a table with a given name exists in the data base.
 	 * 
+	 * @param tableName
+	 *            a data base table name
 	 * @return true in case a table exists in the data base, otherwise false
 	 * @throws SQLException
 	 *             if a database access error occurs
 	 */
-	private boolean isTableExists()
+	private boolean isTableExists(String tableName)
 	throws SQLException {
-		String tableName = properties.getProperty(KEY_TABLE_NAME);
-
 		Connection connection = openConnection();
 		try {
 			DatabaseMetaData metaData = connection.getMetaData();
