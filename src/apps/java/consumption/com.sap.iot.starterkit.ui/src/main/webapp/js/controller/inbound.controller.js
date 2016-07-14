@@ -53,7 +53,8 @@ js.base.Controller.extend( "js.controller.inbound", {
 		var sDeviceType = oSelectedItem.getCustomData()[0].getValue();
 
 		// console.warn( "change url to " + "data/messagetypes/".concat( sDeviceType ) );
-		var sUrl = "data/messagetypes/".concat( sDeviceType );
+		// var sUrl = "data/messagetypes/".concat( sDeviceType );
+		var sUrl = "rdms/v2/api/deviceTypes";
 		// var sUrl = "message.json";
 
 		this.doGet( sUrl, successHandler );
@@ -120,7 +121,7 @@ js.base.Controller.extend( "js.controller.inbound", {
 
 		var sDevice = this.getView().oDeviceSelect.getSelectedItem().getKey();
 
-		var sUrl = "data/push/".concat( sDevice );
+		var sUrl = "mms/v1/api/http/push/".concat( sDevice );
 		console.debug( sUrl );
 
 		this.doPost( sUrl, oData, successHandler );

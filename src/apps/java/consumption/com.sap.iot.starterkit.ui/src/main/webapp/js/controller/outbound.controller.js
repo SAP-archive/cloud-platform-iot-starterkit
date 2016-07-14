@@ -41,6 +41,8 @@ js.base.Controller.extend( "js.controller.outbound", {
 				return sDeviceType === next.id;
 			} );
 
+			// check for empty array
+
 			// console.debug( that.getBindingPathById( sDeviceType, oData ) );
 
 			oFilteredData[0].messageTypes.unshift( {
@@ -54,7 +56,8 @@ js.base.Controller.extend( "js.controller.outbound", {
 		};
 
 		// console.warn( "change url to " + "data/messagetypes/".concat( sDeviceType ) );
-		var sUrl = "data/messagetypes/".concat( sDeviceType );
+		// var sUrl = "data/messagetypes/".concat( sDeviceType );
+		var sUrl = "rdms/v2/api/deviceTypes";
 		// var sUrl = "message.json";
 
 		this.doGet( sUrl, successHandler );
@@ -98,7 +101,7 @@ js.base.Controller.extend( "js.controller.outbound", {
 
 		// console.warn( "change url to " + "data/table/".concat( sDevice, "/", sDeviceType, "/", sMessageType
 		// ) );
-		var sUrl = "data/table/".concat( sDevice, "/", sDeviceType, "/", sMessageType );
+		var sUrl = "data/".concat( sDevice, "/", sDeviceType, "/", sMessageType, "/", "500" );
 		// var sUrl = "data.json";
 
 		that.oMessageInterval = setInterval( function() {

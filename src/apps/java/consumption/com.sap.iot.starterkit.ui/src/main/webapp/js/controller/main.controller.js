@@ -26,7 +26,7 @@ js.base.Controller.extend( "js.controller.main", {
 			clearInterval( that.oDeviceInterval );
 		};
 
-		var sUrl = "data/devices";
+		var sUrl = "rdms/v2/api/devices";
 		// console.warn( "change url to " + "data/devices" );
 		// var sUrl = "device.json";
 
