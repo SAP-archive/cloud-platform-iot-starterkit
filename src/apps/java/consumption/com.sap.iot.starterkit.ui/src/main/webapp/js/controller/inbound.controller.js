@@ -2,8 +2,6 @@ js.base.Controller.extend( "js.controller.inbound", {
 
 	onInit: function() {
 		this.getView().setModel( new sap.ui.model.json.JSONModel(), "message" );
-
-		// console.debug( "init js.controller.inbound" );
 	},
 
 	onDeviceSelectChange: function( oEvent ) {

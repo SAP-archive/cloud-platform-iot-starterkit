@@ -17,24 +17,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.sap.iot.starterkit.ui.util.SqlUtil;
 
 /**
  * A class DataServlet provides an API that can be used by IoT application developers to retrieve
- * stored messages from the data source and push messages to the device via IoT MMS.
+ * stored messages from the data source
  */
 public class DataServlet
 extends AbstractBaseServlet {
 
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * Logging API
-	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDispatcherServlet.class);
 
 	/**
 	 * Keys for the expected path parameters
@@ -45,15 +37,11 @@ extends AbstractBaseServlet {
 	private static final String KEY_LIMIT = "limit";
 	private static final String KEY_TABLE_NAME = "tableName";
 
-	/**
-	 * A factory for connections to the physical data source
-	 */
 	private DataSource dataSource;
-
 	private Properties properties;
 
 	/**
-	 * Initializes the Java Servlet
+	 * Initializes the Java servlet
 	 */
 	@Override
 	public void init()
@@ -67,7 +55,7 @@ extends AbstractBaseServlet {
 	}
 
 	/**
-	 * Handles HTTP GET request from a client
+	 * Handles client's HTTP GET requests
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -94,7 +82,7 @@ extends AbstractBaseServlet {
 	}
 
 	/**
-	 * Gets a content of the DB table as JSON string
+	 * Gets content of the DB table as JSON string
 	 */
 	protected void doGetData(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
@@ -125,6 +113,7 @@ extends AbstractBaseServlet {
 			printError(response, e.getMessage());
 			return;
 		}
+
 		// respond with the result
 		printJson(response, tableData);
 	}
@@ -142,17 +131,16 @@ extends AbstractBaseServlet {
 	 */
 	private Properties buildProperties(String pathInfo, String... keys) {
 		pathInfo = pathInfo.replaceFirst("/", "");
-		// pathInfo = pathInfo.substring(pathInfo.indexOf("/") + 1, pathInfo.length());
-		// LOGGER.error(pathInfo);
 		String[] parts = pathInfo.split("/");
 		if (parts.length != keys.length) {
 			throw new IllegalArgumentException("Wrong number of path parameters.");
 		}
+
 		Properties properties = new Properties();
 		for (int i = 0; i < keys.length; i++) {
 			properties.put(keys[i], parts[i]);
 		}
-		// LOGGER.error(properties.toString());
+
 		return properties;
 	}
 
@@ -200,8 +188,6 @@ extends AbstractBaseServlet {
 	 * entries will have the DESC sorting order according to 'G_CREATED' column value which is added
 	 * to all IoT tables by default.
 	 * 
-	 * @param properties
-	 *            a set of path parameters
 	 * @return a JSON array with JSON objects containing the table column-value pairs represented as
 	 *         JSON string
 	 * @throws SQLException
@@ -263,8 +249,6 @@ extends AbstractBaseServlet {
 	/**
 	 * Checks if a table with a given name exists in the data base.
 	 * 
-	 * @param tableName
-	 *            a data base table name
 	 * @return true in case a table exists in the data base, otherwise false
 	 * @throws SQLException
 	 *             if a database access error occurs

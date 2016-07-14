@@ -1,4 +1,4 @@
-sap.ui.core.UIComponent.extend( 'iotstarterkit.Component', {
+sap.ui.core.UIComponent.extend( "iotstarterkit.Component", {
 
 	metadata: {
 		manifest: "json"

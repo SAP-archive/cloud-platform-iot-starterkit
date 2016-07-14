@@ -34,9 +34,7 @@ sap.ui.core.mvc.Controller.extend( "js.base.Controller", {
 			data: oData,
 			url: sUrl,
 			error: function( jqXHR, textStatus, errorThrown ) {
-				if ( jqXHR.status === 0 ) {
-					// handled separately
-				} else {
+				if ( jqXHR.status !== 0 ) {
 					sap.m.MessageToast.show( "[".concat( jqXHR.status, "] ", jqXHR.statusText, " ", jqXHR.responseText ) );
 				}
 				errorHandler.apply( this, [ jqXHR, textStatus, errorThrown ] );

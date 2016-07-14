@@ -19,8 +19,8 @@ import com.sap.core.connectivity.api.configuration.ConnectivityConfiguration;
 import com.sap.core.connectivity.api.configuration.DestinationConfiguration;
 
 /**
- * A class DataServlet provides an API that can be used by IoT application developers to retrieve
- * stored messages from the data source and push messages to the device via IoT MMS.
+ * An abstract dispatcher implementation responsible to forward HTTP requests back and force from
+ * client UI to IoT Services
  */
 public abstract class AbstractDispatcherServlet
 extends AbstractBaseServlet {
@@ -36,24 +36,18 @@ extends AbstractBaseServlet {
 	private String destinationUrl;
 
 	/**
-	 * 
-	 * @return
-	 * @throws IOException
+	 * Returns a value of the {@code URL} property like specified in the destination file
 	 */
 	protected abstract String getDestinationUrl()
 	throws IOException;
 
 	/**
-	 * 
-	 * @return
+	 * Returns a name of the destination file
 	 */
 	protected abstract String getDestinationName();
 
 	/**
-	 * todo
-	 * 
-	 * @throws ServletException
-	 *             if an exception occurs that interrupts the servlet's normal operation
+	 * Initializes the Java servlet
 	 */
 	@Override
 	public void init()
@@ -62,13 +56,13 @@ extends AbstractBaseServlet {
 			destinationConfiguration = getDestinationConfiguration();
 		}
 		catch (IOException e) {
-			throw new ServletException("get destaintion", e);
+			throw new ServletException(e.getMessage(), e);
 		}
 		try {
 			destinationUrl = getDestinationUrl();
 		}
 		catch (IOException e) {
-			throw new ServletException("get url", e);
+			throw new ServletException(e.getMessage(), e);
 		}
 	}
 
@@ -157,25 +151,21 @@ extends AbstractBaseServlet {
 	}
 
 	/**
-	 * 
-	 * @return
-	 * @throws IOException
+	 * Returns a concrete destination configuration object from JNDI connectivity configuration
 	 */
 	protected DestinationConfiguration getDestinationConfiguration()
 	throws IOException {
-		DestinationConfiguration destination = geConnectivityConfiguration()
-			.getConfiguration(getDestinationName());
+		String name = getDestinationName();
+		DestinationConfiguration destination = geConnectivityConfiguration().getConfiguration(name);
 		if (destination == null) {
 			throw new IOException(
-				"Unable to establish a connectivity to the IoT RDMS destination. Check your 'iotrdms' destination.");
+				"Unable to establish a connectivity to the destination [" + name + "]");
 		}
 		return destination;
 	}
 
 	/**
-	 * 
-	 * @return
-	 * @throws IOException
+	 * Returns connectivity configuration object from JNDI context
 	 */
 	protected ConnectivityConfiguration geConnectivityConfiguration()
 	throws IOException {
@@ -183,15 +173,13 @@ extends AbstractBaseServlet {
 	}
 
 	/**
-	 * Opens a HTTP URL connection to the destination.
+	 * Opens a HTTP URL connection to the destination
 	 * 
 	 * @param url
 	 *            a URL to the destination service
-	 * @param destinationConfiguration
-	 *            a destination configuration instance
 	 * @return a HTTP URL connection
 	 * @throws IOException
-	 *             if fails to open a connection
+	 *             - if fails to open a connection
 	 */
 	private HttpURLConnection openConnection(URL url)
 	throws IOException {
@@ -247,14 +235,14 @@ extends AbstractBaseServlet {
 	}
 
 	/**
-	 * Copies (writes) an input stream to an output stream.
+	 * Copies (writes) an input stream to an output stream
 	 * 
 	 * @param is
 	 *            an input stream to copy from
 	 * @param os
 	 *            an output stream to copy to
 	 * @throws IOException
-	 *             if copying operation fail
+	 *             - if copying operation fail
 	 */
 	private void copyStream(InputStream is, OutputStream os)
 	throws IOException {
@@ -266,8 +254,8 @@ extends AbstractBaseServlet {
 			}
 		}
 		catch (IOException e) {
-			throw new IOException("Unable to copy the content of an stream into an output stream",
-				e);
+			throw new IOException(
+				"Unable to copy the content of an input stream into an output stream", e);
 		}
 	}
 

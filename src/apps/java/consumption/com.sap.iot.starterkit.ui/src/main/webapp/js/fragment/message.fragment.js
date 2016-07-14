@@ -11,8 +11,6 @@ sap.ui.jsfragment( "js.fragment.message", {
 			path: "direction",
 			test: function( sValue ) {
 				sDirection = oController.direction;
-				console.log( sValue + " | " + sDirection.toUpperCase() + " > "
-					+ (sValue === sDirection.toUpperCase()) );
 
 				if ( sDirection === null || sDirection === undefined ) {
 					return true;

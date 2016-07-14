@@ -8,8 +8,6 @@ js.base.Controller.extend( "js.controller.outbound", {
 	onInit: function() {
 		this.getView().setModel( new sap.ui.model.json.JSONModel(), "message" );
 		this.getView().setModel( new sap.ui.model.json.JSONModel(), "data" );
-
-		// console.debug( "init js.controller.outbound" );
 	},
 
 	onDeviceSelectChange: function( oEvent ) {

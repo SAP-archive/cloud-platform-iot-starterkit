@@ -1,4 +1,4 @@
-jQuery.sap.require( 'js.base.Controller' );
+jQuery.sap.require( "js.base.Controller" );
 
 js.base.Controller.extend( "js.controller.main", {
 
@@ -27,15 +27,11 @@ js.base.Controller.extend( "js.controller.main", {
 		};
 
 		var sUrl = "rdms/v2/api/devices";
-		// console.warn( "change url to " + "data/devices" );
-		// var sUrl = "device.json";
 
 		that.doGet( sUrl, successHandler );
 		that.oDeviceInterval = setInterval( function() {
 			that.doGet( sUrl, successHandler, errorHandler );
 		}, 5000 );
-
-		// console.debug( "init js.controller.main" );
 	}
 
 } );
