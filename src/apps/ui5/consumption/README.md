@@ -23,9 +23,9 @@ Open the HCP WebIDE and import the zip file into your workspace. ``` Click > Fil
 
 You are now ready to edit the sample application. In order to execute the sample application ``` Right Click > index.html > Run > Run index.html ```
 
-Note that is sample application just shows data for message types that contains a ``` timestap ``` and a ``` value ``` field. See the source code for details.
+Note that this sample application just shows data for message types that contain a ``` timestamp ``` and a ``` value ``` field. See the source code for details.
 
 ### Deploy
 
-The deployment of the application into your HCP account is straigt forward. 
-``` Right Click your project folder in WebIDE (Example: src) > Deploy > Deploy to SAP HANA Cloud Platform ```. Insert your credentials and follow the deployment guide. 
+The deployment of the application into your HCP account is straight forward. 
+``` Right Click your project folder in WebIDE (Example: src) > Deploy > Deploy to SAP HANA Cloud Platform ```. Follow the intructions of the wizard. 
