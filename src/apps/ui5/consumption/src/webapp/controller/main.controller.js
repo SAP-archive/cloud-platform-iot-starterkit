@@ -142,11 +142,9 @@ sap.ui.define([
 		calculateChartHeight: function() {
 			var pageHeaderHeight = 48;
 			var consumptionPanelHeight = 48;
-			var pushPanelHeight = 48;
-			var listHeight = 129;
-			var margins = 42;
+			var margins = 33;
 
-			var staticHeight = pageHeaderHeight + consumptionPanelHeight + pushPanelHeight + listHeight + margins;
+			var staticHeight = pageHeaderHeight + consumptionPanelHeight + margins;
 			var windowHeight = $(window).height();
 
 			return (windowHeight - staticHeight) + "px";
