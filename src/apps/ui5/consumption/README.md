@@ -16,7 +16,7 @@ After importing the MMS destination you need to import the RDMS destination the 
 ![UI5 RDMS Destination configuration](../../../../images/mms_consume_ui5_05.png)
 
 ### Edit
-In order to edit or execute our example application go to the ``` src ``` directory. This folder contains the webapp folder and some configuration files. To upload the sample application to the HCP all source files have to be zipped. 
+In order to edit or execute our example application go *into* the ``` src ``` directory. This folder contains the webapp folder and one configuration file. Zip the webapp folder and the configuration file and upload the sample application to the HCP.
 
 Open the HCP WebIDE and import the zip file into your workspace. ``` Click > File > Import > File From System  ``` choose the zipped file and name a destination folder. 
 
