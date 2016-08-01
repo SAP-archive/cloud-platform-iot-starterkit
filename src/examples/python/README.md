@@ -13,3 +13,5 @@ usage of the RDMS API in order to create new device instances programatically.
 
 [binary_transfer](./binary_transfer) demonstrates the low level https
 interactions (also suitable for uControlers) used to work with binary messages.
+
+[mqtt-over-wss](./mqtt-over-wss) demonstrates the usage of MQTT over WSS for upstream (publish) and downstream (receive messages for the "push" topic you subscribed to) interaction of a device.
