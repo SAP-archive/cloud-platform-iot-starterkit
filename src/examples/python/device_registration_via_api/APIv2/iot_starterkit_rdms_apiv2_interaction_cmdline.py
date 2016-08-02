@@ -1,5 +1,5 @@
 # This script can be used to create message and device types as well
-# as a message instance via the respective API
+# as a device instance via the respective API
 # it uses the APIv2 - which is the encouraged way to use as in Aug 2016
 # it does not do any error handling - so the created types MUST NOT exist before
 

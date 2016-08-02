@@ -1,5 +1,5 @@
 # This script can be used to create message and device types as well
-# as a message instance via the respective API
+# as a device instance via the respective API
 # it uses the RDMS API v1 - which is deprecated, so you are encouraged to use API v2
 # see: https://help.hana.ondemand.com/iot/frameset.htm?c4477ad35f1c405fb9364f279f24d973.html
 # it does not do any error handling - so the created types MUST NOT exist before
