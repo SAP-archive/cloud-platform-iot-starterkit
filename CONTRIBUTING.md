@@ -30,12 +30,12 @@ Before you submit your pull request consider take the following guidelines into 
 * Search [GitHub](https://github.com/SAP/iot-starterkit/pulls) for an open or closed Pull Request
   that relates to your submission. You don't want to duplicate effort.
 * Please sign our [Contributor License Agreement (CLA)](#cla) before sending pull
-  requests. We cannot accept code without this.
+  requests (see link to the tool below). We cannot accept code without this.
  
 ## <a name="cla"></a> Signing the CLA
 
 Please sign our SAP Individual Contributor License Agreement (CLA) before sending pull requests. For any code
-changes to be accepted, the CLA have to be signed. It is a one step process made possible with [CLA Assistant][claassistant]. The respective form will be shown to you automatically.
+changes to be accepted, the CLA has to be signed. It is a one step process made possible with [CLA Assistant][claassistant]. The respective form will be shown to you automatically.
 
-[claassistant]: https://cla-assistant.io
+[claassistant]: https://cla-assistant.io/SAP/iot-starterkit
 [scn]: http://scn.sap.com/
