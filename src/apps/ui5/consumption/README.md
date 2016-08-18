@@ -40,6 +40,6 @@ The deployment of the application into your HCP account is straight forward.
 
 In case you would need to display another measurement value on Y-Axis different from the ``` value ``` of your message type, please modify the source UI5 binding right in the source code i.e.
 
-[main.view.js](./src/apps/ui5/consumption/src/webapp/view/main.view.js) line #120. 
+[main.view.js](src/webapp/view/main.view.js) line #120. 
 
 A value should match the next pattern ``` {odata>C_<MESSAGE_TYPE_FIELD_NAME>} ```
