@@ -4,5 +4,5 @@ Authentication=BasicAuthentication
 Name=iotrdms
 CloudConnectorVersion=2
 ProxyType=Internet
-URL=https\://iotrdmsiotservices-%account_id%.hanatrial.ondemand.com/com.sap.iotservices.dms
+URL=https\://iotrdmsiotservices-%account_id%.%landscape_name%.ondemand.com/com.sap.iotservices.dms
 User=%user_id%
