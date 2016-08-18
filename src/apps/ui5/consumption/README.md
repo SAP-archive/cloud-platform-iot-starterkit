@@ -38,7 +38,7 @@ The deployment of the application into your HCP account is straight forward.
 
 ### Modify
 
-In case you would need to display another measurement value on Y-Axis different from the ``` value ``` of your message type, please modify the source UI5 binding right in the source code i.e.
+In case you would need to display another measurement value on Y-Axis different from the ``` value ``` field of your message type, please modify the UI5 data source binding right in the source code i.e.
 
 [main.view.js](src/webapp/view/main.view.js) line #120. 
 
