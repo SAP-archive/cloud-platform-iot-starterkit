@@ -14,7 +14,7 @@ The default schema binding can be changed to point to a dedicated HANA instance 
 
 ### Creating and configuring HANA MDC instance
 
-Click on New, select HANA MDC Database, give it a name i.e. "iotmmsxs" and specify a password for your Database user. Please, note that your Database user is "SYSTEM" be default.
+Click on New, select HANA MDC Database, give it a name i.e. "iotmmsxs" and specify a password for your Database user. Please, note that your Database user is "SYSTEM" by default.
 
 ![](../../../../images/xs/0002.png)
 
