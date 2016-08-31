@@ -11,7 +11,7 @@ The deployment of the Message Management Service (MMS) step needs to be done fro
 Then assign the Role IoT-MMS-User for the newly deployed ```iotmms``` Java Application (otherwise you will be denied access to the ```iotmms``` Application URL with an HTTP Status 403 Error). To do so: 
 * Go to the Java Applications tab in your SAP HANA Cloud Platform cockpit of your account
 * Choose the ```iotmms``` application
-* Choose the Roles tab of the Application details
+* Choose the Security tab of the Application details and then select Roles
 <br />
 <br />
 ![Role assignment for MMS](../../../images/mms_role_assignment_01.png)

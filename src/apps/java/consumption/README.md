@@ -14,7 +14,7 @@ In order to compile and deploy our example application please get the sources to
 
 ![UI .war file deployment](../../../../images/ui_war_file_deployment.png?raw=true "UI .war file deployment")
 
-* Select the application and go to ```Destinations > Import from file``` (use the provided file [iotmms](./com.sap.iot.starterkit.ui/destinations/iotmms) in the ```com.sap.iot.starterkit.ui/destinations``` folder) to correctly route requests from your User Interface to the ```iotmms``` application providing the MMS Services
+* Select the application and go to ```Destinations > Import Destination``` (use the provided file [iotmms](./com.sap.iot.starterkit.ui/destinations/iotmms) in the ```com.sap.iot.starterkit.ui/destinations``` folder) to correctly route requests from your User Interface to the ```iotmms``` application providing the MMS Services
 
 ![Destination configuration](../../../../images/destination_configuration_01.png?raw=true "Destination configuration")
 
@@ -22,7 +22,7 @@ In order to compile and deploy our example application please get the sources to
 
 ![Destination configuration](../../../../images/destination_configuration_02.png?raw=true "Destination configuration")
 
-* Select the application and go to ```Destinations > Import from file``` (use the provided file [iotrdms](./com.sap.iot.starterkit.ui/destinations/iotrdms) in the ```com.sap.iot.starterkit.ui/destinations``` folder) to correctly route requests from your User Interface to the ```iotrdms``` application providing the RDMS Services
+* Select the application and go to ```Destinations > Import Destination``` (use the provided file [iotrdms](./com.sap.iot.starterkit.ui/destinations/iotrdms) in the ```com.sap.iot.starterkit.ui/destinations``` folder) to correctly route requests from your User Interface to the ```iotrdms``` application providing the RDMS Services
 
 ![Destination configuration](../../../../images/destination_configuration_03.png?raw=true "Destination configuration")
 
