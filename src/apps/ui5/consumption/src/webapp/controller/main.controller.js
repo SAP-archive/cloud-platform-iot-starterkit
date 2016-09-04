@@ -158,22 +158,36 @@ sap.ui.define([
 		 */
 		formatDate: function(oValue) {
 			var oDate = null;
+			// can be of type Date if consumed with OData (XML format)
+			if (oValue instanceof Date) {
+				oDate = oValue;
+			}
 			// can be a string primitive in JSON, but we need a number
-			if ((typeof oValue) === "string") {
-				// backward compatibility, old type was long, new type is date
-				// check if not a number
-				var result = isNaN(Number(oValue));
-				if (result) {
-					// FF and Ie cannot create Dates using 'DD-MM-YYYY HH:MM:SS.ss' format but
-					// 'DD-MM-YYYYTHH:MM:SS.ss'
-					oValue = oValue.replace(" ", "T");
-					// this is a date type
+			else if ((typeof oValue) === "string") {
+				// can be of type JSON Date if consumed with OData (JSON format)
+				if (oValue.indexOf("/") === 0) {
+					oValue = oValue.replace(new RegExp("/", 'g'), "");
+					oValue = oValue.replace(new RegExp("\\(", 'g'), "");
+					oValue = oValue.replace(new RegExp("\\)", 'g'), "");
+					oValue = oValue.replace("Date", "");
+					oValue = parseInt(oValue);
 					oDate = new Date(oValue);
 				} else {
-					// this is a long type
-					oValue = parseInt(oValue);
-					// ensure that UNIX timestamps are converted to milliseconds
-					oDate = new Date(oValue * 1000);
+					// backward compatibility, old type was long, new type is date
+					// check if not a number
+					var result = isNaN(Number(oValue));
+					if (result) {
+						// FF and Ie cannot create Dates using 'DD-MM-YYYY HH:MM:SS.ss' format but
+						// 'DD-MM-YYYYTHH:MM:SS.ss'
+						oValue = oValue.replace(" ", "T");
+						// this is a date type
+						oDate = new Date(oValue);
+					} else {
+						// this is a long type
+						oValue = parseInt(oValue);
+						// ensure that UNIX timestamps are converted to milliseconds
+						oDate = new Date(oValue * 1000);
+					}
 				}
 			} else {
 				// ensure that UNIX timestamps are converted to milliseconds

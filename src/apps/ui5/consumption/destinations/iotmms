@@ -4,5 +4,5 @@ Authentication=BasicAuthentication
 Name=iotmms
 CloudConnectorVersion=2
 ProxyType=Internet
-URL=https\://iotmms%account_id%.hanatrial.ondemand.com/com.sap.iotservices.mms
+URL=https\://iotmms%account_id%.%landscape_name%.ondemand.com/com.sap.iotservices.mms
 User=%user_id%

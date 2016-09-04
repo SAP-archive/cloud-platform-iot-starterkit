@@ -7,9 +7,13 @@ Download the source of our example application to your system. At first we need 
 
 ![UI5 Destination configuration](../../../../images/mms_consume_ui5_03.png)
 
-Choose ``` Import Destination ``` in order to import the existing MMS destination. Please take care to adopt your ``` user ```, the ``` url ``` and to insert your HCP ``` password ```.
+Choose ``` Import Destination ``` in order to import the existing MMS destination. Please take care to adopt your HCP ``` user ```, ``` password ``` as well as the service ``` url ```. Acceptable values for the ``` %landscape_name% ``` placeholder in the URL are ``` hana ``` and ``` hanatrial ```.
 
 ![UI5 MMS Destination configuration](../../../../images/mms_consume_ui5_04.png)
+
+It is also recommended to click on a "Check Connection" button after you save your imported Destination to verify your connectivity.
+
+![UI5 MMS Destination configuration](../../../../images/mms_consume_ui5_04a.png)
 
 After importing the MMS destination you need to import the RDMS destination the same way. Please take care to adopt your ``` user ```, the ``` url ``` and to insert your HCP ``` password ```.
 
@@ -31,3 +35,11 @@ Note that this sample application just shows data for message types that contain
 
 The deployment of the application into your HCP account is straight forward. 
 ``` Right Click your project folder in WebIDE (Example: src) > Deploy > Deploy to SAP HANA Cloud Platform ```. Follow the intructions of the wizard. 
+
+### Modify
+
+In case you would need to display another measurement value on Y-Axis different from the ``` value ``` field of your message type, please modify the UI5 data source binding right in the source code i.e.
+
+[main.view.js](src/webapp/view/main.view.js) line #120. 
+
+A value should match the next pattern ``` {odata>C_<MESSAGE_TYPE_FIELD_NAME>} ```
