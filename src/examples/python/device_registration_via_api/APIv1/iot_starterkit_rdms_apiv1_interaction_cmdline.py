@@ -1,5 +1,7 @@
 # This script can be used to create message and device types as well
-# as a message instance via the respective API
+# as a device instance via the respective API
+# it uses the RDMS API v1 - which is deprecated, so you are encouraged to use API v2
+# see: https://help.hana.ondemand.com/iot/frameset.htm?c4477ad35f1c405fb9364f279f24d973.html
 # it does not do any error handling - so the created types MUST NOT exist before
 
 # all configuration settings come from config.py
@@ -57,7 +59,7 @@ def register_message_type(device_type_id, message_type_name, specifics):
 	r = http.urlopen('POST', register_message_type_url, body=body, headers=headers)
 	if (debug_communication == 1):
 		print("request body: " + body)
-		print("register_device_type():" + str(r.status))
+		print("register_message_type():" + str(r.status))
 		print(r.data)
 
 	json_string=(r.data).decode("utf-8")
@@ -85,7 +87,7 @@ def register_device_instance(device_type_id, device_name, oauth_credential_for_d
 	r = http.urlopen('POST', register_device_url, body=body, headers=headers)
 	if (debug_communication == 1):
 		print("request body: " + body)
-		print("register_device_type():" + str(r.status))
+		print("register_device_instance():" + str(r.status))
 		print(r.data)
 
 	json_string=(r.data).decode("utf-8")

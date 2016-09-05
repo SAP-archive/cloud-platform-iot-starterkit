@@ -60,6 +60,7 @@ IoT Business Applications can be built using either the HANA XS, the Java or HTM
 
 * [Consume the messages with MMS embedded client](src/apps/embedded/consumption)
 * [Consume the messages with Web Application based on Java and UI5 using HCP Persistence Service](src/apps/java/consumption)
+* [Consume the messages with UI5 using the built-in MMS OData API](src/apps/ui5/consumption)
 * [Consume the messages with HANA XS using XSODATA and XSJS](src/apps/xs/consumption)
 * [Consume the messages with Python using PyHDB](src/apps/python/consumption)
 * [Consume the messages with Node.js using NodeHDB](src/apps/nodejs/consumption)
