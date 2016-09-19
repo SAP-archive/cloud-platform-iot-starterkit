@@ -14,4 +14,5 @@ for(var i = 0; i < oResultSet.length; i++) {
 oConnection.close();
 
 $.response.status = $.net.http.OK;
+$.response.contentType = "text/plain";
 $.response.setBody(sBody);
