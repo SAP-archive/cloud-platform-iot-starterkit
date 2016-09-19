@@ -8,12 +8,12 @@
 
 1. Adapt the Device ID if required
 2. Adapt the Message if required
-3. Click on Post button
+3. Click on Send button
 
 ![MMS Send Embedded HTTP](../../../../../images/mms_send_embedded_http_02.png)
 
 1. In case you are not using "sync" mode for sending messages.
 2. Adapt the Device ID if required
-3. Click on Post to get the acknowledgements.
+3. Click on Send to get the acknowledgements.
 
 ![MMS Send Embedded HTTP](../../../../../images/mms_send_embedded_http_03.png)
