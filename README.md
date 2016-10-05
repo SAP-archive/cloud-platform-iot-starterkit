@@ -50,15 +50,15 @@ IoT Business Applications can be built using either the HANA XS, the Java or HTM
 
 ## Sending messages from the device
 
-* [Send messages with MMS embedded sample client using HTTP API](src/apps/embedded/sending/http)
-* [Send messages with MMS embedded sample client using WebSocket API](src/apps/embedded/sending/ws)
-* [Send messages with MMS embedded sample client using MQTT WebSocket API](src/apps/embedded/sending/mqttws)
+* [Send messages with MMS built-in sample client using HTTP API](src/apps/built-in/sending/http)
+* [Send messages with MMS built-in sample client using WebSocket API](src/apps/built-in/sending/ws)
+* [Send messages with MMS built-in sample client using MQTT WebSocket API](src/apps/built-in/sending/mqttws)
 * [Send messages with Python client using HTTP API](src/apps/python/sending/http)
 * [Send messages with Python client using WebSocket API](src/apps/python/sending/ws)
 
 ## Consuming the messages sent from the device
 
-* [Consume the messages with MMS embedded client](src/apps/embedded/consumption)
+* [Consume the messages with MMS built-in client](src/apps/built-in/consumption)
 * [Consume the messages with Web Application based on Java and UI5 using HCP Persistence Service](src/apps/java/consumption)
 * [Consume the messages with UI5 using the built-in MMS OData API](src/apps/ui5/consumption)
 * [Consume the messages with HANA XS using XSODATA and XSJS](src/apps/xs/consumption)
@@ -67,12 +67,12 @@ IoT Business Applications can be built using either the HANA XS, the Java or HTM
 
 ## Pushing messages to the device
 
-* [Push messages with MMS embedded sample client using HTTP and WebSocket API](src/apps/embedded/pushing)
+* [Push messages with MMS built-in sample client using HTTP and WebSocket API](src/apps/built-in/pushing)
 * [Push messages with Web Application based on Java and UI5 using HTTP API](src/apps/java/consumption)
 
 ## Receiving the messages sent to the device
 
-* [Receive the messages with MMS embedded client](src/apps/embedded/receiving)
+* [Receive the messages with MMS built-in client](src/apps/built-in/receiving)
 * [Receive the messages with Python client](src/apps/python/receiving)
 
 ## Integrated examples for IoT Devices
