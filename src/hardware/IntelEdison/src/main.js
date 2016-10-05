@@ -29,11 +29,11 @@ var inMessageID = '<Inbound Message ID>';
 /********************************************************************* 
                         Init Sensors & Pins
 *********************************************************************/
-var tempSensor = new groveSensor.GroveTemp(0);
-var lightSensor = new groveSensor.GroveLight(1);
-var rotarySensor = new groveSensor.GroveRotary(2);
+var tempSensor = new groveSensor.GroveTemp(0);      // Temp Sensor at A0
+var lightSensor = new groveSensor.GroveLight(1);    // Light Sensor at A1
+var rotarySensor = new groveSensor.GroveRotary(2);  // Rotary Angle Sensor at A2
 
-var LEDPin = new mraa.Gpio(2);
+var LEDPin = new mraa.Gpio(2);  // LED plugged into LED Socket at D2
 LEDPin.dir(mraa.DIR_OUT);
 
 
