@@ -17,6 +17,8 @@ Follow the steps below after following [Intel's instructions](https://software.i
 
 **Hardware Required:**
 
+> If you do not have a particular sensor, please omit the relevant JS function from `src/main.js` when uploading the project onto your board.
+
 - Intel Edison Compute Module
 - Arduino Expansion Board
 - Grove Base Shield
@@ -38,7 +40,7 @@ Follow the steps below after following [Intel's instructions](https://software.i
 ## Running the Project on Edison
 
 - Start a new blank project on Intel XDK.
-- Copy over the code from `src/main.js` & `src/package.json` to your new project with the same file names.
+- Copy over the code from `src/main.js` & `src/package.json` to `main.js` & `package.json` respectively in your new XDK project.
 - In `main.js`, set up the variables from Line 13 - Line 26 according to your own HCP account. You can get these values from your IoT Services Cockpit.
 
 ```js
