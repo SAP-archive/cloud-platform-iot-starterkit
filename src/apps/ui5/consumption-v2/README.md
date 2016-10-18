@@ -29,7 +29,7 @@ Open the HCP WebIDE and import the zip file into your workspace. ``` Click > Fil
 
 You are now ready to edit the sample application. In order to execute the sample application ``` Right Click > Run > Run as > Web Application ```
 
-Note that this sample application just shows data for message types that contain a ``` timestamp ``` and a ``` value ``` field. See the source code for details.
+Note that this sample application just shows data for message types that contain a ``` timestamp ``` field. See the source code for details.
 
 ### Deploy
 
@@ -38,9 +38,13 @@ The deployment of the application into your HCP account is straight forward.
 
 ### Usage
 
-The consumption application is devided into two parts: The configuration panel at the top, and the chart view. When starting the application, the chart is invisible. The user must select a device, a message type, and at least one measure (which correspond to the message type fields) for the chart to be drawn.
-The "Refresh Model" button reloads the available devices, device types and message types from RDMS.
+The consumption application is devided into two parts: The configuration panel at the top, and the chart view.
 
-When the "Chart Auto Refresh" option is switched on, the chart data are reloaded each second.
+When starting the application, the chart is invisible. You must select a device, a message type, and at least one measure (which corresponds to a message type field) for the chart to be drawn. You can select multiple measures. Note that the ```timestamp``` field is automatically chosen for the X-axis (time axis). 
+The ```Refresh Model``` button next to the device selection reloads the available devices, device types and message types from RDMS.
 
-The option "Show last" allows to set the number of values shown in the chart.
+![UI5 Consumption example](../../../../images/mms_consume_ui5_v2_02.png)
+
+When the ```Chart Auto Refresh``` option is switched on, the chart data are reloaded each second.
+
+```Show Last``` allows to set the number of values shown in the chart, e.g., select ```50``` to show the last 50 values in MMS for the chosen measures.
