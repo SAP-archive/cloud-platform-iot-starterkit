@@ -3,7 +3,7 @@ This directory contains an HCP HTML5 application demonstrating the consumption o
 ![UI5 Consumption example](../../../../images/mms_consume_ui5_v2_01.png)
 
 ### Prerequisites
-Download the source of our example application to your system. At first we need to setup destinations to access the MMS and the RDMS from our UI5 application. The destinations can be found in the ``` destination ```  directory of the sample application. Go to the HCP Cockpit and in ``` Configuration ``` tab click on the ``` Destinations ``` like it is shown in the following image.
+Download the source of our example application to your system. At first we need to setup destinations to access the MMS and the RDMS from our UI5 application. The destinations can be found in the ``` destination ```  directory of the sample application. Go to the HCP Cockpit and in ``` Connectivity ``` tab click on the ``` Destinations ``` like it is shown in the following image.
 
 ![UI5 Destination configuration](../../../../images/mms_consume_ui5_03.png)
 
@@ -22,7 +22,7 @@ After importing the MMS destination you need to import the RDMS destination the 
 ### Edit
 In order to edit or execute our example application go *into* the ``` src ``` directory. This folder contains the webapp folder and one configuration file. Zip the webapp folder and the configuration file and upload the sample application to the HCP.
 
-Open the HCP WebIDE and import the zip file into your workspace. ``` Click > File > Import > File From System  ``` choose the zipped file and name a destination folder. 
+Open the HCP WebIDE ( ``` HCP Cockpit > Services > SAP Web IDE > Open SAP Web IDE ``` ) and import the zip file into your workspace. Click ``` File > Import > File From System  ``` choose the zipped file and name a destination folder. 
 
 ![UI5 Import example](../../../../images/mms_consume_ui5_02.png)
 
