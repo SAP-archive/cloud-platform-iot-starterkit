@@ -1,6 +1,10 @@
-This directory contains an HCP HTML5 application demonstrating the consumption of MMS data via OData, and displaying them in a time-series line chart. The application loads available devices from RDMS via REST API and allows the selection of the values to be displayed on the Y-axis of the chart.
+This directory contains an HCP HTML5 application demonstrating the consumption of MMS data via OData, and displaying them in a time-series line chart.
+The application loads available devices from RDMS via REST API and allows the selection of the values to be displayed on the Y-axis of the chart.
+It also demonstrate the display of live data via an automatic refresh.
 
 ![UI5 Consumption example](../../../../images/mms_consume_ui5_v2_01.png)
+
+This application can be used as an out-of-the-box consumption UI in an end-to-end scenario, where you do not want to use the fixed message type required by the [simple consumption UI example](../consumption).
 
 ### Prerequisites
 Download the source of our example application to your system. At first we need to setup destinations to access the MMS and the RDMS from our UI5 application. The destinations can be found in the ``` destination ```  directory of the sample application. Go to the HCP Cockpit and in ``` Connectivity ``` tab click on the ``` Destinations ``` like it is shown in the following image.
