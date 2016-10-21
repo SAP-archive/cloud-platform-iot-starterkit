@@ -4,7 +4,7 @@ It also demonstrates the display of live data via an automatic refresh.
 
 ![UI5 Consumption example](../../../../images/mms_consume_ui5_v2_01.png)
 
-This application can be used as an out-of-the-box consumption UI in an end-to-end scenario, where you do not want to use the fixed message type required by the [simple consumption UI example](../consumption).
+This application can be used as an out-of-the-box consumption UI in an end-to-end scenario, where you do not want to use the fixed message type required by the [simple consumption UI](../consumption).
 
 ### Prerequisites
 Download the source of our example application to your system. At first we need to setup destinations to access the MMS and the RDMS from our UI5 application. The destinations can be found in the ``` destination ```  directory of the sample application. Go to the HCP Cockpit and in ``` Connectivity ``` tab click on the ``` Destinations ``` like it is shown in the following image.
