@@ -2,6 +2,8 @@ This directory has the sources for a UI5 application that uses the HCP IoT Servi
 
 ![UI5 Consumption example](../../../../images/mms_consume_ui5_01.png)
 
+This application is deliberately kept simple to provide an easy starting point for understanding data consumption via the MMS OData API. If you are looking for an advanced application with more configuration possibilities and live data updates, please refer to the [advanced consumption UI](../consumption-advanced).
+
 ### Prerequisites
 Download the source of our example application to your system. At first we need to setup destinations to access the MMS and the RDMS from our UI5 application. The destinations can be found in the ``` destination ```  directory of the sample application. Go to the HCP Cockpit and in ``` Configuration ``` tab click on the ``` Destinations ``` like it is shown in the following image.
 

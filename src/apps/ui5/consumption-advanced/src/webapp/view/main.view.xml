@@ -1,0 +1,73 @@
+<!DOCTYPE xml>
+<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="odataconsumption.controller.main"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:layout="sap.ui.layout" xmlns:form="sap.ui.layout.form" xmlns:viz="sap.viz.ui5.controls"
+	xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds" xmlns:viz.data="sap.viz.ui5.data" displayBlock="true" class="sapUiSizeCompact"
+	height="100%">
+	<App>
+		<pages>
+			<Page title="{i18n>TITLE}">
+				<layout:FixFlex id='chartFixFlex' minFlexSize="250">
+					<layout:fixContent>
+						<Panel width="100%">
+							<HBox>
+								<form:SimpleForm maxContainerCols="2" layout="ResponsiveGridLayout" labelSpanL="3" labelSpanM="3" emptySpanL="1" emptySpanM="1" columnsL="1"
+									columnsM="1" editable="true" class="editableForm" backgroundDesign="Transparent">
+									<form:content>
+										<Label text="{i18n>LBL_DEVICES}" required="true"/>
+										<HBox width="100%">
+											<Select items="{devices>/}" selectedKey="{viewModel>/selectedDeviceId}" change="onDeviceChange"
+												enabled="{ path: 'devices>/', formatter: '.formatSelectEnablement' }" tooltip="{i18n>TOOLTIP_DEVICES}" width="100%">
+												<core:Item key="{devices>id}" text="{devices>name}"/>
+												<layoutData>
+													<FlexItemData growFactor="1"/>
+												</layoutData>
+											</Select>
+											<Button icon="sap-icon://refresh" press="onRefreshDevicesPressed" class="sapUiTinyMarginBegin" tooltip="{i18n>TOOLTIP_REFRESH_DEVICES}"/>
+										</HBox>
+										<Label text="{i18n>LBL_MESSAGE_TYPE}" required="true"/>
+										<Select items="{viewModel>/messageTypes}" selectedKey="{viewModel>/selectedMessageTypeId}" change="onMessageTypeChange"
+											enabled="{ path: 'viewModel>/messageTypes', formatter: '.formatSelectEnablement' }" tooltip="{i18n>TOOLTIP_MESSAGE_TYPES}">
+											<core:Item key="{viewModel>id}" text="{viewModel>name}"/>
+										</Select>
+										<Label text="{i18n>LBL_MEASURES}" required="true"/>
+										<MultiComboBox id="measureSelection" items="{viewModel>/measures}" selectionChange="onMeasureSelectionChanged"
+											enabled="{ path: 'viewModel>/', formatter: '.formatSelectEnablement' }" tooltip="{i18n>TOOLTIP_MEASURE}" valueState="Error"
+											valueStateText="{i18n>ERROR_NO_MEASURE_SELECTED}">
+											<core:Item key="{viewModel>position}" text="{viewModel>name}"/>
+										</MultiComboBox>
+									</form:content>
+									<form:layoutData>
+										<FlexItemData growFactor="3"/>
+									</form:layoutData>
+								</form:SimpleForm>
+								<form:SimpleForm maxContainerCols="2" layout="ResponsiveGridLayout" labelSpanL="3" labelSpanM="3" emptySpanL="0" emptySpanM="0" columnsL="1"
+									columnsM="1" editable="true" class="editableForm" backgroundDesign="Transparent">
+									<form:content>
+										<Label text="{i18n>LBL_AUTO_REFRESH_CHART}"/>
+										<Switch id="autoRefreshSwitch" state="{viewModel>/autoRefresh}" change="onAutoRefreshChanged"></Switch>
+										<Label text="{i18n>LBL_VALUE_COUNT}"/>
+										<RadioButtonGroup buttons="{viewModel>/shownValueCounts}" columns="{= ${viewModel>/shownValueCounts}.length}"
+											selectedIndex="{ path: 'viewModel>/shownValueCount', type: 'odataconsumption.ShownValueCountToIndexConverter' }"
+											select="onShownValueCountChanged">
+											<RadioButton text="{viewModel>}"></RadioButton>
+										</RadioButtonGroup>
+									</form:content>
+									<form:layoutData>
+										<FlexItemData growFactor="1"/>
+									</form:layoutData>
+								</form:SimpleForm>
+							</HBox>
+						</Panel>
+					</layout:fixContent>
+					<layout:flexContent>
+						<viz:VizFrame id="idVizFrame" height="100%" width="100%" vizType="timeseries_line" uiConfig="{applicationSet:'fiori'}">
+							<viz:feeds>
+								<viz.feeds:FeedItem uid="timeAxis" type="Dimension" values="timestamp"/>
+							</viz:feeds>
+						</viz:VizFrame>
+					</layout:flexContent>
+				</layout:FixFlex>
+			</Page>
+		</pages>
+	</App>
+</core:View>
