@@ -1,6 +1,6 @@
 This directory contains an HCP HTML5 application demonstrating the consumption of MMS data via OData, and displaying them in a time-series line chart.
 The application loads available devices from RDMS via REST API and allows the selection of the values to be displayed on the Y-axis of the chart.
-It also demonstrate the display of live data via an automatic refresh.
+It also demonstrates the display of live data via an automatic refresh.
 
 ![UI5 Consumption example](../../../../images/mms_consume_ui5_v2_01.png)
 
