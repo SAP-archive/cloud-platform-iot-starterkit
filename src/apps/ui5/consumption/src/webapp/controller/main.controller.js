@@ -154,7 +154,7 @@ sap.ui.define([
 		 * Formats the date object that is shown in chart
 		 *
 		 * @param oValue the value to be date formatted
-		 * @returns {string} a date formatted string
+		 * @returns {Date} a Date object as expected by time-series line chart
 		 */
 		formatDate: function(oValue) {
 			var oDate = null;
@@ -193,7 +193,7 @@ sap.ui.define([
 				// ensure that UNIX timestamps are converted to milliseconds
 				oDate = new Date(oValue * 1000);
 			}
-			return oDate.toLocaleString();
+			return oDate;
 		},
 
 		/**
