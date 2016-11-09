@@ -37,7 +37,7 @@ sap.ui.jsview("odataconsumption.view.main", {
 		});
 
 		var app = new sap.m.App("myApp", {
-			initialPage: "oPage"
+			initialPage: oPage
 		});
 		app.addPage(oPage);
 		return app;
