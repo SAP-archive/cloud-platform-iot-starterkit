@@ -37,7 +37,7 @@ sap.ui.jsview("odataconsumption.view.main", {
 		});
 
 		var app = new sap.m.App("myApp", {
-			initialPage: "oPage"
+			initialPage: oPage
 		});
 		app.addPage(oPage);
 		return app;
@@ -89,7 +89,7 @@ sap.ui.jsview("odataconsumption.view.main", {
 
 	createDimensionFeed: function() {
 		return new sap.viz.ui5.controls.common.feeds.FeedItem({
-			"uid": "axisLabels",
+			"uid": "timeAxis",
 			"type": "Dimension",
 			"values": ["timestamp"]
 		});
@@ -113,7 +113,8 @@ sap.ui.jsview("odataconsumption.view.main", {
 					formatter: function(oValue) {
 						return oController.formatDate(oValue);
 					}
-				}
+				},
+				dataType: "date"
 			}],
 			measures: [{
 				name: "value",
@@ -131,7 +132,7 @@ sap.ui.jsview("odataconsumption.view.main", {
 		var oVizFrame = new sap.viz.ui5.controls.VizFrame({
 			width: "100%",
 			height: oController.calculateChartHeight(),
-			vizType: "line",
+			vizType: "timeseries_line",
 			vizProperties: {
 				plotArea: {
 					dataLabel: {
@@ -144,13 +145,25 @@ sap.ui.jsview("odataconsumption.view.main", {
 				title: {
 					visible: false
 				},
-				categoryAxis: {
+				timeAxis: {
 					title: {
 						visible: true
+					},
+					levels: ["day", "month", "year"],
+					levelConfig: {
+						month: {
+							formatString: "MM"
+						},
+						year: {
+							formatString: "yyyy"
+						}
+					},
+					interval: {
+						unit: ''
 					}
 				}
 			},
-			xAxis: {
+			timeAxis: {
 				title: {
 					visible: false
 				}
