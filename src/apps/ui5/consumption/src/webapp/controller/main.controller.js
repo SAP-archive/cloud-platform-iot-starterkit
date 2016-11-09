@@ -128,10 +128,16 @@ sap.ui.define([
 
 			this.oDataset.bindAggregation("data", {
 				path: "odata>/T_IOT_" + sMessageTypeId,
+				// number of values to be displayed in the chart
+				length: 100,
+				// filter for the selected device
 				filters: [
 					new sap.ui.model.Filter("G_DEVICE", sap.ui.model.FilterOperator.EQ, sDeviceId)
-				]
-			});
+				],
+				//sort by timestamp to get the last, and not the first x values
+				sorters: [
+					new sap.ui.model.Sorter("C_TIMESTAMP", true)
+				]			});
 		},
 
 		/**
