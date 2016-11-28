@@ -76,15 +76,15 @@ def read_slider_value(slider, old_value):
 	except IOError:
 		print("IOError communicating with HW - can and will continue though.")
 		slider_value=old_value
-	return(slider_value)
+	return slider_value
 
 def switch_led(arg):
 	global led
 	try:
 		# LED is against Vcc - so HIGH switches it off / LOW on
-		if (arg == 0):
+		if arg == 0:
 			grovepi.digitalWrite(led, 1)
-		if (arg == 1):
+		if arg == 1:
 			grovepi.digitalWrite(led, 0)
 	except IOError:
 		print("IOError communicating with HW - can and will continue though.")
@@ -97,10 +97,10 @@ def redraw_oled(value, do_send, msg_string):
 	oled_putString("Value:"+str(value))
 	oled_setTextXY(2,0)
 	oled_putString("            ")
-	if (do_send == 0):
+	if do_send == 0:
 		oled_setTextXY(2,0)
 		oled_putString("Not sending!")
-	if (do_send == 1):
+	if do_send == 1:
 		oled_setTextXY(2,0)
 		oled_putString("Sending!")
 
@@ -136,7 +136,7 @@ except:
 	print("urllib3.disable_warnings() failed - get a recent enough urllib3 version to avoid potential InsecureRequestWarning warnings! Can and will continue though.")
 
 # use with or without proxy
-if (config.proxy_url == ''):
+if config.proxy_url == '':
 	http = urllib3.PoolManager()
 else:
 	http = urllib3.proxy_from_url(config.proxy_url)
@@ -173,11 +173,11 @@ print("Entering main loop now")
 print("Slide to 100 to start sending / to 0 to stop sending! Terminate with Ctrl+C!")
 while 1:
 	slider_value=read_slider_value(slider, slider_value)
-	if (slider_value == 100):
+	if slider_value == 100:
 		do_send=1
-	if (slider_value == 0):
+	if slider_value == 0:
 		do_send=0
-	if (do_send == 1):
+	if do_send == 1:
 		send_to_hcp(http, url, headers, slider_value)
 	poll_from_hcp(http, url, headers)
 
