@@ -113,4 +113,5 @@ See the [FAQ](https://help.hana.ondemand.com/iot/frameset.htm?a012a3788b6e498a89
 See [Create Device Information in Internet of Things Services Cockpit](../../../prerequisites/cockpit).
 4. Check that data are available for the device. You can use the MMS Cockpit, which can be accessed in the HCP Cockpit under ```Applications > Java Applications > iotmms```.
 Click the tile ```Display Stored Messages``` and open the table with name ```T_IOT_```+```<Message Type ID>```.
-If such a table does not exist or it is empty, sending data to MMS did not work. Try one of these methods: [Sending messages from the device](../../../../README.md#sending-messages).
+If such a table does not exist or it is empty, sending data to MMS did not work.
+Try one of these methods: [Sending messages from the device](../../../../README.md#sending-messages-from-the-device).
