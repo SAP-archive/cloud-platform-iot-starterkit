@@ -18,8 +18,8 @@ Go to the [main folder of the GitHub repository](https://github.com/SAP/iot-star
 
 Extract the downloaded Zip file to a local folder and navigate to the sample application folder ```<path to IoT Starterkit>\iot-starterkit-master\src\apps\ui5\consumption-advanced```.
 This folder contains two subfolders:
-- ```destinations``` contains the destinations for accessing IoT RDMS and IoT MMS, and
-- ```src``` contains the source code of the sample application.
+- **```destinations```** contains the destinations for accessing IoT RDMS and IoT MMS, and
+- **```src```** contains the source code of the sample application.
 
 #### Import Destinations
 Open the HCP Cockpit in a browser and go to ``` Connectivity > Destinations ```.
@@ -28,8 +28,8 @@ Open the HCP Cockpit in a browser and go to ``` Connectivity > Destinations ```.
 
 Choose ``` Import Destination ```, navigate to the ``` destinations ``` folder of the sample application and import the file ```iotmms```.
 Enter your HCP ``` User ``` and ``` Password ```. In the ``` Url ``` you need to exchange:
-- ```%account_id%``` - the name of your HCP account, which can be found on the ```Overview``` page of the HCP Cockpit under ```Account Information > Account Name```
-- ```%landscape_name%``` - the name of the HCP landscape, which can be found as part of the HCP Cockpit URL between ```https://account.``` and ```.ondemand.com```,
+- **```%account_id%```** - the name of your HCP account, which can be found on the ```Overview``` page of the HCP Cockpit under ```Account Information > Account Name```
+- **```%landscape_name%```** - the name of the HCP landscape, which can be found as part of the HCP Cockpit URL between ```https://account.``` and ```.ondemand.com```,
 e.g., on HCP Trial the URL is ```https://account.hanatrial.ondemand.com/cockpit``` and the landscape name is ``` hanatrial ```.
 
 ![UI5 MMS Destination configuration](../../../../images/mms_consume_ui5_04.png)
@@ -101,4 +101,4 @@ See the [FAQ](https://help.hana.ondemand.com/iot/frameset.htm?a012a3788b6e498a89
 4. Check that data are available for the device. You can use the MMS Cockpit, which can be accessed in the HCP Cockpit under ```Applications > Java Applications > iotmms```.
 Click the tile ```Display Stored Messages``` and open the table with name ```T_IOT_```+```<Message Type ID>```.
 If such a table does not exist or it is empty, sending data to MMS did not work.
-Try one of these methods: [Sending messages from the device](../../../../README.md#sending-messages-from-the-device).
+Try one of these methods: [Sending messages from the device](../../../../README.md#sending-messages).

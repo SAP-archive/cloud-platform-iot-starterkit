@@ -17,8 +17,8 @@ Go to the [main folder of the GitHub repository](https://github.com/SAP/iot-star
 
 Extract the downloaded Zip file to a local folder and navigate to the sample application folder ```<Path to IoT Starterkit>\iot-starterkit-master\src\apps\ui5\consumption```.
 This folder contains two subfolders:
-- ```destinations``` contains the destinations for accessing IoT RDMS and IoT MMS, and
-- ```src``` contains the source code of the sample application.
+- **```destinations```** - contains the destinations for accessing IoT RDMS and IoT MMS, and
+- **```src```** - contains the source code of the sample application.
 
 #### Import Destinations
 Open the HCP Cockpit in a browser and go to ``` Connectivity > Destinations ```.
@@ -27,8 +27,8 @@ Open the HCP Cockpit in a browser and go to ``` Connectivity > Destinations ```.
 
 Choose ``` Import Destination ```, navigate to the ``` destinations ``` folder of the sample application and import the file ```iotmms```.
 Enter your HCP ``` User ``` and ``` Password ```. In the ``` Url ``` you need to exchange:
-- ```%account_id%``` - the name of your HCP account, which can be found on the ```Overview``` page of the HCP Cockpit under ```Account Information > Account Name```
-- ```%landscape_name%``` - the name of the HCP landscape, which can be found as part of the HCP Cockpit URL between ```https://account.``` and ```.ondemand.com```,
+- **```%account_id%```** - the name of your HCP account, which can be found on the ```Overview``` page of the HCP Cockpit under ```Account Information > Account Name```
+- **```%landscape_name%```** - the name of the HCP landscape, which can be found as part of the HCP Cockpit URL between ```https://account.``` and ```.ondemand.com```,
 e.g., on HCP Trial the URL is ```https://account.hanatrial.ondemand.com/cockpit``` and the landscape name is ``` hanatrial ```.
 
 ![UI5 MMS Destination configuration](../../../../images/mms_consume_ui5_04.png)
