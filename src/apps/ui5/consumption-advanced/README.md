@@ -94,7 +94,7 @@ When the ```Chart Auto Refresh``` option is switched on, the chart data are relo
 ### Troubleshooting
 If the sample application does not show devices or the chart does not show data, there are a couple of things to check.
 
-1. Check the destinations. URL, User and Password must must be correct. Note that ```Check Connection``` validates only the URL.
+1. Check the destinations. URL, User and Password must be correct. Note that ```Check Connection``` validates only the URL.
 2. Check that the IoT Services are running, and the roles are set correctly for RDMS and MMS.
 See the [FAQ](https://help.hana.ondemand.com/iot/frameset.htm?a012a3788b6e498a8971dd27c97ce6bf.html) for typical problems and solutions.
 3. Check that at least one device exists. If not, create one.

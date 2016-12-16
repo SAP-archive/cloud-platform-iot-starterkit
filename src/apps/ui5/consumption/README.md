@@ -1,4 +1,6 @@
-This directory has the sources for a UI5 application that uses the HCP IoT Services to interact with an IoT Device. It renders the received data that is stored in the database (where the MMS part of the IoT Services writes to) in an xy plot using the MMS built-in OData API. Per default the chart show the last 100 values of the chosen device.
+This directory has the sources for a UI5 application that uses the HCP IoT Services to interact with an IoT Device.
+It renders the received data that is stored in the database (where the MMS part of the IoT Services writes to) in an xy plot using the MMS built-in OData API.
+Per default the chart shows the last 100 values of the chosen device.
 
 ![UI5 Consumption example](../../../../images/mms_consume_ui5_01.png)
 
@@ -106,7 +108,7 @@ Change the value of the ```length``` property to the number of values you want t
 ### Troubleshooting
 If the sample application does not show devices or the chart does not show data, there are a couple of things to check.
 
-1. Check the destinations. URL, User and Password must must be correct. Note that ```Check Connection``` validates only the URL.
+1. Check the destinations. URL, User and Password must be correct. Note that ```Check Connection``` validates only the URL.
 2. Check that the IoT Services are running, and the roles are set correctly for RDMS and MMS.
 See the [FAQ](https://help.hana.ondemand.com/iot/frameset.htm?a012a3788b6e498a8971dd27c97ce6bf.html) for typical problems and solutions.
 3. Check that at least one device with a message type of the expected format exists.
