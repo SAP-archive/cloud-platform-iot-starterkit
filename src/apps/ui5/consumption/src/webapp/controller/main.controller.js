@@ -128,10 +128,16 @@ sap.ui.define([
 
 			this.oDataset.bindAggregation("data", {
 				path: "odata>/T_IOT_" + sMessageTypeId,
+				// number of values to be displayed in the chart
+				length: 100,
+				// filter for the selected device
 				filters: [
 					new sap.ui.model.Filter("G_DEVICE", sap.ui.model.FilterOperator.EQ, sDeviceId)
-				]
-			});
+				],
+				//sort by timestamp to get the last, and not the first x values
+				sorters: [
+					new sap.ui.model.Sorter("C_TIMESTAMP", true)
+				]			});
 		},
 
 		/**
@@ -154,7 +160,7 @@ sap.ui.define([
 		 * Formats the date object that is shown in chart
 		 *
 		 * @param oValue the value to be date formatted
-		 * @returns {string} a date formatted string
+		 * @returns {Date} a Date object as expected by time-series line chart
 		 */
 		formatDate: function(oValue) {
 			var oDate = null;
@@ -193,7 +199,7 @@ sap.ui.define([
 				// ensure that UNIX timestamps are converted to milliseconds
 				oDate = new Date(oValue * 1000);
 			}
-			return oDate.toLocaleString();
+			return oDate;
 		},
 
 		/**

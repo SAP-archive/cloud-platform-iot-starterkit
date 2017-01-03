@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta charset="UTF-8">
+
+		<title>Built-in OData API</title>
+		<!--TODO: loading an old UI5 version to avoid layouting problem with FixFlex control in UI5 v2.40.x; replace with src="../../resources/sap-ui-core.js"-->
+		<script id="sap-ui-bootstrap"
+			src="https://sapui5.hana.ondemand.com/1.38.7/resources/sap-ui-core.js"
+			data-sap-ui-libs="sap.m,sap.viz"
+			data-sap-ui-theme="sap_bluecrystal"
+			data-sap-ui-compatVersion="edge"
+			data-sap-ui-resourceroots='{"odataconsumption": ""}'>
+		</script>
+
+		<script>
+			sap.ui.getCore().attachInit(function() {
+				new sap.m.Shell({
+					app: new sap.ui.core.ComponentContainer({
+						height : "100%",
+						name : "odataconsumption"
+					})
+				}).placeAt("content");
+			});
+		</script>
+	</head>
+
+	<body class="sapUiBody" id="content">
+	</body>
+
+</html>
