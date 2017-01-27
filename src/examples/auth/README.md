@@ -117,7 +117,7 @@ An optional company name []:.
 * Finally the registered device must be authenticated, i.e. to receive the device certificate. Again the  acquired device type certificate must be attached to the HTTPS connection. It will then be used during the initial SSL handshake as client certificate.
 
 ```
-$ curl --header 'Content-Type: application/json' --cert ./ ./<device_type_certificate>.p12:<secret> --data '{"type": "clientCertificate","csr": "MIIC6jCCAdICAQAwgYsxCzAJBgNVB…"}' https:// ://<rdms_cert_host>/com.sap.iotservices.dms/v2/api/devices/<deviceId>/authentication
+$ curl --header 'Content-Type: application/json' --cert ./<device_type_certificate>.p12:<secret> --data '{"type": "clientCertificate","csr": "MIIC6jCCAdICAQAwgYsxCzAJBgNVB…"}' https:// ://<rdms_cert_host>/com.sap.iotservices.dms/v2/api/devices/<deviceId>/authentication
 ```
 
 * The request body entails the authentication ```type``` and the previously generated base64-encoded ```csr```:
