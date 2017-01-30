@@ -12,6 +12,9 @@ import random
 # === START === values set from the config.py file ===
 my_endpoint             = "iotmms" + config.hcp_account_id + config.hcp_landscape_host
 my_endpoint_certificate = config.endpoint_certificate
+# only needed when using Client Certificate Authentication; my_username and my_password can be skipped in this case
+# my_client_certificate 	= config.client_certificate
+# my_client_key 			= config.client_key
 my_device_id            = config.device_id
 
 my_client_id            = my_device_id
@@ -55,6 +58,8 @@ mqttc.on_publish = on_publish
 mqttc.on_subscribe = on_subscribe
 
 mqttc.tls_set(my_endpoint_certificate)
+# to use Client Certificate Authentication, also specifiy the client certificate and key; setting the username and password can be skipped in this case
+# mqttc.tls_set(my_endpoint_certificate, my_client_certificate, my_client_key)
 mqttc.username_pw_set(my_username, my_password)
 mqttc.endpoint_url_path_set(my_endpoint_url_path)
 mqttc.connect(my_endpoint, 443, 60)
