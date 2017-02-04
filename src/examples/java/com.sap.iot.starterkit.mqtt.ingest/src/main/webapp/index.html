@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta http-equiv='X-UA-Compatible' content='IE=edge' />
+<meta http-equiv='Content-Type' content='text/html;charset=UTF-8' />
+<meta charset='UTF-8' />
+<meta name='google' content='notranslate' />
+
+<script id='sap-ui-bootstrap' type='text/javascript'
+	src='https://sapui5.hana.ondemand.com/resources/sap-ui-core.js'
+	data-sap-ui-theme='sap_bluecrystal' data-sap-ui-libs='sap.m'
+	data-sap-ui-language='en'></script>
+
+<script>
+	sap.ui.getCore().attachInit( function() {
+		new sap.m.Shell( {
+			app: new sap.m.MessagePage( {
+				icon: "sap-icon://hint",
+				showHeader: false,
+				text: "Hint",
+				description: "Follow the procedure described in a README file"
+			} )
+		} ).placeAt( "content" );
+
+		$( document ).ready( function() {
+			document.title = sTitle;
+		} );
+
+	} );
+</script>
+
+</head>
+<body class='sapUiBody'>
+	<div id='content'></div>
+</body>
+</html>
