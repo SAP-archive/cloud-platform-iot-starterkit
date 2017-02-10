@@ -7,7 +7,7 @@
 ### 1. Device Type Registration
 (The device type registration can also be done using the IoT Cockpit.)
 
-* Before registering and authenticating devices with client certificates a corresponding device type using client certificate authentication must be registered.
+* Before registering and authenticating devices with client certificates a corresponding device type using client certificate authentication must be registered. ```<rdms_host>``` specifies the application url of your IoT Services Remote Device Management Service (RDMS), e.g. ```https://iotrdmsiotservices-<account_name>.hana.ondemand.com```.
 
 ```
 $ curl --header 'Content-Type: application/json' --basic --user '<username>' --data '{"name": "Device Type 1","authentication": {"type": "clientCertificate"}}' https://<rdms_host>/com.sap.iotservices.dms/v2/api/deviceTypes
@@ -37,16 +37,22 @@ $ curl --header 'Content-Type: application/json' --basic --user '<username>' --d
 }
 ```
 
- * Save the base64-encoded *.p12 file to be used as device type certificate. For using the certificate (e.g. in Postman) you need to create a *.crt and a *.key file using the following openssl commands:
+ * Save the base64-encoded *.p12 file to be used as device type certificate. You can use openssl to decode the received base64-encoded string and directly redirect the output to a *.p12 file using the following command. It is recommended to use <device_type_id>.p12 as file name.
+ 
+```
+$ openssl enc -base64 -d <<< MIACAQMwgAYJKoZIhvc… > 273e5b736a9af59689ba.p12
+```
+ 
+ * Optional: For using seperate certificate and key (e.g. in Postman) you need to create a *.crt and a *.key file using the following openssl commands. You will be asked to specify a passphrase, where you can use the received secret to protect your certificate/key.
 
 ```
-$ openssl pkcs12 -in 273e5b736a9af59689ba.p12 -out 273e5b736a9af59689ba.crt –nokeys
+$ openssl pkcs12 -in 273e5b736a9af59689ba.p12 -out 273e5b736a9af59689ba.crt -nokeys
 $ openssl pkcs12 -in 273e5b736a9af59689ba.p12 -out 273e5b736a9af59689ba.key -nocerts
 ```
 
 ### 2. Device Registration
 
-* To register a device, the previously acquired device type certificate must be attached to the HTTPS connection. It will then be used during the initial SSL handshake as client certificate.
+* To register a device, the previously acquired device type certificate must be attached to the HTTPS connection. It will then be used during the initial SSL handshake as client certificate. ```<rdms_cert_host>``` specifies the application url of your IoT Services Remote Device Management Service (RDMS) with ```cert``` prefix, e.g. ```https://iotrdmsiotservices-<account_name>.cert.hana.ondemand.com```.
 
 ```
 $ curl --header 'Content-Type: application/json' --cert ./<device_type_certificate>.p12:<secret> --data '{"name": "Device 1","id": "Device01","deviceType": "273e5b736a9af59689ba”}' https://<rdms_cert_host>/com.sap.iotservices.dms/v2/api/devices
@@ -82,8 +88,12 @@ $ curl --header 'Content-Type: application/json' --cert ./<device_type_certifica
 $ openssl req -nodes -newkey rsa:2048 -keyout Device01.key -out Device01.csr
 ```
 
-* Several fields that are incorporated into the CSR need to be specified. Except for the common name, all other fields must be the same as the respective properties in the acquired device type certificate. The common name is be defined as ```deviceId:<deviceId>|tenantId:<tenantId>```, where the ```<tenantId>``` must also be extracted from the device type certificate.
-	
+* Several fields that are incorporated into the CSR need to be specified. Except for the common name, all other fields must be the same as the respective properties in the acquired device type certificate. The common name is defined as ```deviceId:<deviceId>|tenantId:<tenantId>```, where the ```<tenantId>``` can be extracted from the device type certificate, e.g. using the following openssl command:
+
+```	
+$ openssl x509 -in 9a5fce7d71478672ff74.crt -text -noout
+```
+
 ```
 Generating a 2048 bit RSA private key
 ..................................+++
@@ -106,7 +116,7 @@ Email Address []:.
 
 Please enter the following 'extra' attributes
 to be sent with your certificate request
-A challenge password []:********        
+A challenge password []:.
 An optional company name []:.
 ```
 
