@@ -1,14 +1,12 @@
 package com.sap.iot.starterkit.mqtt.ingest.type;
 
-public class Client {
+public class MqttConfiguration {
 
 	private String serverUri;
 
 	private String clientId;
 
-	private transient String username;
-
-	private transient String password;
+	private Authorization authorization;
 
 	private String topic;
 
@@ -28,28 +26,20 @@ public class Client {
 		this.clientId = clientId;
 	}
 
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public String getTopic() {
 		return topic;
 	}
 
 	public void setTopic(String topic) {
 		this.topic = topic;
+	}
+
+	public Authorization getAuthorization() {
+		return authorization;
+	}
+
+	public void setAuthorization(Authorization authorization) {
+		this.authorization = authorization;
 	}
 
 }

@@ -12,13 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
-import com.sap.iot.starterkit.mqtt.ingest.type.Client;
+import com.sap.iot.starterkit.mqtt.ingest.connect.MqttClient;
+import com.sap.iot.starterkit.mqtt.ingest.connect.MqttClientFactory;
+import com.sap.iot.starterkit.mqtt.ingest.json.GsonFactory;
 import com.sap.iot.starterkit.mqtt.ingest.type.Configuration;
 import com.sap.iot.starterkit.mqtt.ingest.type.MessageEnvelope;
-import com.sap.iot.starterkit.mqtt.ingest.util.ConfigurationDeserializer;
-import com.sap.iot.starterkit.mqtt.ingest.util.ResponseMessage;
 
 public class IngestServlet
 extends AbstractServlet {
@@ -38,9 +37,7 @@ extends AbstractServlet {
 	@Override
 	public void init()
 	throws ServletException {
-		GsonBuilder builder = new GsonBuilder();
-		builder.registerTypeAdapter(Configuration.class, new ConfigurationDeserializer());
-		gson = builder.create();
+		gson = GsonFactory.buildGson();
 	}
 
 	@Override
@@ -71,7 +68,7 @@ extends AbstractServlet {
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		configuration = null;
-		LOGGER.info("Configuration has been deleted");
+		LOGGER.info("Configuration was removed");
 
 		disconnect();
 		printText(response, HttpServletResponse.SC_OK, ResponseMessage.CONFIGURATION_REMOVED);
@@ -100,11 +97,16 @@ extends AbstractServlet {
 	private void doParse(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		try {
-			this.configuration = gson.fromJson(request.getReader(), Configuration.class);
+			configuration = gson.fromJson(request.getReader(), Configuration.class);
 		}
 		catch (JsonParseException e) {
 			LOGGER.error("Unable to parse configuration", e);
 
+			printText(response, HttpServletResponse.SC_BAD_REQUEST,
+				ResponseMessage.PAYLOAD_UNEXPECTED);
+		}
+
+		if (configuration == null) {
 			printText(response, HttpServletResponse.SC_BAD_REQUEST,
 				ResponseMessage.PAYLOAD_UNEXPECTED);
 		}
@@ -137,14 +139,16 @@ extends AbstractServlet {
 
 	private void connect()
 	throws IOException {
-		Client publisherConf = configuration.getPublisher();
-		Client subscriberConf = configuration.getSubscriber();
+		try {
+			subscriber = MqttClientFactory.buildMqttClient(configuration.getSubscriber());
+			publisher = MqttClientFactory.buildMqttClient(configuration.getPublisher());
+		}
+		catch (IllegalStateException e) {
+			throw new IOException("Unable to instantiate the MQTT client", e);
+		}
 
-		publisher = new MqttClient(publisherConf.getServerUri(), publisherConf.getClientId());
-		publisher.connect(publisherConf.getUsername(), publisherConf.getPassword());
-
-		subscriber = new MqttClient(subscriberConf.getServerUri(), subscriberConf.getClientId());
-		subscriber.connect(subscriberConf.getUsername(), subscriberConf.getPassword());
+		subscriber.connect(configuration.getSubscriber().getServerUri());
+		publisher.connect(configuration.getPublisher().getServerUri());
 	}
 
 	private void subscribe()
@@ -154,8 +158,10 @@ extends AbstractServlet {
 			return;
 		}
 
-		Client subscriberConf = configuration.getSubscriber();
-		subscriber.subscribe(subscriberConf.getTopic(), new IMqttMessageListener() {
+		final String subscribeTopic = configuration.getSubscriber().getTopic();
+		final String publishTopic = configuration.getPublisher().getTopic();
+
+		subscriber.subscribe(subscribeTopic, new IMqttMessageListener() {
 
 			@Override
 			public void messageArrived(String topic, MqttMessage message)
@@ -168,13 +174,13 @@ extends AbstractServlet {
 					return;
 				}
 
-				Client publisherConf = configuration.getPublisher();
-				MessageEnvelope envelope = MessageEnvelope.fromMqttMessage(message);
-				publisher.publish(publisherConf.getTopic(),
-					gson.toJson(envelope, MessageEnvelope.class));
+				MessageEnvelope messageEnvelope = MessageEnvelope.fromMqttMessage(message);
+				publisher.publish(publishTopic,
+					gson.toJson(messageEnvelope, MessageEnvelope.class));
 			}
 
 		});
+
 	}
 
 }

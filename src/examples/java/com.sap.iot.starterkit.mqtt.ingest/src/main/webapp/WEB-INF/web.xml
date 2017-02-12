@@ -27,7 +27,7 @@
 		<servlet-name>IngestServlet</servlet-name>
 		<url-pattern>/do</url-pattern>
 	</servlet-mapping>
-<!--  
+
 	<login-config>
 		<auth-method>FORM</auth-method>
 	</login-config>
@@ -40,5 +40,5 @@
 			<role-name>MQTT-Ingest-User</role-name>
 		</auth-constraint>
 	</security-constraint>
--->
+
 </web-app>

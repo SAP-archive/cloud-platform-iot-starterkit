@@ -2,6 +2,7 @@ package com.sap.iot.starterkit.mqtt.ingest;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 
 import javax.mail.internet.ContentType;
 import javax.mail.internet.ParseException;
@@ -13,10 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.iot.starterkit.mqtt.ingest.util.Constant;
-import com.sap.iot.starterkit.mqtt.ingest.util.MediaType;
-import com.sap.iot.starterkit.mqtt.ingest.util.ResponseMessage;
-
 /**
  * An abstraction over HTTP servlet
  */
@@ -27,6 +24,14 @@ extends HttpServlet {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractServlet.class);
 
+	private static final String APPLICATION_JSON = "application/json";
+
+	private static final String TEXT_HTML = "text/html";
+
+	private static final int MAX_PAYLOAD_SIZE = 1 * 1024 * 1024;
+
+	public static final String ENCODING = StandardCharsets.UTF_8.toString();
+
 	/**
 	 * Performs request basic validation
 	 */
@@ -34,9 +39,8 @@ extends HttpServlet {
 	throws ServletException, IOException {
 
 		int contentLength = request.getContentLength();
-		if (contentLength > Constant.MAX_PAYLOAD_SIZE) {
-			String message = String.format(Constant.LOCALE, ResponseMessage.PAYLOAD_TOO_LARGE,
-				Constant.MAX_PAYLOAD_SIZE);
+		if (contentLength > MAX_PAYLOAD_SIZE) {
+			String message = String.format(ResponseMessage.PAYLOAD_TOO_LARGE, MAX_PAYLOAD_SIZE);
 			printText(response, HttpServletResponse.SC_REQUEST_ENTITY_TOO_LARGE, message);
 			return;
 		}
@@ -46,25 +50,24 @@ extends HttpServlet {
 			contentType = new ContentType(request.getContentType());
 		}
 		catch (ParseException e) {
-			String message = String.format(Constant.LOCALE,
-				ResponseMessage.CONTENT_TYPE_UNSUPPORTED, request.getContentType());
+			String message = String.format(ResponseMessage.CONTENT_TYPE_UNSUPPORTED,
+				request.getContentType());
 			printText(response, HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, message);
 			return;
 		}
 
-		if (!MediaType.APPLICATION_JSON.equalsIgnoreCase(contentType.getBaseType())) {
-			String message = String.format(Constant.LOCALE,
-				ResponseMessage.CONTENT_TYPE_NOT_ALLOWED, MediaType.APPLICATION_JSON);
+		if (!APPLICATION_JSON.equalsIgnoreCase(contentType.getBaseType())) {
+			String message = String.format(ResponseMessage.CONTENT_TYPE_NOT_ALLOWED,
+				APPLICATION_JSON);
 			printText(response, HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, message);
 			return;
 		}
 
 		if (request.getCharacterEncoding() == null) {
-			String message = String.format(Constant.LOCALE,
-				"No character encoding specified in the request. Use a default %1$s one",
-				Constant.ENCODING);
+			String message = String.format(
+				"No character encoding specified in the request. Use a default %1$s one", ENCODING);
 			LOGGER.warn(message);
-			request.setCharacterEncoding(Constant.ENCODING);
+			request.setCharacterEncoding(ENCODING);
 		}
 	}
 
@@ -99,7 +102,7 @@ extends HttpServlet {
 	 */
 	protected void printJson(HttpServletResponse response, int status, String message)
 	throws IOException {
-		response.setContentType(MediaType.APPLICATION_JSON);
+		response.setContentType(APPLICATION_JSON);
 		print(response, status, message);
 	}
 
@@ -118,7 +121,7 @@ extends HttpServlet {
 	 */
 	protected void printText(HttpServletResponse response, int status, String message)
 	throws IOException {
-		response.setContentType(MediaType.TEXT_HTML);
+		response.setContentType(TEXT_HTML);
 		print(response, status, message);
 	}
 
@@ -138,7 +141,7 @@ extends HttpServlet {
 	private void print(HttpServletResponse response, int status, String message)
 	throws IOException {
 		response.setStatus(status);
-		response.setCharacterEncoding(Constant.ENCODING);
+		response.setCharacterEncoding(ENCODING);
 		try {
 			PrintWriter writer = response.getWriter();
 			writer.print(message);

@@ -1,0 +1,15 @@
+{
+	"subscriber" : {
+		"serverUri" : "tcp://iot:1883",
+		"topic" : "temperature"
+	},
+	"publisher" : {
+		"serverUri" : "wss://iotmmstrial.hanatrial.ondemand.com/com.sap.iotservices.mms/v1/api/ws/mqtt",
+		"clientId" : "d000-e000-v000-i000-c000-e001",
+		"topic" : "iot/data/d000-e000-v000-i000-c000-e001",
+		"authorization" : {
+			"username" : "d000-e000-v000-i000-c000-e001",
+			"password" : "token"
+		}
+	}
+}

@@ -2,23 +2,23 @@ package com.sap.iot.starterkit.mqtt.ingest.type;
 
 public class Configuration {
 
-	private Client subscriber;
+	private MqttConfiguration subscriber;
 
-	private Client publisher;
+	private MqttConfiguration publisher;
 
-	public Client getSubscriber() {
+	public MqttConfiguration getSubscriber() {
 		return subscriber;
 	}
 
-	public void setSubscriber(Client subscriber) {
+	public void setSubscriber(MqttConfiguration subscriber) {
 		this.subscriber = subscriber;
 	}
 
-	public Client getPublisher() {
+	public MqttConfiguration getPublisher() {
 		return publisher;
 	}
 
-	public void setPublisher(Client publisher) {
+	public void setPublisher(MqttConfiguration publisher) {
 		this.publisher = publisher;
 	}
 

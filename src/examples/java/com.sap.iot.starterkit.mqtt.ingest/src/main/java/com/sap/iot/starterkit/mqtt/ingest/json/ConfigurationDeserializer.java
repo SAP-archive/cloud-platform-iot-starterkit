@@ -1,20 +1,23 @@
-package com.sap.iot.starterkit.mqtt.ingest.util;
+package com.sap.iot.starterkit.mqtt.ingest.json;
 
 import java.lang.reflect.Type;
 
 import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.sap.iot.starterkit.mqtt.ingest.type.Client;
 import com.sap.iot.starterkit.mqtt.ingest.type.Configuration;
+import com.sap.iot.starterkit.mqtt.ingest.type.MqttConfiguration;
 
 /**
  * A custom JSON deserializer for {@link Configuration} type
  */
 public class ConfigurationDeserializer
-implements JsonDeserializer<Configuration> {
+extends AbstractDeserializer<Configuration> {
+
+	private static final String ATTRIBUTE_PUBLISHER = "publisher";
+
+	private static final String ATTRIBUTE_SUBSCRIBER = "subscriber";
 
 	/**
 	 * GSON invokes this call-back method during deserialization when it encounters a field of type
@@ -32,40 +35,31 @@ implements JsonDeserializer<Configuration> {
 	public Configuration deserialize(JsonElement json, Type type,
 		JsonDeserializationContext context)
 	throws JsonParseException {
+
 		checkNotNull(json);
 		checkJsonObject(json);
 
 		JsonObject jsonObject = json.getAsJsonObject();
 
-		JsonElement publisherElement = jsonObject.get("publisher");
+		JsonElement publisherElement = jsonObject.get(ATTRIBUTE_PUBLISHER);
 		checkNotNull(publisherElement);
 		checkJsonObject(publisherElement);
-		Client publisher = context.deserialize(publisherElement, Client.class);
 
-		JsonElement subscriberElement = jsonObject.get("subscriber");
+		MqttConfiguration publisher = context.deserialize(publisherElement,
+			MqttConfiguration.class);
+
+		JsonElement subscriberElement = jsonObject.get(ATTRIBUTE_SUBSCRIBER);
 		checkNotNull(subscriberElement);
 		checkJsonObject(subscriberElement);
-		Client subscriber = context.deserialize(subscriberElement, Client.class);
+
+		MqttConfiguration subscriber = context.deserialize(subscriberElement,
+			MqttConfiguration.class);
 
 		Configuration configuration = new Configuration();
 		configuration.setPublisher(publisher);
 		configuration.setSubscriber(subscriber);
 
 		return configuration;
-	}
-
-	private void checkNotNull(JsonElement jsonElement)
-	throws JsonParseException {
-		if (jsonElement == null || jsonElement.isJsonNull()) {
-			throw new JsonParseException("JSON element was null");
-		}
-	}
-
-	private void checkJsonObject(JsonElement jsonElement)
-	throws JsonParseException {
-		if (!jsonElement.isJsonObject()) {
-			throw new JsonParseException("JSON object is expected");
-		}
 	}
 
 }

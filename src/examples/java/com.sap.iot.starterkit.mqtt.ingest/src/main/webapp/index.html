@@ -7,25 +7,29 @@
 <meta charset='UTF-8' />
 <meta name='google' content='notranslate' />
 
+<link type='text/css' rel='stylesheet' href='css/style.css' />
+
 <script id='sap-ui-bootstrap' type='text/javascript'
 	src='https://sapui5.hana.ondemand.com/resources/sap-ui-core.js'
 	data-sap-ui-theme='sap_bluecrystal' data-sap-ui-libs='sap.m'
-	data-sap-ui-language='en'></script>
+	data-sap-ui-language='en'
+	data-sap-ui-resourceroots='{
+            "mqttingest": "./js"
+        }'></script>
 
 <script>
 	sap.ui.getCore().attachInit( function() {
+
+		jQuery.sap.registerModulePath( "js", "js" );
+		jQuery.sap.registerModulePath( "locale", "locale" );
+
 		new sap.m.Shell( {
-			app: new sap.m.MessagePage( {
-				icon: "sap-icon://hint",
-				showHeader: false,
-				text: "Hint",
-				description: "Follow the procedure described in a README file"
+			app: new sap.ui.core.ComponentContainer( {
+				width: "100%",
+				height: "100%",
+				name: "mqttingest"
 			} )
 		} ).placeAt( "content" );
-
-		$( document ).ready( function() {
-			document.title = sTitle;
-		} );
 
 	} );
 </script>

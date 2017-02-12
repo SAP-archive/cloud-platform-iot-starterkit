@@ -15,16 +15,20 @@ POST ../mqtt-ingest/do
 	"subscriber" : {
 		"serverUri" : "...",
 		"clientId" : "...",
-		"username" : "...",
-		"password" : "...",
-		"topic" : "..."
+		"topic" : "...",
+		"authorization" : {
+			"username" : "...",
+			"password" : "...",
+		}
 	},
 	"publisher" : {
 		"serverUri" : "wss://iotmms%ACCOUNT_ID%.hanatrial.ondemand.com/com.sap.iotservices.mms/v1/api/ws/mqtt",
 		"clientId" : "d000-e000-v000-i000-c000-e001",
-		"username" : "d000-e000-v000-i000-c000-e001",
-		"password" : "token",
-		"topic" : "iot/data/d000-e000-v000-i000-c000-e001"
+		"topic" : "iot/data/d000-e000-v000-i000-c000-e001",
+		"authorization" : {
+			"username" : "d000-e000-v000-i000-c000-e001",
+			"password" : "token",
+		}
 	}
 }
 ```
@@ -36,16 +40,20 @@ PUT ../mqtt-ingest/do
 	"subscriber" : {
 		"serverUri" : "...",
 		"clientId" : "...",
-		"username" : "...",
-		"password" : "...",
-		"topic" : "..."
+		"topic" : "...",
+		"authorization" : {
+			"username" : "...",
+			"password" : "...",
+		}
 	},
 	"publisher" : {
 		"serverUri" : "wss://iotmms%ACCOUNT_ID%.hanatrial.ondemand.com/com.sap.iotservices.mms/v1/api/ws/mqtt",
 		"clientId" : "d000-e000-v000-i000-c000-e001",
-		"username" : "d000-e000-v000-i000-c000-e001",
-		"password" : "token",
-		"topic" : "iot/data/d000-e000-v000-i000-c000-e001"
+		"topic" : "iot/data/d000-e000-v000-i000-c000-e001",
+		"authorization" : {
+			"username" : "d000-e000-v000-i000-c000-e001",
+			"password" : "token",
+		}
 	}
 }
 ```
