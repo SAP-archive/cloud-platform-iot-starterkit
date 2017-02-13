@@ -17,7 +17,9 @@ import com.sap.iot.starterkit.mqtt.ingest.connect.MqttClient;
 import com.sap.iot.starterkit.mqtt.ingest.connect.MqttClientFactory;
 import com.sap.iot.starterkit.mqtt.ingest.json.GsonFactory;
 import com.sap.iot.starterkit.mqtt.ingest.type.Configuration;
+import com.sap.iot.starterkit.mqtt.ingest.type.Mapping;
 import com.sap.iot.starterkit.mqtt.ingest.type.MessageEnvelope;
+import com.sap.iot.starterkit.mqtt.ingest.util.ResponseMessage;
 
 public class IngestServlet
 extends AbstractServlet {
@@ -76,7 +78,8 @@ extends AbstractServlet {
 
 	protected void doModify(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
-		super.doValidate(request, response);
+
+		doValidate(request, response);
 		if (response.isCommitted()) {
 			return;
 		}
@@ -100,7 +103,7 @@ extends AbstractServlet {
 			configuration = gson.fromJson(request.getReader(), Configuration.class);
 		}
 		catch (JsonParseException e) {
-			LOGGER.error("Unable to parse configuration", e);
+			LOGGER.error(String.format("Unable to parse configuration: %1$s", e.getMessage()));
 
 			printText(response, HttpServletResponse.SC_BAD_REQUEST,
 				ResponseMessage.PAYLOAD_UNEXPECTED);
@@ -160,6 +163,7 @@ extends AbstractServlet {
 
 		final String subscribeTopic = configuration.getSubscriber().getTopic();
 		final String publishTopic = configuration.getPublisher().getTopic();
+		final Mapping mapping = configuration.getMapping();
 
 		subscriber.subscribe(subscribeTopic, new IMqttMessageListener() {
 
@@ -174,9 +178,16 @@ extends AbstractServlet {
 					return;
 				}
 
-				MessageEnvelope messageEnvelope = MessageEnvelope.fromMqttMessage(message);
-				publisher.publish(publishTopic,
-					gson.toJson(messageEnvelope, MessageEnvelope.class));
+				try {
+					MessageEnvelope messageEnvelope = MessageEnvelope.fromMqttMessage(message,
+						mapping);
+					publisher.publish(publishTopic,
+						gson.toJson(messageEnvelope, MessageEnvelope.class));
+				}
+				catch (IllegalStateException e) {
+					LOGGER.warn(
+						String.format("MQTT message was not published: %1$s", e.getMessage()));
+				}
 			}
 
 		});

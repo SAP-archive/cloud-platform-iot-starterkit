@@ -1,7 +1,5 @@
 package com.sap.iot.starterkit.mqtt.ingest.connect;
 
-import java.util.UUID;
-
 import javax.net.ssl.SSLSocketFactory;
 
 import com.sap.iot.starterkit.mqtt.ingest.type.Authorization;
@@ -13,10 +11,6 @@ public class MqttClientFactory {
 
 	public static MqttClient buildMqttClient(MqttConfiguration configuration) {
 		String clientId = configuration.getClientId();
-
-		if (clientId == null) {
-			clientId = UUID.randomUUID().toString();
-		}
 
 		Authorization authorization = configuration.getAuthorization();
 		if (authorization == null) {

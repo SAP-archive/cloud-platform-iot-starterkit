@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.sap.iot.starterkit.mqtt.ingest.type.Configuration;
+import com.sap.iot.starterkit.mqtt.ingest.type.Mapping;
 import com.sap.iot.starterkit.mqtt.ingest.type.MqttConfiguration;
 
 /**
@@ -18,6 +19,8 @@ extends AbstractDeserializer<Configuration> {
 	private static final String ATTRIBUTE_PUBLISHER = "publisher";
 
 	private static final String ATTRIBUTE_SUBSCRIBER = "subscriber";
+
+	private static final String ATTRIBUTE_MAPPING = "mapping";
 
 	/**
 	 * GSON invokes this call-back method during deserialization when it encounters a field of type
@@ -55,9 +58,16 @@ extends AbstractDeserializer<Configuration> {
 		MqttConfiguration subscriber = context.deserialize(subscriberElement,
 			MqttConfiguration.class);
 
+		JsonElement mappingElement = jsonObject.get(ATTRIBUTE_MAPPING);
+		checkNotNull(mappingElement);
+		checkJsonObject(mappingElement);
+
+		Mapping mapping = context.deserialize(mappingElement, Mapping.class);
+
 		Configuration configuration = new Configuration();
 		configuration.setPublisher(publisher);
 		configuration.setSubscriber(subscriber);
+		configuration.setMapping(mapping);
 
 		return configuration;
 	}

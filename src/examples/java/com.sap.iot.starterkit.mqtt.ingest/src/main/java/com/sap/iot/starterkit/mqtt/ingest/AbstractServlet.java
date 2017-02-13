@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sap.iot.starterkit.mqtt.ingest.util.ResponseMessage;
+
 /**
  * An abstraction over HTTP servlet
  */

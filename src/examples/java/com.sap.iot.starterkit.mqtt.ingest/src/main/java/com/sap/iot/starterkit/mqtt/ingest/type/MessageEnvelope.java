@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import com.sap.iot.starterkit.mqtt.ingest.type.MappingConfiguration.Type;
+
 public class MessageEnvelope {
 
 	private String messageType;
@@ -29,12 +31,47 @@ public class MessageEnvelope {
 		this.messages = messages;
 	}
 
-	public static MessageEnvelope fromMqttMessage(MqttMessage mqttMessage) {
+	public static MessageEnvelope fromMqttMessage(MqttMessage mqttMessage, Mapping mapping) {
+
+		if (mqttMessage == null || mqttMessage.getPayload() == null ||
+			mqttMessage.getPayload().length == 0) {
+			throw new IllegalStateException("MQTT message is null or empty");
+		}
+
 		String mqttPayload = new String(mqttMessage.getPayload());
-		double mqttValue = Double.parseDouble(mqttPayload);
 
 		Map<String, Object> fields = new HashMap<String, Object>();
-		fields.put("value", mqttValue);
+
+		Type type = mapping.getInput().getType();
+		switch (type) {
+		case DOUBLE:
+			fields.put(mapping.getOutput().getReferences().get(0).getName(),
+				Double.parseDouble(mqttPayload));
+			break;
+		case INTEGER:
+			fields.put(mapping.getOutput().getReferences().get(0).getName(),
+				Integer.parseInt(mqttPayload));
+			break;
+		case LONG:
+			fields.put(mapping.getOutput().getReferences().get(0).getName(),
+				Long.parseLong(mqttPayload));
+			break;
+		case FLOAT:
+			fields.put(mapping.getOutput().getReferences().get(0).getName(),
+				Float.parseFloat(mqttPayload));
+			break;
+		case STRING:
+			fields.put(mapping.getOutput().getReferences().get(0).getName(), mqttPayload);
+			break;
+		case BOOLEAN:
+			fields.put(mapping.getOutput().getReferences().get(0).getName(),
+				Boolean.parseBoolean(mqttPayload));
+			break;
+		case JSON:
+		default:
+			throw new IllegalStateException(
+				String.format("Unsupported mapping input type '%1$s'", type));
+		}
 
 		Message message = new Message();
 		message.setFields(fields);
@@ -44,7 +81,7 @@ public class MessageEnvelope {
 
 		MessageEnvelope messageEnvelope = new MessageEnvelope();
 		messageEnvelope.setMessages(messages);
-		messageEnvelope.setMessageType("a825148f132eb9cfa5ef");
+		messageEnvelope.setMessageType(mapping.getMessageTypeId());
 
 		return messageEnvelope;
 	}

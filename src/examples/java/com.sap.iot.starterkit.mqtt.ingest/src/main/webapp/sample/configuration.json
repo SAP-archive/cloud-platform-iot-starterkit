@@ -1,15 +1,27 @@
 {
 	"subscriber" : {
-		"serverUri" : "tcp://iot:1883",
+		"serverUri" : "tcp://iot.org:1883",
 		"topic" : "temperature"
 	},
 	"publisher" : {
-		"serverUri" : "wss://iotmmstrial.hanatrial.ondemand.com/com.sap.iotservices.mms/v1/api/ws/mqtt",
+		"serverUri" : "wss://iotmmsp0000trial.hanatrial.ondemand.com/com.sap.iotservices.mms/v1/api/ws/mqtt",
 		"clientId" : "d000-e000-v000-i000-c000-e001",
 		"topic" : "iot/data/d000-e000-v000-i000-c000-e001",
 		"authorization" : {
-			"username" : "d000-e000-v000-i000-c000-e001",
-			"password" : "token"
+			"username" : "d000-e000-v000-i000-c000-e001,
+			"password" : "abc0a92514e4808894d392758a889zxc"
+		}
+	},
+	"mapping" : {
+		"messageTypeId" : "qwe5148f132eb9cfa5rty",
+		"input" : {
+			"type" : "double"
+		},
+		"output" : {
+			"type" : "json",
+			"references" : [
+				{ "name" : "value", "type" : "double" }
+			]
 		}
 	}
 }

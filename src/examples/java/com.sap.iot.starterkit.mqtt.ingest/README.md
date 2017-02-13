@@ -13,21 +13,28 @@ Make a POST request in order to configure the clients, connect them and subscrib
 POST ../mqtt-ingest/do
 {
 	"subscriber" : {
-		"serverUri" : "...",
-		"clientId" : "...",
-		"topic" : "...",
-		"authorization" : {
-			"username" : "...",
-			"password" : "...",
-		}
+		"serverUri" : "tcp://iot.org:1883",
+		"topic" : "temperature"
 	},
 	"publisher" : {
-		"serverUri" : "wss://iotmms%ACCOUNT_ID%.hanatrial.ondemand.com/com.sap.iotservices.mms/v1/api/ws/mqtt",
+		"serverUri" : "wss://iotmmsp0000trial.hanatrial.ondemand.com/com.sap.iotservices.mms/v1/api/ws/mqtt",
 		"clientId" : "d000-e000-v000-i000-c000-e001",
 		"topic" : "iot/data/d000-e000-v000-i000-c000-e001",
 		"authorization" : {
-			"username" : "d000-e000-v000-i000-c000-e001",
-			"password" : "token",
+			"username" : "d000-e000-v000-i000-c000-e001,
+			"password" : "abc0a92514e4808894d392758a889zxc"
+		}
+	},
+	"mapping" : {
+		"messageTypeId" : "qwe5148f132eb9cfa5rty",
+		"input" : {
+			"type" : "double"
+		},
+		"output" : {
+			"type" : "json",
+			"references" : [
+				{ "name" : "value", "type" : "double" }
+			]
 		}
 	}
 }
@@ -38,21 +45,28 @@ Make a PUT request in order to re-configure the clients, re-connect them and re-
 PUT ../mqtt-ingest/do
 {
 	"subscriber" : {
-		"serverUri" : "...",
-		"clientId" : "...",
-		"topic" : "...",
-		"authorization" : {
-			"username" : "...",
-			"password" : "...",
-		}
+		"serverUri" : "tcp://iot.org:1883",
+		"topic" : "temperature"
 	},
 	"publisher" : {
-		"serverUri" : "wss://iotmms%ACCOUNT_ID%.hanatrial.ondemand.com/com.sap.iotservices.mms/v1/api/ws/mqtt",
+		"serverUri" : "wss://iotmmsp0000trial.hanatrial.ondemand.com/com.sap.iotservices.mms/v1/api/ws/mqtt",
 		"clientId" : "d000-e000-v000-i000-c000-e001",
 		"topic" : "iot/data/d000-e000-v000-i000-c000-e001",
 		"authorization" : {
-			"username" : "d000-e000-v000-i000-c000-e001",
-			"password" : "token",
+			"username" : "d000-e000-v000-i000-c000-e001,
+			"password" : "abc0a92514e4808894d392758a889zxc"
+		}
+	},
+	"mapping" : {
+		"messageTypeId" : "qwe5148f132eb9cfa5rty",
+		"input" : {
+			"type" : "double"
+		},
+		"output" : {
+			"type" : "json",
+			"references" : [
+				{ "name" : "value", "type" : "double" }
+			]
 		}
 	}
 }
@@ -67,3 +81,10 @@ Make a DELETE in order to request disconnect the clients and remove configuratio
 ```
 DELETE ../mqtt-ingest/do
 ```
+
+TODOs:
+- [ ] Support JSON as mapping input type
+- [ ] Optimize JSON deserialization
+- [ ] Introduce JSON schema validation (?)
+- [ ] Improve error handling
+- [ ] Support client certificate based authorization

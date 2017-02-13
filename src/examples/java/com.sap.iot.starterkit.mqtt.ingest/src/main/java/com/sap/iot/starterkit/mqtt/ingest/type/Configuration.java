@@ -6,6 +6,8 @@ public class Configuration {
 
 	private MqttConfiguration publisher;
 
+	private Mapping mapping;
+
 	public MqttConfiguration getSubscriber() {
 		return subscriber;
 	}
@@ -20,6 +22,14 @@ public class Configuration {
 
 	public void setPublisher(MqttConfiguration publisher) {
 		this.publisher = publisher;
+	}
+
+	public Mapping getMapping() {
+		return mapping;
+	}
+
+	public void setMapping(Mapping mapping) {
+		this.mapping = mapping;
 	}
 
 }

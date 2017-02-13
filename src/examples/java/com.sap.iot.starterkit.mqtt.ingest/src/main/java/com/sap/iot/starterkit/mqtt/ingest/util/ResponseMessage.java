@@ -1,4 +1,4 @@
-package com.sap.iot.starterkit.mqtt.ingest;
+package com.sap.iot.starterkit.mqtt.ingest.util;
 
 public class ResponseMessage {
 
