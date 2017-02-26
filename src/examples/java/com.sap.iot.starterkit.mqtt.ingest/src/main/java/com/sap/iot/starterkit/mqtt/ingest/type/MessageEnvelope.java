@@ -7,10 +7,8 @@ import java.util.Map;
 
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.sap.iot.starterkit.mqtt.ingest.json.GsonFactory;
 import com.sap.iot.starterkit.mqtt.ingest.type.MappingConfiguration.Type;
 
@@ -63,104 +61,80 @@ public class MessageEnvelope {
 	}
 
 	public static MessageEnvelope fromMqttMessage(MqttMessage mqttMessage, Mapping mapping) {
-
 		if (mqttMessage == null || mqttMessage.getPayload() == null ||
 			mqttMessage.getPayload().length == 0) {
 			throw new IllegalStateException("MQTT message is null or empty");
 		}
-
 		String mqttPayload = new String(mqttMessage.getPayload());
 
 		Map<String, Object> fields = new HashMap<String, Object>();
 
-		Type type = mapping.getInput().getType();
-		switch (type) {
+		Type inputType = mapping.getInput().getType();
+		List<Reference> inputReferences = mapping.getInput().getReferences();
+		List<Reference> outputReferences = mapping.getOutput().getReferences();
+
+		switch (inputType) {
 		case DOUBLE:
-			fields.put(mapping.getOutput().getReferences().get(0).getName(),
-				Double.parseDouble(mqttPayload));
+			fields.put(outputReferences.get(0).getName(), Double.parseDouble(mqttPayload));
 			break;
 		case INTEGER:
-			fields.put(mapping.getOutput().getReferences().get(0).getName(),
-				Integer.parseInt(mqttPayload));
+			fields.put(outputReferences.get(0).getName(), Integer.parseInt(mqttPayload));
 			break;
 		case LONG:
-			fields.put(mapping.getOutput().getReferences().get(0).getName(),
-				Long.parseLong(mqttPayload));
+			fields.put(outputReferences.get(0).getName(), Long.parseLong(mqttPayload));
 			break;
 		case FLOAT:
-			fields.put(mapping.getOutput().getReferences().get(0).getName(),
-				Float.parseFloat(mqttPayload));
+			fields.put(outputReferences.get(0).getName(), Float.parseFloat(mqttPayload));
 			break;
 		case STRING:
-			fields.put(mapping.getOutput().getReferences().get(0).getName(), mqttPayload);
+			fields.put(outputReferences.get(0).getName(), mqttPayload);
 			break;
 		case BOOLEAN:
-			fields.put(mapping.getOutput().getReferences().get(0).getName(),
-				Boolean.parseBoolean(mqttPayload));
+			fields.put(outputReferences.get(0).getName(), Boolean.parseBoolean(mqttPayload));
 			break;
 		case JSON:
-			if (mapping.getOutput().getReferences() == null ||
-				mapping.getOutput().getReferences().isEmpty()) {
-
-				Gson gson = GsonFactory.buildGson();
-				Message message = gson.fromJson(mqttPayload, Message.class);
+			if (outputReferences == null || outputReferences.isEmpty()) {
+				Message message = GsonFactory.buildGson().fromJson(mqttPayload, Message.class);
 				fields = message.getFields();
 			}
 			else {
-				// Gson gson = GsonFactory.buildGson();
-				// Message message = gson.fromJson(mqttPayload, Message.class);
-
-				JsonElement json = new JsonParser().parse(mqttPayload);
-
-				List<Reference> outputReferences = mapping.getOutput().getReferences();
-				List<Reference> inputReferences = mapping.getInput().getReferences();
-
+				JsonElement jsonElement = GsonFactory.buildParser().parse(mqttPayload);
 				for (int i = 0; i < inputReferences.size(); i++) {
 
-					String n = inputReferences.get(i).getName();
-
-					// System.out.println(n);
-					String[] parts = n.split("/");
-
-					JsonElement val = null;
-					if (parts.length > 1) {
-						JsonElement sub = ((JsonObject) json).get(parts[0]);
-
-						val = ((JsonObject) sub).get(parts[1]);
-					}
-					else {
-						val = ((JsonObject) json).get(parts[0]);
-					}
+					String inputReferenceName = inputReferences.get(i).getName();
+					String outputReferenceName = outputReferences.get(i).getName();
+					JsonElement jsonValue = revealJsonValue(inputReferenceName, jsonElement);
 
 					switch (inputReferences.get(i).getType()) {
 					case DOUBLE:
-						fields.put(outputReferences.get(i).getName(), val.getAsDouble());
+						fields.put(outputReferenceName, jsonValue.getAsDouble());
 						break;
 					case INTEGER:
-						fields.put(outputReferences.get(i).getName(), val.getAsInt());
+						fields.put(outputReferenceName, jsonValue.getAsInt());
 						break;
 					case LONG:
-						fields.put(outputReferences.get(i).getName(), val.getAsLong());
+						fields.put(outputReferenceName, jsonValue.getAsLong());
 						break;
 					case FLOAT:
-						fields.put(outputReferences.get(i).getName(), val.getAsFloat());
+						fields.put(outputReferenceName, jsonValue.getAsFloat());
 						break;
 					case STRING:
-						fields.put(outputReferences.get(i).getName(), val.getAsString());
+						fields.put(outputReferenceName, jsonValue.getAsString());
 						break;
 					case BOOLEAN:
-						fields.put(outputReferences.get(i).getName(), val.getAsBoolean());
+						fields.put(outputReferenceName, jsonValue.getAsBoolean());
 						break;
 					default:
 						throw new IllegalStateException(
-							String.format("Unsupported mapping input type '%1$s'", type));
+							String.format("Unsupported mapping input type '%1$s'",
+								inputReferences.get(i).getType()));
 					}
 				}
 			}
 			break;
 		default:
 			throw new IllegalStateException(
-				String.format("Unsupported mapping input type '%1$s'", type));
+				String.format("Unsupported mapping input type '%1$s'", inputType));
 		}
 
 		Message message = new Message();
@@ -174,6 +148,16 @@ public class MessageEnvelope {
 		messageEnvelope.setMessageType(mapping.getMessageTypeId());
 
 		return messageEnvelope;
+	}
+
+	private static JsonElement revealJsonValue(String referenceName, JsonElement root) {
+		String[] parts = referenceName.split("/");
+		if (parts.length == 1) {
+			return ((JsonObject) root).get(parts[0]);
+		}
+		int begIndex = referenceName.indexOf("/") + 1;
+		return revealJsonValue(referenceName.substring(begIndex),
+			((JsonObject) root).get(parts[0]));
 	}
 
 }

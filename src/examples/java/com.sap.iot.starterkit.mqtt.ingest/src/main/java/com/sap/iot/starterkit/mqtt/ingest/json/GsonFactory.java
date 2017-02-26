@@ -2,6 +2,7 @@ package com.sap.iot.starterkit.mqtt.ingest.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
 import com.sap.iot.starterkit.mqtt.ingest.type.Authorization;
 import com.sap.iot.starterkit.mqtt.ingest.type.Configuration;
 import com.sap.iot.starterkit.mqtt.ingest.type.MappingConfiguration;
@@ -22,6 +23,10 @@ public class GsonFactory {
 		builder.registerTypeAdapter(Message.class, new MessageDeserializer());
 		builder.registerTypeAdapter(Message.class, new MessageSerializer());
 		return builder.create();
+	}
+
+	public static JsonParser buildParser() {
+		return new JsonParser();
 	}
 
 }

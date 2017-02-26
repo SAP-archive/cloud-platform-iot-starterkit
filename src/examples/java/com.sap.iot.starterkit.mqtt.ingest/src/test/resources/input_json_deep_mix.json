@@ -1,0 +1,38 @@
+{  
+   "app_id":"myapp",
+   "dev_id":"mydevice",
+   "hardware_serial":"0011223344556677",
+   "port":1,
+   "counter":1000,
+   "payload_raw":"DO0KWQ1H",
+   "payload" : {
+   		"payload_fields":{  
+      		"celcius":33.09,
+      		"fahrenheit":91
+   		}
+   },
+   "status":{
+   		"battery":"low",
+      	"active":true
+   },
+   "metadata":{  
+      "time":"2017-02-21T16:38:55.081110224Z",
+      "frequency":600.5,
+      "modulation":"LORA",
+      "data_rate":"SF7BW125",
+      "coding_rate":"4/5",
+      "gateways":[  
+         {  
+            "gtw_id":"eui-00112233445566",
+            "timestamp":1220910331,
+            "time":"2017-02-21T16:38:55.062545Z",
+            "channel":2,
+            "rssi":-73,
+            "snr":6.8,
+            "rf_chain":1,
+            "latitude":40.40790,
+            "longitude":7.78192
+         }
+      ]
+   }
+}

@@ -15,13 +15,32 @@ public class MessageEnvelopeTest
 extends TestSuite {
 
 	@Test
-	public void positiveJsonDeepMapping() {
-		assertMessageEnvelope("input_json_deep.json", "mapping_json_deep.json", "output_json.json");
+	public void positiveJsonDeep2xMapping() {
+		assertMessageEnvelope("input_json_deep_2x.json", "mapping_json_deep_2x.json",
+			"output_json.json");
+	}
+
+	@Test
+	public void positiveJsonDeep3xMapping() {
+		assertMessageEnvelope("input_json_deep_3x.json", "mapping_json_deep_3x.json",
+			"output_json.json");
+	}
+
+	@Test
+	public void positiveJsonDeepMixMapping() {
+		assertMessageEnvelope("input_json_deep_mix.json", "mapping_json_deep_mix.json",
+			"output_json.json");
 	}
 
 	@Test
 	public void positiveJsonFlatMapping() {
 		assertMessageEnvelope("input_json_flat.json", "mapping_json_flat.json", "output_json.json");
+	}
+
+	@Test
+	public void positiveJsonDirectMapping() {
+		assertMessageEnvelope("input_json_flat.json", "mapping_json_direct.json",
+			"output_json.json");
 	}
 
 	@Test
