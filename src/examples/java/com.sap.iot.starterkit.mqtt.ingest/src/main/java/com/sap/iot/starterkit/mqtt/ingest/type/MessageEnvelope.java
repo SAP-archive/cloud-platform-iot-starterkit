@@ -122,9 +122,15 @@ public class MessageEnvelope {
 					// System.out.println(n);
 					String[] parts = n.split("/");
 
-					JsonElement sub = ((JsonObject) json).get(parts[0]);
+					JsonElement val = null;
+					if (parts.length > 1) {
+						JsonElement sub = ((JsonObject) json).get(parts[0]);
 
-					JsonElement val = ((JsonObject) sub).get(parts[1]);
+						val = ((JsonObject) sub).get(parts[1]);
+					}
+					else {
+						val = ((JsonObject) json).get(parts[0]);
+					}
 
 					switch (inputReferences.get(i).getType()) {
 					case DOUBLE:
