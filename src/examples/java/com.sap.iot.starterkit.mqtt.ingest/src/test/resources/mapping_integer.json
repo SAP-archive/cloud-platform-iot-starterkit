@@ -1,0 +1,15 @@
+{  
+   "messageTypeId":"a825148f132eb9cfa5ef",
+   "input":{  
+      "type":"integer"
+   },
+   "output":{  
+      "type":"json",
+      "references":[  
+         {  
+            "name":"value",
+            "type":"integer"
+         }
+      ]
+   }
+}

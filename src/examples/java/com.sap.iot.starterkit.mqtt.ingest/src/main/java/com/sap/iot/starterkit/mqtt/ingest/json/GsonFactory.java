@@ -6,7 +6,6 @@ import com.sap.iot.starterkit.mqtt.ingest.type.Authorization;
 import com.sap.iot.starterkit.mqtt.ingest.type.Configuration;
 import com.sap.iot.starterkit.mqtt.ingest.type.MappingConfiguration;
 import com.sap.iot.starterkit.mqtt.ingest.type.Message;
-import com.sap.iot.starterkit.mqtt.ingest.type.MessageEnvelope;
 import com.sap.iot.starterkit.mqtt.ingest.type.MqttConfiguration;
 import com.sap.iot.starterkit.mqtt.ingest.type.Reference;
 
@@ -21,7 +20,7 @@ public class GsonFactory {
 			new MappingConfigurationDeserializer());
 		builder.registerTypeAdapter(Reference.class, new ReferenceDeserializer());
 		builder.registerTypeAdapter(Message.class, new MessageDeserializer());
-		builder.registerTypeAdapter(MessageEnvelope.class, new MessageEnvelopeSerializer());
+		builder.registerTypeAdapter(Message.class, new MessageSerializer());
 		return builder.create();
 	}
 

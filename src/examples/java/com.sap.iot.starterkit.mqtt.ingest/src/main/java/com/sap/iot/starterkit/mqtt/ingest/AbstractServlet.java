@@ -35,7 +35,7 @@ extends HttpServlet {
 	public static final String ENCODING = StandardCharsets.UTF_8.toString();
 
 	/**
-	 * Performs request basic validation
+	 * Performs basic validation for HTTP requests
 	 */
 	protected void doValidate(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
