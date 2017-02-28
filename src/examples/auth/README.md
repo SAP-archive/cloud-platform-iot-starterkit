@@ -7,12 +7,13 @@
 ### 1. Device Type Registration
 (The device type registration can also be done using the IoT Cockpit.)
 
-* Before registering and authenticating devices with client certificates a corresponding device type using client certificate authentication must be registered. ```<rdms_host>``` specifies the application url of your IoT Services Remote Device Management Service (RDMS), e.g. ```https://iotrdmsiotservices-<account_name>.hana.ondemand.com```.
+* Before registering and authenticating devices with client certificates a corresponding device type using client certificate authentication must be registered. ```<rdms_host>``` specifies the application url of your IoT Services Remote Device Management Service (RDMS), e.g. ```https://iotrdmsiotservices-<account_name>.hana.ondemand.com```. 
 
 ```
-$ curl --header "Content-Type: application/json" --basic --user "<username>" --proxy <proxyhost>:<port> --data "{\"name\": \"Device Type 1\",\"authentication\": {\"type\": \"clientCertificate\"}}" https://<rdms_host>/com.sap.iotservices.dms/v2/api/deviceTypes
+$ curl --header "Content-Type: application/json" --basic --user "<username>" --data "{\"name\": \"Device Type 1\",\"authentication\": {\"type\": \"clientCertificate\"}}" https://<rdms_host>/com.sap.iotservices.dms/v2/api/deviceTypes
 ```
 
+* Optional: In case you need to set a proxy, please specify ```--proxy <proxyhost>:<port>``` when using the ```curl``` command.
 * The request body specifies the device type ```name``` and authentication ```type```:
 ```
 {
@@ -55,7 +56,7 @@ $ openssl pkcs12 -in 273e5b736a9af59689ba.p12 -out 273e5b736a9af59689ba.key -noc
 * To register a device, the previously acquired device type certificate must be attached to the HTTPS connection. It will then be used during the initial SSL handshake as client certificate. ```<rdms_cert_host>``` specifies the application url of your IoT Services Remote Device Management Service (RDMS) with ```cert``` prefix, e.g. ```https://iotrdmsiotservices-<account_name>.cert.hana.ondemand.com```.
 
 ```
-$ curl --header "Content-Type: application/json" --cert-type P12 --cert ./<device_type_certificate>.p12:<secret> --proxy <proxyhost>:<port> --data "{\"name\": \"Device 1\",\"id\": \"Device01\",\"deviceType\": \"273e5b736a9af59689ba\"}" https://<rdms_cert_host>/com.sap.iotservices.dms/v2/api/devices
+$ curl --header "Content-Type: application/json" --cert-type P12 --cert ./<device_type_certificate>.p12:<secret> --data "{\"name\": \"Device 1\",\"id\": \"Device01\",\"deviceType\": \"273e5b736a9af59689ba\"}" https://<rdms_cert_host>/com.sap.iotservices.dms/v2/api/devices
 ```
 
 * The request body specifies the device ```name```, ```id``` and ```deviceType```:
@@ -127,7 +128,7 @@ An optional company name []:.
 * Finally the registered device must be authenticated, i.e. to receive the device certificate. Again the  acquired device type certificate must be attached to the HTTPS connection. It will then be used during the initial SSL handshake as client certificate.
 
 ```
-$ curl --header "Content-Type: application/json" --cert-type P12 --cert ./<device_type_certificate>.p12:<secret> --proxy <proxyhost>:<port> --data "{\"type\": \"clientCertificate\",\"csr\": \"MIIC6jCCAdICAQAwgYsxCzAJBgNVB…\"}" https://<rdms_cert_host>/com.sap.iotservices.dms/v2/api/devices/<deviceId>/authentication
+$ curl --header "Content-Type: application/json" --cert-type P12 --cert ./<device_type_certificate>.p12:<secret> --data "{\"type\": \"clientCertificate\",\"csr\": \"MIIC6jCCAdICAQAwgYsxCzAJBgNVB…\"}" https://<rdms_cert_host>/com.sap.iotservices.dms/v2/api/devices/<deviceId>/authentication
 ```
 
 * The request body entails the authentication ```type``` and the previously generated base64-encoded ```csr```:
