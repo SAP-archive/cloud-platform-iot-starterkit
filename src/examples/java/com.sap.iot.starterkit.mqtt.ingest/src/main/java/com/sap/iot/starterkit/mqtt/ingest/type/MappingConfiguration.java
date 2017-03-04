@@ -12,7 +12,8 @@ public class MappingConfiguration {
 		LONG("long"),
 		FLOAT("float"),
 		STRING("string"),
-		BOOLEAN("boolean");
+		BOOLEAN("boolean"),
+		DATE("date");
 
 		private String value;
 
@@ -36,7 +37,7 @@ public class MappingConfiguration {
 				}
 			}
 
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException(String.format("Unsupported type name '%1$s'", name));
 		}
 	}
 

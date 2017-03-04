@@ -12,8 +12,8 @@ public class ResponseMessage {
 
 	public static final String INTERNAL_ERROR = "Internal error. Please, check application logs for details.";
 
-	public static final String CONFIGURATION_MISSING = "Configuration is missing";
+	public static final String CONFIGURATION_MISSING = "No configuration found";
 
-	public static final String CONFIGURATION_REMOVED = "Configuration cleared. Clients disconnected.";
+	public static final String CONFIGURATION_REMOVED = "Configuration was removed. MQTT clients disconnected.";
 
 }

@@ -1,27 +1,72 @@
-{
-	"subscriber" : {
-		"serverUri" : "tcp://iot.org:1883",
-		"topic" : "temperature"
-	},
-	"publisher" : {
-		"serverUri" : "wss://iotmmsp0000trial.hanatrial.ondemand.com/com.sap.iotservices.mms/v1/api/ws/mqtt",
-		"clientId" : "d000-e000-v000-i000-c000-e001",
-		"topic" : "iot/data/d000-e000-v000-i000-c000-e001",
-		"authorization" : {
-			"username" : "d000-e000-v000-i000-c000-e001,
-			"password" : "abc0a92514e4808894d392758a889zxc"
-		}
-	},
-	"mapping" : {
-		"messageTypeId" : "qwe5148f132eb9cfa5rty",
-		"input" : {
-			"type" : "double"
-		},
-		"output" : {
-			"type" : "json",
-			"references" : [
-				{ "name" : "value", "type" : "double" }
-			]
-		}
-	}
+{  
+   "subscriber":{  
+      "serverUri":"tcp://eu.thethings.network:1883",
+      "topic":"ttnappid/devices/ttndeviceid/up",
+      "authorization":{  
+         "username":"ttnappid",
+         "password":"ttn-account-v2.ABcdf456fgdfgfg3432dfsd"
+      }
+   },
+   "publisher":{  
+      "serverUri":"wss://iotmmsp00001trial.hanatrial.ondemand.com/com.sap.iotservices.mms/v1/api/ws/mqtt",
+      "topic":"iot/data/b141d8f7-4013-49a5-93b8-c342727c150a",
+      "clientId": "b141d8f7-4013-49a5-93b8-c342727c150a",
+      "authorization":{  
+         "username":"b141d8f7-4013-49a5-93b8-c342727c150a",
+         "password":"f756f220dd8646b7dea7f7f7d77ddb0"
+      }
+   },
+   "mapping":{  
+      "messageTypeId":"ee7fa864f7f27492f039",
+      "input":{  
+         "type":"json",
+         "references":[  
+            {  
+               "name":"metadata/time",
+               "type":"date"
+            },
+            {  
+               "name":"payload_fields/battery",
+               "type":"double"
+            },
+            {  
+               "name":"payload_fields/celcius",
+               "type":"double"
+            },
+            {  
+               "name":"payload_fields/fahrenheit",
+               "type":"double"
+            },
+            {  
+               "name":"payload_fields/humidity",
+               "type":"double"
+            }
+         ]
+      },
+      "output":{  
+         "type":"json",
+         "references":[  
+            {  
+               "name":"timestamp",
+               "type":"date"
+            },
+            {  
+               "name":"battery",
+               "type":"double"
+            },
+            {  
+               "name":"celcius",
+               "type":"double"
+            },
+            {  
+               "name":"fahrenheit",
+               "type":"double"
+            },
+            {  
+               "name":"humidity",
+               "type":"double"
+            }
+         ]
+      }
+   }
 }

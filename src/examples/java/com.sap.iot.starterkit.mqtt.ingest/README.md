@@ -83,8 +83,8 @@ DELETE ../mqtt-ingest/do
 ```
 
 TODOs:
-- [ ] Support JSON as mapping input type
-- [ ] Optimize JSON deserialization
-- [ ] Introduce JSON schema validation (?)
+- [x] Support JSON as mapping input type
+- [ ] Optimize JSON serialization/deserialization
+- [ ] Introduce JSON schema validation
 - [ ] Improve error handling
 - [ ] Support client certificate based authorization

@@ -38,7 +38,7 @@ implements JsonDeserializer<T> {
 	protected void checkString(JsonPrimitive jsonPrimitive)
 	throws JsonParseException {
 		if (!jsonPrimitive.isString()) {
-			throw new JsonParseException("JSON string is expected");
+			throw new JsonParseException("String is expected");
 		}
 	}
 

@@ -14,6 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import com.sap.iot.starterkit.mqtt.ingest.AbstractServlet;
 
+/**
+ * A proxy (wrapper) for {@link org.eclipse.paho.client.mqttv3.MqttClient} Paho client
+ */
 public class MqttClient {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MqttClient.class);
@@ -25,7 +28,7 @@ public class MqttClient {
 	private String clientId;
 
 	public MqttClient(String clientId) {
-		if (clientId == null) {
+		if (clientId == null || clientId.trim().isEmpty()) {
 			clientId = org.eclipse.paho.client.mqttv3.MqttClient.generateClientId();
 		}
 		this.clientId = clientId;
@@ -51,7 +54,7 @@ public class MqttClient {
 			disconnect();
 		}
 
-		LOGGER.info(String.format("Connect to %1$s", destination));
+		LOGGER.info(String.format("Connecting to %1$s ...", destination));
 
 		try {
 			client = new org.eclipse.paho.client.mqttv3.MqttClient(destination, clientId,
@@ -61,18 +64,33 @@ public class MqttClient {
 		catch (MqttException e) {
 			throw new IOException("Unable to establish a MQTT connection", e);
 		}
+
+		LOGGER.info(String.format("Connected to %1$s", destination));
 	}
 
 	public void disconnect() {
 		if (client != null) {
 
-			LOGGER.info(String.format("Disconnect from %1$s", client.getServerURI()));
+			LOGGER.info(String.format("Disconnecting from %1$s ...", client.getServerURI()));
 
 			try {
 				client.disconnect();
+				if (client.isConnected()) {
+					client.disconnectForcibly();
+				}
 			}
 			catch (MqttException e) {
 				// disconnect silently
+			}
+			finally {
+				try {
+					client.close();
+				}
+				catch (MqttException e) {
+					// close silently
+				}
+
+				LOGGER.info(String.format("Disconnected from %1$s", client.getServerURI()));
 			}
 		}
 	}
@@ -80,7 +98,7 @@ public class MqttClient {
 	public void publish(String topic, String message)
 	throws IOException {
 
-		LOGGER.debug(String.format("Publish on topic '%1$s' : %2$s", topic, message));
+		LOGGER.debug(String.format("Publishing on topic '%1$s' : %2$s", topic, message));
 
 		byte[] bytes = message.getBytes(AbstractServlet.ENCODING);
 		MqttMessage mqttMessage = new MqttMessage(bytes);
@@ -88,6 +106,8 @@ public class MqttClient {
 
 		try {
 			client.publish(topic, mqttMessage);
+
+			LOGGER.debug(String.format("Published on topic '%1$s' : %2$s", topic, message));
 		}
 		catch (MqttException e) {
 			throw new IOException("Unable to publish the MQTT message", e);
@@ -97,10 +117,12 @@ public class MqttClient {
 	public void subscribe(String topic, IMqttMessageListener listener)
 	throws IOException {
 
-		LOGGER.info(String.format("Subscribe for topic '%1$s'", topic));
+		LOGGER.info(String.format("Subscribing for topic '%1$s' ...", topic));
 
 		try {
 			client.subscribe(topic, listener);
+
+			LOGGER.info(String.format("Subscribed for topic '%1$s'", topic));
 		}
 		catch (MqttException e) {
 			throw new IOException("Unable to subscribe for the MQTT topic", e);

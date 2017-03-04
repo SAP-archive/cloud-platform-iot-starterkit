@@ -21,6 +21,9 @@ import com.sap.iot.starterkit.mqtt.ingest.type.Mapping;
 import com.sap.iot.starterkit.mqtt.ingest.type.MessageEnvelope;
 import com.sap.iot.starterkit.mqtt.ingest.util.ResponseMessage;
 
+/**
+ * Web application entry point, exposes RESTful interface to the user, handles HTTP requests
+ */
 public class IngestServlet
 extends AbstractServlet {
 
@@ -103,7 +106,7 @@ extends AbstractServlet {
 			configuration = gson.fromJson(request.getReader(), Configuration.class);
 		}
 		catch (JsonParseException e) {
-			LOGGER.error(String.format("Unable to parse configuration: %1$s", e.getMessage()));
+			LOGGER.error("Unable to parse configuration", e);
 
 			printText(response, HttpServletResponse.SC_BAD_REQUEST,
 				ResponseMessage.PAYLOAD_UNEXPECTED);
@@ -117,13 +120,15 @@ extends AbstractServlet {
 
 	private void doReconnect(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
+
 		disconnect();
+
 		try {
 			connect();
 			subscribe();
 		}
 		catch (IOException e) {
-			LOGGER.error("Unable to reconnect the clients", e);
+			LOGGER.error("Unable to reconnect the MQTT clients", e);
 			disconnect();
 
 			printText(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,

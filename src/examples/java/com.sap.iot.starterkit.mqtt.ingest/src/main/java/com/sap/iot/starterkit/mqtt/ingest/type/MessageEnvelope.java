@@ -87,6 +87,7 @@ public class MessageEnvelope {
 			fields.put(outputReferences.get(0).getName(), Float.parseFloat(mqttPayload));
 			break;
 		case STRING:
+		case DATE:
 			fields.put(outputReferences.get(0).getName(), mqttPayload);
 			break;
 		case BOOLEAN:
@@ -119,6 +120,7 @@ public class MessageEnvelope {
 						fields.put(outputReferenceName, jsonValue.getAsFloat());
 						break;
 					case STRING:
+					case DATE:
 						fields.put(outputReferenceName, jsonValue.getAsString());
 						break;
 					case BOOLEAN:

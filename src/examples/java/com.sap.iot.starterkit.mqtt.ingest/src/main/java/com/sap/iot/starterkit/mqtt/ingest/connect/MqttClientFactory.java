@@ -1,12 +1,14 @@
 package com.sap.iot.starterkit.mqtt.ingest.connect;
 
-import javax.net.ssl.SSLSocketFactory;
-
 import com.sap.iot.starterkit.mqtt.ingest.type.Authorization;
 import com.sap.iot.starterkit.mqtt.ingest.type.BasicAuthorization;
 import com.sap.iot.starterkit.mqtt.ingest.type.ClientCertificateAuthorization;
 import com.sap.iot.starterkit.mqtt.ingest.type.MqttConfiguration;
 
+/**
+ * A factory for instantiating the {@link MqttClient} instances based on the user provided
+ * {@link MqttConfiguration} settings
+ */
 public class MqttClientFactory {
 
 	public static MqttClient buildMqttClient(MqttConfiguration configuration) {
@@ -23,11 +25,8 @@ public class MqttClientFactory {
 			return new MqttClient(clientId, username, password);
 		}
 		else if (authorization instanceof ClientCertificateAuthorization) {
-
-			// TODO: prepare SSL socket factory
-			SSLSocketFactory sslSocketFactory = null;
-
-			return new MqttClient(clientId, sslSocketFactory);
+			throw new UnsupportedOperationException(
+				"Client certificate authentication type is not supported yet");
 		}
 
 		throw new IllegalStateException("Unknown authorization settings");

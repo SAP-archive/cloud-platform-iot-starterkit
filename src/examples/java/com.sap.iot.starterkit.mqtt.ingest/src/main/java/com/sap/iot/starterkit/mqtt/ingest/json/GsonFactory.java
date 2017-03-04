@@ -10,6 +10,9 @@ import com.sap.iot.starterkit.mqtt.ingest.type.Message;
 import com.sap.iot.starterkit.mqtt.ingest.type.MqttConfiguration;
 import com.sap.iot.starterkit.mqtt.ingest.type.Reference;
 
+/**
+ * A factory for instantiating the {@link Gson} entities
+ */
 public class GsonFactory {
 
 	public static Gson buildGson() {
