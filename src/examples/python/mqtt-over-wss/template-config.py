@@ -8,10 +8,15 @@ hcp_account_id='your_hcp_account_id'
 # you only need to adapt this part of the URL if you are NOT ON TRIAL but e.g. on PROD
 hcp_landscape_host='.hanatrial.ondemand.com'
 # hcp_landscape_host='.hana.ondemand.com' # this is used on PROD
+# hcp_landscape_host='.cert.hana.ondemand.com' # this is used on PROD with Client Certificate Authentication
 
 endpoint_certificate = "./hanatrial.ondemand.com.crt"
 # you can download this certificate file with your browser from the app server in your landscape - it is used to check that the server is authentic
 # we also provide the certificate that is valid in July 2016 at our github repo
+
+# to use Client Certificate Authentication (works only on PROD) you need to use the respective landscape and authenticate the device by specifying the client certificate and key; in this case the OAuth token can be skipped
+# client_certificate = "./Device.crt"
+# client_key = "./Device.key"
 
 # the following values need to be taken from the IoT Cockpit
 device_id='the_id_of_the_device_you_created_in_the_iot_cockpit'
