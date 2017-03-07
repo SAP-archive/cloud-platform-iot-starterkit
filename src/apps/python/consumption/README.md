@@ -1,8 +1,8 @@
-This directory has the sources for a Python application that prints out the table data sent on behalf of the devices via HCP IoT Services to console.
+This directory has the sources for a Python application that prints out the table data sent on behalf of the devices via SAP Cloud Platform Internet of Things to console.
 
 ### Prerequisites
 
-1. You have HCP SDK installed https://tools.hana.ondemand.com
+1. You have SAP Cloud Platform SDK installed https://tools.hana.ondemand.com
 2. You have Python installed https://www.python.org (use version 2.7 to make PyHDB work)
 3. You have PyHDB (SAP HANA Database Client for Python) installed https://github.com/SAP/PyHDB
 

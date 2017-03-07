@@ -2,15 +2,15 @@ This directory has the sources for a XSODATA and XSJS services that expose the I
 
 ### Message Storage
 
-Messages can be send to the HCP IoT Services using the Message Management Service (MMS) component deployed in the consumer account. By default MMS stores incoming messages into a relational database. 
-The respective message tables are automatically created by MMS based on the message type definitions. More details can be found in the IoT Services documentation.
+Messages can be send to the SAP Cloud Platform Internet of Things using the Message Management Service (MMS) component deployed in the consumer account. By default MMS stores incoming messages into a relational database. 
+The respective message tables are automatically created by MMS based on the message type definitions. More details can be found in the SAP Cloud Platform Internet of Things documentation.
 By default, MMS uses the automatically created database (schema) for storing data and the default data source binding for accessing this schema. 
-The name of the underlying database schema is displayed in the "Databases & Schemas" section of the HCP Cockpit. The default data source bindings for this schema are also displayed on this page. 
+The name of the underlying database schema is displayed in the "Databases & Schemas" section of the SAP Cloud Platform Cockpit. The default data source bindings for this schema are also displayed on this page. 
 In the example below, MMS is bound to a shared HANA instance.
 
 ![](../../../../images/xs/0001.png)
 
-The default schema binding can be changed to point to a dedicated HANA instance or any other database available in HCP. HANA MDC will be used in this example.
+The default schema binding can be changed to point to a dedicated HANA instance or any other database available in SAP Cloud Platform. HANA MDC will be used in this example.
 
 ### Creating and configuring HANA MDC instance
 
@@ -22,7 +22,7 @@ Wait until the Database is created and started
 
 ![](../../../../images/xs/0003.png)
 
-Navigate to Overview, re-check the Database state and then click on SAP HANA Cockpit at the bottom
+Navigate to Overview, re-check the Database state and then click on SAP Cloud Platform Cockpit at the bottom
 
 ![](../../../../images/xs/0004.png)
 

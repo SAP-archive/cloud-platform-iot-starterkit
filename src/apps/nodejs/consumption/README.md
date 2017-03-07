@@ -1,8 +1,8 @@
-This directory has the sources for a Node.js application that prints out the table data sent on behalf of the devices via HCP IoT Services to console.
+This directory has the sources for a Node.js application that prints out the table data sent on behalf of the devices via SAP Cloud Platform Internet of Things to console.
 
 ### Prerequisites
 
-1. You have HCP SDK installed https://tools.hana.ondemand.com
+1. You have SAP Cloud Platform SDK installed https://tools.hana.ondemand.com
 2. You have Node.js installed https://nodejs.org/
 3. You have NodeHDB (SAP HANA Database Client for Node) installed https://github.com/SAP/node-hdb
 

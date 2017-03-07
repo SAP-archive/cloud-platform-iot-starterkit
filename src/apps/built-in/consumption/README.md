@@ -2,7 +2,7 @@
 
 ## Consume the messages with MMS built-in client
 
-In addition to interacting with the HCP IoT Services via their network service API there are various alternatives to consume the data that attached IoT
+In addition to interacting with the SAP Cloud Platform Internet of Things via its network service APIs there are various alternatives to consume the data that attached IoT
 devices produce. A basic graphical interface for doing so exists with the MMS Cockpit.
 
 * Click on "Application Data" tile

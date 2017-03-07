@@ -110,6 +110,7 @@ sap.ui.jsview( "js.view.outbound", {
 
 		this.oExportButton = new sap.m.Button( {
 			enabled: false,
+			visible: false,
 			tooltip: "{i18n>TOOLTIP_EXPORT}",
 			icon: "sap-icon://excel-attachment",
 			press: function( oEvent ) {

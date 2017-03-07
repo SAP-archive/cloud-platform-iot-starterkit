@@ -1,6 +1,6 @@
-# iOS Sample for the HANA Cloud Platform IoT Services
+# iOS Sample for the SAP Cloud Platform Internet of Things
 
-The IoT Starterkit supports any iOS device (Apple iPhone / iPad). In the example we use a native mobile application to register a device via the [Remote Device Management API](https://help.hana.ondemand.com/iot/frameset.htm?2e2fe26905c247668f1e61360846ce53.html) and send data to the [Message Management Service API](https://help.hana.ondemand.com/iot/frameset.htm?8e1c277be0cd4854943a15f86188aaec.html) with HTTP Post requests.
+The IoT Starter Kit supports any iOS device (Apple iPhone / iPad). In the example we use a native mobile application to register a device via the [Remote Device Management API](https://help.hana.ondemand.com/iot/frameset.htm?2e2fe26905c247668f1e61360846ce53.html) and send data to the [Message Management Service API](https://help.hana.ondemand.com/iot/frameset.htm?8e1c277be0cd4854943a15f86188aaec.html) with HTTP Post requests.
 
 Prerequsites:
 
