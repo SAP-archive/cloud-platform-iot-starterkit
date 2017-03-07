@@ -1,13 +1,13 @@
-# Starter Kit for the SAP HANA Cloud Platform Internet of Things (IoT) Services
+# Starter Kit for the SAP Cloud Platform Internet of Things
 
-A Starter Kit for working with the [SAP HANA Cloud Platform IoT Services](http://help.hana.ondemand.com/iot)
+A Starter Kit for working with the [SAP Cloud Platform Internet of Things](http://help.hana.ondemand.com/iot)
 
-The document and the code snippets will provide a complete end to end example of how to use the IoT Services. You will learn how to enable the Services as
+The document and the code snippets will provide a complete end to end example of how to use the SAP Cloud Platform Internet of Things. You will learn how to enable it for your account as
 well as how to send messages and how to receive push messages. Moreover, the samples for data consumption are provided. 
 
 ## Table of contents
 
-* [HANA Cloud Platform IoT Services Overview](#hcp-iot-services-overview)
+* [Overview](#overview)
 * [Getting started in the Cloud](#getting-started-in-the-cloud)
 * [Sending messages from the device](#sending-messages-from-the-device)
 * [Consuming the messages sent from the device](#consuming-the-messages-sent-from-the-device)
@@ -18,34 +18,34 @@ well as how to send messages and how to receive push messages. Moreover, the sam
 * [Revision history and related advice](#revision-history-and-related-advice)
 * [What comes next](#what-comes-next)
 
-## HCP IoT Services Overview
+## Overview
 
-SAP HANA Cloud Platform IoT Services are designed to facilitate and support the implementation of Internet of Things applications. 
-The services provide interfaces for registering devices and their specific data types, sending data to a data base running in 
-SAP HANA Cloud Platform (HCP) in a secure and efficient manner, storing the data in HCP as well as provide easy access to the data stored.
+SAP Cloud Platform Internet of Things is designed to facilitate and support the implementation of Internet of Things applications. 
+It provides interfaces for registering devices and their specific data types, sending data to a data base running in 
+SAP Cloud Platform in a secure and efficient manner, storing the data in SAP Cloud Platform as well as provide easy access to the data stored.
 
-The respective services are distributed across two main components: Remote Device Management Service (RDMS) and Message Management Service (MMS). 
-Moreover, there is a web-based interface called IoT Services Cockpit which provides easy access to the various services.
+The respective APIs are distributed across two main components: Remote Device Management Service (RDMS) and Message Management Service (MMS). 
+Moreover, there is a web-based interface called Internet of Things Cockpit which provides easy access to the various functionalities.
 
 ![IoT Service Architecture](images/system_architecture.png "IoT Service Architecture")
 
-MMS provides various APIs that can be used by devices to send data to the SAP HANA Cloud Platform. It processes the data and persists the data 
+MMS provides various APIs that can be used by devices to send data to the SAP Cloud Platform. It processes the data and persists the data 
 in the attached databases. There may be other use cases, though, which require forwarding the data to other Message Brokers or Event Stream Processors.
 
-The Internet of Things Services Cockpit is the main interface for users to interact with the Remote Device Management Service (RDMS). 
+The Internet of Things Cockpit is the main interface for users to interact with the Remote Device Management Service (RDMS). 
 It can be used to register new devices, to define the schema of messages (devices types and message types) they can send and/or receive, 
-as well as to establish the necessary trust relationship devices need to interact with MMS. The Internet of Things Services Cockpit and RDMS 
-are provided as Cloud services and can be used through subscriptions.
+as well as to establish the necessary trust relationship devices need to interact with MMS. The Internet of Things Cockpit and RDMS 
+are provided on a subscription base in the Cloud.
 
 ### IoT Business Applications
 
-IoT Business Applications can be built using either the HANA XS, the Java or HTML5 mechanisms provided by the HCP infrastructure. 
+IoT Business Applications can be built using either the HANA XS, the Java or HTML5 mechanisms provided by the SAP Cloud Platform infrastructure. 
 
 ## Getting started in the Cloud
 
-1. [Get HANA Cloud Platform Developer Account](src/prerequisites/account)
-2. [Enable Internet of Things Services](src/prerequisites/service)
-3. [Create Device Information in Internet of Things Services Cockpit](src/prerequisites/cockpit)
+1. [Get SAP Cloud Platform Developer Account](src/prerequisites/account)
+2. [Enable Internet of Things](src/prerequisites/service)
+3. [Create Device Information in Internet of Things Cockpit](src/prerequisites/cockpit)
 4. [Deploy the Message Management Service (MMS)](src/prerequisites/mms)
 
 ## Sending messages from the device
@@ -61,7 +61,7 @@ IoT Business Applications can be built using either the HANA XS, the Java or HTM
 ## Consuming the messages sent from the device
 
 * [Consume the messages with MMS built-in client](src/apps/built-in/consumption)
-* [Consume the messages with Web Application based on Java and UI5 using HCP Persistence Service](src/apps/java/consumption)
+* [Consume the messages with Web Application based on Java and UI5 using SAP Cloud Platform Persistence Service](src/apps/java/consumption)
 * [Consume the messages with UI5 using the built-in MMS OData API](src/apps/ui5/consumption)
 * [Consume the messages with UI5 using the built-in MMS OData API with advanced chart configuration and live data updates](src/apps/ui5/consumption-advanced)
 * [Consume the messages with HANA XS using XSODATA and XSJS](src/apps/xs/consumption)
@@ -105,28 +105,28 @@ We provide instructions and code for usage with a Raspberry Pi and a GrovePi shi
 example we use a Slide Potentiometer for the input of values that can be changed by the user as well as an LED and an OLED graphical display for visible
 output. You should be able to comfortably purchase these components and assemble them without having to solder.
 
-![Starterkit running](images/starterkit_running_01.jpg?raw=true "Starterkit running")
+![Starter Kit running](images/starterkit_running_01.jpg "Starter Kit running")
 
 Please follow these [steps to setup and use the Raspberry Pi](./src/hardware/raspberry-pi/README.md) with the shown peripherals and the 
 [example application](src/examples/python/iot-starterkit-for-pi-and-grove-peripherals/iot_starterkit_pi_and_grove_peripherals.py).
 
-In addition to the Raspberry Pi we have already used the HCP IoT Services on a [variety of other hardware](./src/hardware).
+In addition to the Raspberry Pi we have already used the SAP Cloud Platform Internet of Things with a [variety of other hardware](./src/hardware).
 
 ## Security aspects
 
 Security plays a very important role for the deployment of IoT scenarios in
-productive environments. The Starterkit examples concentrate of the aspect of
+productive environments. The Starter Kit examples concentrate of the aspect of
 demonstrating basic IoT Services mechanisms. Inherently, specific usable
 security mechanisms differ for different programming languages, frameworks or
 hardware platforms. Thus, before making use of code snippets or integrated
 examples in productive scenarios please pay additional attention on hardening
-against potential attacks. We will continously provide further guidance on
+against potential attacks. We will continuously provide further guidance on
 potential attack vectors and how to harden your solution on the dedicated
 [Security aspects](./misc/security/README.md) page.
 
 ## Revision history and related advice
 
-The HCP IoT Services are continously developed further. Please pay attention to
+The SAP Cloud Platform Internet of Things is continuously developed further. Please pay attention to
 the dedicated page [Revision history and related
 advice](./misc/revision-history/README.md) to ensure you get specific
 information about potentially necessary modifications to your older usage
@@ -134,5 +134,5 @@ examples.
 
 ## What comes next
 
-The initial version of the IoT Starter Kit for HCP IoT Services as first published at SAPPHIRE 2015 intentionally tries to provide a simple and easy to
-reproduce example. We welcome feedback on the adaptation of the HCP IoT Services and your own usage examples via the SCN page ["Try out IoT Service on SAP HANA Cloud Platform"](http://scn.sap.com/docs/DOC-63811).
+The initial version of the IoT Starter Kit for SAP Cloud Platform Internet of Things as first published at SAPPHIRE 2015 intentionally tries to provide a simple and easy to
+reproduce example. We welcome feedback on the adaptation of the HCP IoT Services and your own usage examples via the SCN page ["Try out the SAP Cloud Platform Internet of Things"](https://blogs.sap.com/2015/04/29/try-out-the-sap-hana-cloud-platform-internet-of-things-iot-services/).

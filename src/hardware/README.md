@@ -1,4 +1,4 @@
-We have successfully used the HCP IoT Services on
+We have successfully used the SAP Cloud Platform Internet of Things on
 * Desktop Systems
 * Smart Phones 
 * [iOS] (./iOS)

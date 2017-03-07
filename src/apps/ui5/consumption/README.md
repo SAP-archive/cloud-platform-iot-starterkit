@@ -1,6 +1,6 @@
-This directory has the sources for a UI5 application that uses the HCP IoT Services to interact with an IoT Device.
-It renders the received data that is stored in the database (where the MMS part of the IoT Services writes to) in an xy plot using the MMS built-in OData API.
-Per default the chart shows the last 100 values of the chosen device.
+This directory has the sources for a UI5 application that uses the SAP Cloud Platform Internet of Things to interact with an IoT Device.
+It renders the received data that is stored in the database (where the MMS part of the Internet of Things writes to) in an xy plot using the MMS built-in OData API.
+By default the chart shows the last 100 values of the chosen device.
 
 ![UI5 Consumption example](../../../../images/mms_consume_ui5_01.png)
 
@@ -8,12 +8,12 @@ This application is deliberately kept simple to provide an easy starting point f
 If you are looking for an advanced application with more configuration possibilities and live data updates, please refer to the [advanced consumption UI](../consumption-advanced).
 
 ### Prerequisites
-#### Setup IoT Services
-The sample application needs an instance of the IoT Services running on the same HCP account, where the application shall run.
-Please refer to the IoT Services setup guide [`Internet of Things Services`](https://help.hana.ondemand.com/iot)` > Getting Started`.
+#### Setup SAP Cloud Platform Internet of Things
+The sample application requires the SAP Cloud Platform Internet of Things enabled for your SAP Cloud Platform account.
+Please refer to the SAP Cloud Platform Internet of Things setup guide [`Internet of Things`](https://help.hana.ondemand.com/iot)` > Getting Started`.
 
-#### Download the IoT Starterkit
-Go to the [main folder of the GitHub repository](https://github.com/SAP/iot-starterkit) and download the IoT Starterkit.
+#### Download the IoT Starter Kit
+Go to the [main folder of the GitHub repository](https://github.com/SAP/iot-starterkit) and download the IoT Starter Kit.
 
 ![UI5 Consumption example](../../../../images/mms_consume_ui5_01a.png)
 
@@ -23,15 +23,15 @@ This folder contains two subfolders:
 - **```src```** - contains the source code of the sample application.
 
 #### Import Destinations
-Open the HCP Cockpit in a browser and go to ``` Connectivity > Destinations ```.
+Open the SAP Cloud Platform Cockpit in a browser and go to ``` Connectivity > Destinations ```.
 
 ![UI5 Destination configuration](../../../../images/mms_consume_ui5_03.png)
 
 Choose ``` Import Destination ```, navigate to the ``` destinations ``` folder of the sample application and import the file ```iotmms```.
 Enter your HCP ``` User ``` and ``` Password ```. In the ``` Url ``` you need to exchange:
-- **```%account_id%```** - the name of your HCP account, which can be found on the ```Overview``` page of the HCP Cockpit under ```Account Information > Account Name```
-- **```%landscape_name%```** - the name of the HCP landscape, which can be found as part of the HCP Cockpit URL between ```https://account.``` and ```.ondemand.com```,
-e.g., on HCP Trial the URL is ```https://account.hanatrial.ondemand.com/cockpit``` and the landscape name is ``` hanatrial ```.
+- **```%account_id%```** - the name of your SAP Cloud Platform account, which can be found on the ```Overview``` page of the SAP Cloud Platform Cockpit under ```Account Information > Account Name```
+- **```%landscape_name%```** - the name of the SAP Cloud Platform landscape, which can be found as part of the SAP Cloud Platform Cockpit URL between ```https://account.``` and ```.ondemand.com```,
+e.g., on SAP Cloud Platform Trial the URL is ```https://account.hanatrial.ondemand.com/cockpit``` and the landscape name is ``` hanatrial ```.
 
 ![UI5 MMS Destination configuration](../../../../images/mms_consume_ui5_04.png)
 
@@ -40,7 +40,7 @@ It is also recommended to click on the ```Check Connection``` button after you s
 
 ![UI5 MMS Destination configuration](../../../../images/mms_consume_ui5_04a.png)
 
-Import the RDMS destination ```iotrdms``` in the same way. Enter your HCP ``` User ``` and ``` Password ```, and adapt the service ``` Url ```.
+Import the RDMS destination ```iotrdms``` in the same way. Enter your SAP Cloud Platform ``` User ``` and ``` Password ```, and adapt the service ``` Url ```.
 
 ![UI5 RDMS Destination configuration](../../../../images/mms_consume_ui5_05.png)
 
@@ -50,7 +50,7 @@ Go *into* the ``` src ``` folder of the sample application and zip the ```webapp
 
 ![UI5 RDMS Destination configuration](../../../../images/mms_consume_ui5_05a.png)
 
-Open the HCP Cockpit, go to ```Services``` and click on the tile ```SAP Web IDE```. If you have never used the Web IDE before, you may need to enable it first.
+Open the SAP Cloud Platform Cockpit, go to ```Services``` and click on the tile ```SAP Web IDE```. If you have never used the Web IDE before, you may need to enable it first.
 Click ```Open SAP Web IDE```.
 
 In the Web IDE click ```File > Import > File From System  ``` and choose the zipped file. Enter an application folder name of your choice in ```Import to```.
@@ -65,16 +65,16 @@ The application is now available in your workspace.
 
 To run the sample application, right click on the application folder in the Web IDE and choose ```Run > Run as > Web Application ```.
 
-*Note*: The application expects IoT RDMS and IoT MMS to run. Make sure to follow the instructions of the IoT Services setup guide ([`Internet of Things Services`](https://help.hana.ondemand.com/iot)` > Getting Started`).
+*Note*: The application expects IoT RDMS and IoT MMS to run. Make sure to follow the instructions of the SAP Cloud Platform Internet of Things setup guide ([`Internet of Things`](https://help.hana.ondemand.com/iot)` > Getting Started`).
 You should also create at least one message type, device type and device. 
 Note that this sample application just shows data for message types that contain a ``` timestamp ``` and a ``` value ``` field. See the source code for details.
 
-### Deploy the Application to HCP
+### Deploy the Application to SAP Cloud Platform
 
-If you want to run the sample application directly from the HCP Cockpit, you need to deploy it into your HCP account.
+If you want to run the sample application directly from the SAP Cloud Platform Cockpit, you need to deploy it into your SAP Cloud Platform account.
 
-Right click your project folder in WebIDE and choose ```Deploy > Deploy to SAP HANA Cloud Platform ```. Follow the intructions of the wizard. Ignore the step for registering the application in the Fiori Lanchpad.
-After the deployment you find the application in the HCP Cockpit under ```Applications > HTML5 Applications```.
+Right click your project folder in WebIDE and choose ```Deploy > Deploy to SAP Cloud Platform ```. Follow the instructions of the wizard. Ignore the step for registering the application in the Fiori Launchpad.
+After the deployment you find the application in the SAP Cloud Platform Cockpit under ```Applications > HTML5 Applications```.
 
 ![UI5 Import example](../../../../images/mms_consume_ui5_07.png)
 
@@ -86,7 +86,7 @@ In case you would need to display another measurement value on Y-Axis different 
 [main.view.js](src/webapp/view/main.view.js) line #120.
 A value should match the next pattern ``` {odata>C_<MESSAGE_TYPE_FIELD_NAME>} ```.
 
-Per default, the chart shows the last 100 values. If you want to change this number, or want to load all available values, open
+By default, the chart shows the last 100 values. If you want to change this number, or want to load all available values, open
 [main.controller.js](src/webapp/controller/main.controller.js) and go to line #132:
 ```javascript
 	this.oDataset.bindAggregation("data", {
@@ -109,10 +109,10 @@ Change the value of the ```length``` property to the number of values you want t
 If the sample application does not show devices or the chart does not show data, there are a couple of things to check.
 
 1. Check the destinations. URL, User and Password must be correct. Note that ```Check Connection``` validates only the URL.
-2. Check that the IoT Services are running, and the roles are set correctly for RDMS and MMS.
+2. Check that the respective components of the SAP Cloud Platform Internet of Things are running, and the roles are set correctly for RDMS and MMS.
 See the [FAQ](https://help.hana.ondemand.com/iot/frameset.htm?a012a3788b6e498a8971dd27c97ce6bf.html) for typical problems and solutions.
 3. Check that at least one device with a message type of the expected format exists.
-See [Create Device Information in Internet of Things Services Cockpit](../../../prerequisites/cockpit).
+See [Create Device Information in Internet of Things Cockpit](../../../prerequisites/cockpit).
 4. Check that data are available for the device. You can use the MMS Cockpit, which can be accessed in the HCP Cockpit under ```Applications > Java Applications > iotmms```.
 Click the tile ```Display Stored Messages``` and open the table with name ```T_IOT_```+```<Message Type ID>```.
 If such a table does not exist or it is empty, sending data to MMS did not work.

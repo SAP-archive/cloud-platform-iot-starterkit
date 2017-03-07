@@ -1,10 +1,10 @@
 # Security aspects
 
 Security plays a very important role for the deployment of IoT scenarios in
-productive environments. The Starterkit examples concentrate of the aspect of
-demonstrating basic IoT Services mechanisms. Whereas some code snippets
+productive environments. The Starter Kit examples concentrate of the aspect of
+demonstrating basic SAP Cloud Platform Internet of Things mechanisms. Whereas some code snippets
 show how to harden a solution against e.g. Man-in-the-Middle attacks that try
-to spoof a HCP server in order to get access to sensitive payloads or
+to spoof a SAP Cloud Platform server in order to get access to sensitive payloads or
 credentials this is not generally the case for all examples and other security
 aspects like e.g. the integrity of the execution environment for an edge client
 are so far not covered. Inherently, specific usable security mechanisms differ

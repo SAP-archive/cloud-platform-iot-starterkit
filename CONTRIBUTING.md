@@ -14,9 +14,9 @@ If your issue appears to be a bug, and hasn't been reported yet, open a new issu
 Here is a list of the information we would expect from you:
 
 * **Description of the Issue** - a brief description of what has happened
-* **HCP Landscape** - either Trial or Productive
-* **HCP Account ID** - an account ID where an issues occurs
-* **MMS / RDMS Version** - a version of the currently used IoT components
+* **SAP Cloud Platform Landscape** - either Trial or Productive
+* **SAP Cloud Platform Account ID** - an account ID where an issues occurs
+* **MMS / RDMS Version** - a version of the currently used SAP Cloud Platform Internet of Things components
 * **Runtime** - a runtime being used (Java, Python, JS etc)
 * **Browsers and Operating System** - browser and OS version
 * **Related Issues** - has a similar issue been reported before?

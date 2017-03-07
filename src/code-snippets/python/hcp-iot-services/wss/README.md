@@ -1,4 +1,4 @@
-These code snippets show primitives for interacting with the HCP IoT services
+These code snippets show primitives for interacting with the SAP Cloud Platform Internet of Things
 via wss (WebSockets).
 
 To run these scripts you need a Python 2.x installation with the modules

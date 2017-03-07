@@ -1,4 +1,4 @@
-This directory contains the sources for a Java application that uses Certificate based authentication to interact with the HCP IoT services.
+This directory contains the sources for a Java application that uses Certificate based authentication to interact with the SAP Cloud Platform Internet of Things.
 
 - Import as a Maven project to your IDE
 - Adapt the configuration file [configuration](src/main/resources/config.properties) according to in-line descriptions of the properties
