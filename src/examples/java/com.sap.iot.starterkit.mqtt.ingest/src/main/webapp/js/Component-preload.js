@@ -1,0 +1,1 @@
+jQuery.sap.require( "js.base.Controller" );

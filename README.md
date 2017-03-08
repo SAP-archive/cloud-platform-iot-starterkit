@@ -57,6 +57,7 @@ IoT Business Applications can be built using either the HANA XS, the Java or HTM
 * [Send messages with Python client using HTTP API](src/apps/python/sending/http)
 * [Send messages with Python client using WebSocket API](src/apps/python/sending/ws)
 * [Register a device and send messages using HTTP API with Certificate based authentication](src/apps/java/authentication/com.sap.iot.starterkit.cert)
+* [Flexible ingest from an external MQTT broker using MQTT over WebSocket Data Service API](src/examples/java/com.sap.iot.starterkit.mqtt.ingest)
 
 ## Consuming the messages sent from the device
 
