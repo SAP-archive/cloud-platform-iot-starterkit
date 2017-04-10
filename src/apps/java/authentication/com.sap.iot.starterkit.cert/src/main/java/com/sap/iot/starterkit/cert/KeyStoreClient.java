@@ -25,6 +25,7 @@ import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,11 +51,8 @@ public class KeyStoreClient {
 	private static final String JDK_TRUSTSTORE_PATH = System.getProperty("java.home") +
 		"/lib/security/cacerts";
 
-	private static final Pattern DEVICE_TYPE_PATTERN = Pattern
-		.compile("(?<=deviceTypeId:)(.*)(?:\\|tenantId\\:)([^,]+)");
-
-	private static final Pattern DEVICE_PATTERN = Pattern
-		.compile("(?<=deviceId:)(.*)(?:\\|tenantId\\:)([^,]+)");
+	private static final Pattern DEVICEID_PATTERN_SINGLE = Pattern.compile("(deviceId\\:)(.*)");
+	private static final Pattern TENANTID_PATTERN_SINGLE = Pattern.compile("(tenantId\\:)(.*)");
 
 	private KeyStore keyStore;
 
@@ -100,7 +98,7 @@ public class KeyStoreClient {
 	throws KeyStoreException {
 		storeCertificate(device.getId(), certificate, keyPair.getPrivate());
 
-		setPrivateCertificate(certificate);
+		setPrivateCertificate(certificate, keyPair.getPrivate());
 	}
 
 	/**
@@ -139,6 +137,14 @@ public class KeyStoreClient {
 
 		X509Certificate deviceCertificate = (X509Certificate) keyStore
 			.getCertificate(device.getId());
+		Key deviceCertificateKey;
+		try {
+			deviceCertificateKey = keyStore.getKey(device.getId(), SSL_KEYSTORE_SECRET);
+		}
+		catch (UnrecoverableKeyException | NoSuchAlgorithmException e1) {
+			System.err.println("Device certificate private key could not be retrieved.");
+			return false;
+		}
 		try {
 			deviceCertificate.checkValidity();
 		}
@@ -149,20 +155,17 @@ public class KeyStoreClient {
 
 		Principal principal = deviceCertificate.getSubjectDN();
 
-		String name = getPrincipalAttributeValue(principal, "CN", "");
+		String[] name = getPrincipalAttributeValue(principal, "CN", "");
 
-		Matcher matcher = DEVICE_PATTERN.matcher(name);
-		if (matcher.find()) {
-			if (matcher.groupCount() == 2) {
-				if (device.getId().equals(matcher.group(1))) {
+		String deviceId = extractMatchingValue(name, DEVICEID_PATTERN_SINGLE);
 
-					// device certificate is in the key store, set it as private for SSL connection
+		if (device.getId().equals(deviceId)) {
 
-					setPrivateCertificate(deviceCertificate);
+			// device certificate is in the key store, set it as private for SSL connection
 
-					return true;
-				}
-			}
+			setPrivateCertificate(deviceCertificate, deviceCertificateKey);
+
+			return true;
 		}
 
 		return false;
@@ -261,12 +264,17 @@ public class KeyStoreClient {
 	/**
 	 * Set given certificate as a private one for SSL connectivity
 	 */
-	private void setPrivateCertificate(Certificate certificate)
+	private void setPrivateCertificate(Certificate certificate, Key key)
 	throws KeyStoreException {
 		String alias = "private";
 
 		keyStore.deleteEntry(alias);
-		keyStore.setCertificateEntry(alias, certificate);
+		keyStore.setKeyEntry(alias, key, SSL_KEYSTORE_SECRET, new Certificate[] { certificate });
+
+		// necessary for the correct TLS-Handshake
+		store();
+		keyStore = load("PKCS12", keyStorePath, SSL_KEYSTORE_SECRET);
+
 	}
 
 	private KeyStore load(String type, String path, char[] secret)
@@ -302,24 +310,21 @@ public class KeyStoreClient {
 			.getCertificate("private");
 		Principal principal = deviceTypeCertificate.getSubjectDN();
 
-		String country = getPrincipalAttributeValue(principal, "C", "DE");
-		String organization = getPrincipalAttributeValue(principal, "O", "SAP Trust Community");
-		String unit = getPrincipalAttributeValue(principal, "OU", "SAP POC IOT");
-		String name = getPrincipalAttributeValue(principal, "CN", "");
+		String country = getPrincipalAttributeValue(principal, "C", "DE")[0];
+		String organization = getPrincipalAttributeValue(principal, "O", "SAP Trust Community")[0];
+		String unit = getPrincipalAttributeValue(principal, "OU", "IoT Services")[0];
+		String[] name = getPrincipalAttributeValue(principal, "CN", "");
 
-		Matcher matcher = DEVICE_TYPE_PATTERN.matcher(name);
-		String tenantId = null;
-		if (matcher.find()) {
-			if (matcher.groupCount() == 2) {
-				tenantId = matcher.group(2);
-			}
-		}
-		String commonName = "deviceId:".concat(device.getId()).concat("|tenantId:")
-			.concat(tenantId);
+		String tenantId = extractMatchingValue(name, TENANTID_PATTERN_SINGLE);
+
+		String commonName1 = "deviceId:" + device.getId();
+		String commonName2 = "tenantId:" + tenantId;
+		String newName = "CN=" + commonName1 + ",CN=" + commonName2 + ",OU=" + unit + ",O=" +
+			organization + ",C=" + country;
 
 		X500Name x500Name = null;
 		try {
-			x500Name = new X500Name(commonName, unit, organization, "", "", country);
+			x500Name = new X500Name(newName);
 		}
 		catch (IOException e) {
 			throw new KeyStoreException("Unable to create X500 name for a device", e);
@@ -331,15 +336,21 @@ public class KeyStoreClient {
 	/**
 	 * Retrieves attributes from a common name or gives back a default value
 	 */
-	private String getPrincipalAttributeValue(Principal principal, String attributeName,
+	private String[] getPrincipalAttributeValue(Principal principal, String attributeName,
 		String defaultValue) {
-		String[] principalAttributes = principal.toString().split(",");
-		for (String attribute : principalAttributes) {
+		ArrayList<String> attributeEntries = new ArrayList<String>();
+		String[] principleAttributes = principal.toString().split(",");
+		for (String attribute : principleAttributes) {
 			if (attribute.contains(attributeName + "=")) {
-				return attribute.split("=")[1];
+				attributeEntries.add(attribute.split("=")[1]);
 			}
 		}
-		return defaultValue;
+		if (attributeEntries.isEmpty()) {
+			return new String[] { defaultValue };
+		}
+		else {
+			return attributeEntries.toArray(new String[attributeEntries.size()]);
+		}
 	}
 
 	private void store()
@@ -372,6 +383,17 @@ public class KeyStoreClient {
 				System.err.println("Unable to close an I/O stream");
 			}
 		}
+	}
+
+	private String extractMatchingValue(String[] commonName, Pattern pattern) {
+		String Id = null;
+		for (String element : commonName) {
+			Matcher matcher = pattern.matcher(element);
+			if (matcher.find()) {
+				Id = matcher.group(2);
+			}
+		}
+		return Id;
 	}
 
 }

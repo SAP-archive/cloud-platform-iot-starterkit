@@ -87,7 +87,7 @@ public class Main {
 
 		// decide if a device certificate should be requested or it already exists in the key store
 
-		boolean deviceCertificateExists = checkForDeviceTypeCertificate(device);
+		boolean deviceCertificateExists = checkForDeviceCertificate(device);
 		if (deviceCertificateExists) {
 			System.out.println("Device certificate exists in key store");
 			System.out.println("----------------------------------------------------");
@@ -130,7 +130,7 @@ public class Main {
 		return jsonParser.fromJson(response, Device.class);
 	}
 
-	public static boolean checkForDeviceTypeCertificate(Device device)
+	public static boolean checkForDeviceCertificate(Device device)
 	throws KeyStoreException {
 		return keyStoreClient.checkForDeviceCertificate(device);
 	}
