@@ -174,9 +174,9 @@ public class KeyStoreClient {
 	/**
 	 * Creates a Certificate Signing Request and signs it with RSA private key
 	 */
-	public PKCS10 createCSRequest(Device device, KeyPair keyPair)
+	public PKCS10 createCSRequest(Device device, KeyPair keyPair, boolean twoCommonNames)
 	throws KeyStoreException {
-		X500Name x500Name = createX500NameForDevice(device);
+		X500Name x500Name = createX500NameForDevice(device, twoCommonNames);
 
 		PKCS10 request = null;
 		try {
@@ -304,7 +304,7 @@ public class KeyStoreClient {
 	/**
 	 * Creates a subject name using the device id and other values from the device type certificate
 	 */
-	private X500Name createX500NameForDevice(Device device)
+	private X500Name createX500NameForDevice(Device device, boolean twoCommonNames)
 	throws KeyStoreException {
 		X509Certificate deviceTypeCertificate = (X509Certificate) keyStore
 			.getCertificate("private");

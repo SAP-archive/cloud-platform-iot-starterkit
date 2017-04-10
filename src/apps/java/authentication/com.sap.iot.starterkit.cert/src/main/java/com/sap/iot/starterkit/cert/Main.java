@@ -142,7 +142,9 @@ public class Main {
 			.concat("/authentication");
 
 		KeyPair keyPair = keyStoreClient.generateKeyPair();
-		PKCS10 csRequest = keyStoreClient.createCSRequest(device, keyPair);
+		boolean useTwoCommonNames = Boolean
+			.parseBoolean(properties.get("use.two.common.names").toString());
+		PKCS10 csRequest = keyStoreClient.createCSRequest(device, keyPair, useTwoCommonNames);
 
 		String base64 = DatatypeConverter.printBase64Binary(csRequest.getEncoded());
 
