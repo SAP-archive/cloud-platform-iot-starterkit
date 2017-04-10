@@ -319,8 +319,16 @@ public class KeyStoreClient {
 
 		String commonName1 = "deviceId:" + device.getId();
 		String commonName2 = "tenantId:" + tenantId;
-		String newName = "CN=" + commonName1 + ",CN=" + commonName2 + ",OU=" + unit + ",O=" +
-			organization + ",C=" + country;
+
+		String newName = null;
+		if (twoCommonNames) {
+			newName = "CN=" + commonName1 + ",CN=" + commonName2 + ",OU=" + unit + ",O=" +
+				organization + ",C=" + country;
+		}
+		else {
+			newName = "CN=" + commonName1 + "|" + commonName2 + ",OU=" + unit + ",O=" +
+				organization + ",C=" + country;
+		}
 
 		X500Name x500Name = null;
 		try {
