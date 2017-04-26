@@ -108,7 +108,7 @@ public class Main {
 		String deviceTypeId = properties.get("device.type.id").toString();
 		String secret = properties.get("device.type.certificate.secret").toString();
 
-		String path = properties.get("device.type.certificate.download.folder").toString();
+		String path = properties.get("certificate.download.folder").toString();
 		path = normalizePath(path).concat("/").concat(deviceTypeId).concat(".p12");
 
 		keyStoreClient.storeDeviceTypeCertificate(path, secret, deviceTypeId);
@@ -162,6 +162,14 @@ public class Main {
 			.retrieveCertificate(jsonParser.fromJson(response, Device.class));
 
 		keyStoreClient.storeDeviceCertificate(certificate, keyPair, device);
+
+		boolean storeAsPEMFile = Boolean
+			.parseBoolean(properties.get("additionally.store.as.pem").toString());
+		if (storeAsPEMFile) {
+			String folder = properties.get("certificate.download.folder").toString();
+			folder = normalizePath(folder).concat("/");
+			keyStoreClient.storeDeviceCertificateAsPEM(certificate, keyPair, device, folder);
+		}
 	}
 
 	public static void sendData(Device device)

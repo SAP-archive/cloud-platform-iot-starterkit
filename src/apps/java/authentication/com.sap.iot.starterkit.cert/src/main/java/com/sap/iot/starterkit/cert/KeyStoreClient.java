@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -20,11 +21,13 @@ import java.security.Principal;
 import java.security.Signature;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -86,12 +89,21 @@ public class KeyStoreClient {
 
 			key = tempKeyStore.getKey(alias, secretAsChars);
 			certificate = tempKeyStore.getCertificate(alias);
+
+			storeCertificate("private", certificate, key);
 		}
 		catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
 			throw new KeyStoreException("Unable to get X.509 certificate from P12 file", e);
 		}
 
-		storeCertificate("private", certificate, key);
+	}
+
+	public void storeDeviceCertificateAsPEM(Certificate certificate, KeyPair keyPair, Device device,
+		String folder)
+	throws KeyStoreException {
+
+		storePrivateKeyAsPEM(keyPair.getPrivate(), folder + device.getId() + "-private_key.pem");
+		storeCertificateAsPEM(certificate, folder + device.getId() + "-device_certificate.pem");
 	}
 
 	public void storeDeviceCertificate(Certificate certificate, KeyPair keyPair, Device device)
@@ -404,4 +416,41 @@ public class KeyStoreClient {
 		return Id;
 	}
 
+	private void storePrivateKeyAsPEM(Key privateKey, String path)
+	throws KeyStoreException {
+		try (FileWriter myFW = new FileWriter(path)) {
+			myFW.write("-----BEGIN RSA PRIVATE KEY-----");
+			myFW.write("\n");
+			PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(
+				privateKey.getEncoded());
+			myFW.write(DatatypeConverter.printBase64Binary(pkcs8EncodedKeySpec.getEncoded())
+				.replaceAll("(.{64})", "$1\n"));
+			if ((pkcs8EncodedKeySpec.getEncoded().length % 64) != 0) {
+				myFW.write("\n");
+			}
+			myFW.write("-----END RSA PRIVATE KEY-----");
+			myFW.write("\n");
+		}
+		catch (IOException e) {
+			throw new KeyStoreException("Unable to store the private key as PEM File", e);
+		}
+	}
+
+	private void storeCertificateAsPEM(Certificate certificate, String path)
+	throws KeyStoreException {
+		try (FileWriter myFW = new FileWriter(path)) {
+			myFW.write("-----BEGIN CERTIFICATE-----");
+			myFW.write("\n");
+			myFW.write(DatatypeConverter.printBase64Binary(certificate.getEncoded())
+				.replaceAll("(.{64})", "$1\n"));
+			if ((certificate.getEncoded().length % 64) != 0) {
+				myFW.write("\n");
+			}
+			myFW.write("-----END CERTIFICATE-----");
+			myFW.write("\n");
+		}
+		catch (IOException | CertificateEncodingException e) {
+			throw new KeyStoreException("Unable to store the certificate as PEM File", e);
+		}
+	}
 }
