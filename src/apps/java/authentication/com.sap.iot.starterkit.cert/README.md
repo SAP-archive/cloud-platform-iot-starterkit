@@ -8,7 +8,8 @@ It consists of several files:
  
  It executes the following step-by-step procedure:
  1. Reads in the device type certificate from the provided folder and store it in the Java keystore to be used as client certificate for the HTTPS-connection
- 2. If no device id is given, it calls the Remote Device Management Service (RDMS) and registers the device, otherwise the step is skipped 
+ 2. If no device id is given, it calls the Remote Device Management Service (RDMS) and registers the device
+ 3. If a device id is given, it checks with RDMS if the device already exists, if not it calls the RDMS and registers the device, otherwise this step is skipped
  3. It checks its keystore if it already contains a device certificate for the considered device id
  4. If there is no device certificate, the following substeps are executed or otherwise skipped
  	4.1. A RSA key pair is generated
