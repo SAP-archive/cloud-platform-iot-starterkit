@@ -61,7 +61,11 @@ mqttc.tls_set(my_endpoint_certificate)
 # to use Client Certificate Authentication, also specifiy the client certificate and key; setting the username and password can be skipped in this case
 # mqttc.tls_set(my_endpoint_certificate, my_client_certificate, my_client_key)
 mqttc.username_pw_set(my_username, my_password)
-mqttc.endpoint_url_path_set(my_endpoint_url_path)
+
+# setting an individual path for the WebSocket endpoint needs the development version of the Paho MQTT python lib and is possible since May 2017
+# please adapt accordingly if you used the individually patched library version with mqttc.endpoint_url_path_set(my_endpoint_url_path) before
+mqttc.ws_set_options(my_endpoint_url_path)
+
 mqttc.connect(my_endpoint, 443, 60)
 
 # you can use the push API (e.g. also from the built-in sample UI) to send to the device
