@@ -1,9 +1,10 @@
 We have successfully used the SAP Cloud Platform Internet of Things on
 * Desktop Systems
 * Smart Phones 
-* [iOS] (./iOS)
+* [iOS](./iOS)
 * [Raspberry Pi](./raspberry-pi)
-* Intel Galileo or Edison
+* [Intel Edison](./IntelEdison)
+* Intel Galileo
 * Beaglebone
 * UDOO
 * Arduino Yun

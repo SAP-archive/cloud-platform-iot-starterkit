@@ -1,0 +1,15 @@
+{
+  "name": "inteledison-sapiot-sample",
+  "description": "",
+  "version": "1.0.0",
+  "main": "main.js",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "dependencies": {
+    "mraa": "latest",
+    "jsupm_grove": "latest",
+    "request": "^2.74.0",
+    "ws": "latest"
+  }
+}
