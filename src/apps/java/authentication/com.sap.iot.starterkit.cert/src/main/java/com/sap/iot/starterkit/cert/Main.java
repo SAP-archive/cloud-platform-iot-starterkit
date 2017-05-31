@@ -73,21 +73,29 @@ public class Main {
 
 			System.out.println("Register a new device using certificate based authentication");
 
-			device = registerDevice();
+			device = registerDevice("");
 		}
 		else {
 
-			System.out.println("Use an existing device " + deviceId);
-			System.out.println("----------------------------------------------------");
+			if (checkForDevice(deviceId.trim())) {
+				System.out.println("Use an existing device " + deviceId);
+				System.out.println("----------------------------------------------------");
 
-			device = new Device();
-			device.setId(deviceId);
-			device.setDeviceType(properties.get("device.type.id").toString());
+				device = new Device();
+				device.setId(deviceId.trim());
+				device.setDeviceType(properties.get("device.type.id").toString());
+			}
+			else {
+				System.out.println("Register a new device with given Id " + deviceId.trim() +
+					" using certificate based authentication");
+				device = registerDevice(deviceId.trim());
+			}
+
 		}
 
 		// decide if a device certificate should be requested or it already exists in the key store
 
-		boolean deviceCertificateExists = checkForDeviceTypeCertificate(device);
+		boolean deviceCertificateExists = checkForDeviceCertificate(device);
 		if (deviceCertificateExists) {
 			System.out.println("Device certificate exists in key store");
 			System.out.println("----------------------------------------------------");
@@ -108,13 +116,13 @@ public class Main {
 		String deviceTypeId = properties.get("device.type.id").toString();
 		String secret = properties.get("device.type.certificate.secret").toString();
 
-		String path = properties.get("device.type.certificate.download.folder").toString();
+		String path = properties.get("certificate.download.folder").toString();
 		path = normalizePath(path).concat("/").concat(deviceTypeId).concat(".p12");
 
 		keyStoreClient.storeDeviceTypeCertificate(path, secret, deviceTypeId);
 	}
 
-	public static Device registerDevice()
+	public static Device registerDevice(String deviceId)
 	throws KeyStoreException, IOException {
 		String path = properties.get("iot.dms.cert.domain").toString();
 		path = normalizePath(path).concat("/v2/api/devices");
@@ -122,6 +130,9 @@ public class Main {
 		Device device = new Device();
 		device.setDeviceType(properties.get("device.type.id").toString());
 		device.setName("Device_".concat(UUID.randomUUID().toString()));
+		if (!deviceId.isEmpty()) {
+			device.setId(deviceId);
+		}
 
 		String request = jsonParser.toJson(device, Device.class);
 
@@ -130,9 +141,24 @@ public class Main {
 		return jsonParser.fromJson(response, Device.class);
 	}
 
-	public static boolean checkForDeviceTypeCertificate(Device device)
+	public static boolean checkForDeviceCertificate(Device device)
 	throws KeyStoreException {
 		return keyStoreClient.checkForDeviceCertificate(device);
+	}
+
+	private static boolean checkForDevice(String deviceId)
+	throws KeyStoreException, IOException {
+		String path = properties.get("iot.dms.cert.domain").toString();
+		path = normalizePath(path).concat("/v2/api/devices/");
+
+		String response = doSSLGet(path);
+		Device[] devices = jsonParser.fromJson(response, Device[].class);
+		for (Device element : devices) {
+			if (deviceId.equalsIgnoreCase(element.getId())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static void requestAndStoreDeviceCertificate(Device device)
@@ -142,7 +168,9 @@ public class Main {
 			.concat("/authentication");
 
 		KeyPair keyPair = keyStoreClient.generateKeyPair();
-		PKCS10 csRequest = keyStoreClient.createCSRequest(device, keyPair);
+		boolean useTwoCommonNames = Boolean
+			.parseBoolean(properties.get("use.two.common.names").toString());
+		PKCS10 csRequest = keyStoreClient.createCSRequest(device, keyPair, useTwoCommonNames);
 
 		String base64 = DatatypeConverter.printBase64Binary(csRequest.getEncoded());
 
@@ -160,6 +188,16 @@ public class Main {
 			.retrieveCertificate(jsonParser.fromJson(response, Device.class));
 
 		keyStoreClient.storeDeviceCertificate(certificate, keyPair, device);
+
+		boolean storeAsPEMFile = Boolean
+			.parseBoolean(properties.get("additionally.store.as.pem").toString());
+		if (storeAsPEMFile) {
+			String folder = properties.get("certificate.download.folder").toString();
+			folder = normalizePath(folder).concat("/");
+			System.out.println(
+				"Store device certificate/private key as PEM files in folder: " + folder + "\n");
+			keyStoreClient.storeDeviceCertificateAsPEM(certificate, keyPair, device, folder);
+		}
 	}
 
 	public static void sendData(Device device)
@@ -202,6 +240,20 @@ public class Main {
 		try {
 			connection = httpClient.openSSLConnection(path, sslSocketFactory);
 			return httpClient.doPost(connection, request);
+		}
+		finally {
+			httpClient.closeConnection(connection);
+		}
+	}
+
+	private static String doSSLGet(String path)
+	throws KeyStoreException, IOException {
+		SSLSocketFactory sslSocketFactory = keyStoreClient.buildSSLSocketFactory();
+
+		HttpsURLConnection connection = null;
+		try {
+			connection = httpClient.openSSLConnection(path, sslSocketFactory);
+			return httpClient.doGet(connection);
 		}
 		finally {
 			httpClient.closeConnection(connection);

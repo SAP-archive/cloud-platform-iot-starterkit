@@ -29,6 +29,21 @@ public class HttpClient {
 		}
 	}
 
+	public String doGet(HttpsURLConnection connection)
+	throws IOException {
+		connection.setRequestMethod("GET");
+		connection.setDoOutput(false);
+		connection.setDoInput(true);
+		connection.setUseCaches(false);
+		connection.setRequestProperty("Content-Type", "application/json");
+
+		String response = null;
+		try (InputStream is = connect(connection)) {
+			response = readFromStream(is);
+		}
+		return response;
+	}
+
 	public String doPost(HttpsURLConnection connection, String json)
 	throws IOException {
 
