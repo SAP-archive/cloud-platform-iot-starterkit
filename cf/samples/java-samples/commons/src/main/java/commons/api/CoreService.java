@@ -134,7 +134,7 @@ public class CoreService {
 
 		try {
 			httpClient.connect(destination);
-			httpClient.doPost(httpClient.getJsonParser().toJson(command));
+			httpClient.doPost(command, Command.class);
 		}
 		finally {
 			httpClient.disconnect();

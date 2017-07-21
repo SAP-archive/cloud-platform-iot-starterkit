@@ -11,7 +11,6 @@ import java.nio.charset.StandardCharsets;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import commons.utils.Constants;
@@ -125,6 +124,11 @@ extends AbstractClient {
 		}
 	}
 
+	public <T> void doPost(T payload, Class<T> clazz)
+	throws IOException {
+		doPost(jsonParser.toJson(payload));
+	}
+
 	public String doPost(String request)
 	throws IOException {
 
@@ -160,10 +164,6 @@ extends AbstractClient {
 			FileUtil.closeStream(is);
 			disconnect();
 		}
-	}
-
-	public Gson getJsonParser() {
-		return jsonParser;
 	}
 
 	private HttpURLConnection openConnection(String destination)
