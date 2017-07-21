@@ -5,6 +5,7 @@ import java.io.IOException;
 import commons.connectivity.HttpClient;
 import commons.model.Authentication;
 import commons.model.Authentications;
+import commons.model.Command;
 import commons.model.Device;
 import commons.model.Gateway;
 import commons.model.GatewayStatus;
@@ -124,6 +125,20 @@ public class CoreService {
 		}
 
 		return deviceAuthenticatons[0];
+	}
+
+	public void sendCommand(Device device, Command command)
+	throws IOException {
+		String destination = String.format("%1$s/iot/core/api/v1/devices/%2$s/commands", host,
+			device.getId());
+
+		try {
+			httpClient.connect(destination);
+			httpClient.doPost(httpClient.getJsonParser().toJson(command));
+		}
+		finally {
+			httpClient.disconnect();
+		}
 	}
 
 }

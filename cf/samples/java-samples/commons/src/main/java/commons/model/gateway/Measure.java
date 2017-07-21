@@ -1,6 +1,6 @@
-package commons.model;
+package commons.model.gateway;
 
-public class GatewayMeasure {
+public class Measure {
 
 	private int[] measureIds;
 

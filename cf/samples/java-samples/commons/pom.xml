@@ -10,8 +10,6 @@
 	</parent>
 
 	<artifactId>commons</artifactId>
-    <version>1.0.0</version>
-	<description>This sample demonstrates sending of default measures via the Gateway Cloud</description>
 
 	<properties>
 		<gson.version>2.2.4</gson.version>

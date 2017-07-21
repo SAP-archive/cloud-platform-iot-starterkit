@@ -11,8 +11,10 @@ import java.nio.charset.StandardCharsets;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+import commons.utils.Constants;
 import commons.utils.FileUtil;
 
 public class HttpClient
@@ -54,7 +56,7 @@ extends AbstractClient {
 		if (user != null && password != null) {
 			@SuppressWarnings("restriction")
 			String base64 = new sun.misc.BASE64Encoder()
-				.encode((user + ":" + password).getBytes(StandardCharsets.UTF_8));
+				.encode((user + ":" + password).getBytes(Constants.ENCODING));
 			connection.setRequestProperty("Authorization", "Basic " + base64);
 		}
 		else if (sslSocketFactory != null && connection instanceof HttpsURLConnection) {
@@ -158,6 +160,10 @@ extends AbstractClient {
 			FileUtil.closeStream(is);
 			disconnect();
 		}
+	}
+
+	public Gson getJsonParser() {
+		return jsonParser;
 	}
 
 	private HttpURLConnection openConnection(String destination)

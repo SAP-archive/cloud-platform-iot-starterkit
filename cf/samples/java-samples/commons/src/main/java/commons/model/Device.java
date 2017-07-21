@@ -12,6 +12,8 @@ public class Device {
 
 	private boolean online;
 
+	private Sensor[] sensors;
+
 	public String getId() {
 		return id;
 	}
@@ -50,6 +52,14 @@ public class Device {
 
 	public void setOnline(boolean online) {
 		this.online = online;
+	}
+
+	public Sensor[] getSensors() {
+		return sensors;
+	}
+
+	public void setSensors(Sensor[] sensors) {
+		this.sensors = sensors;
 	}
 
 }

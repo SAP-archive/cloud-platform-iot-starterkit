@@ -23,6 +23,7 @@
 	<modules>
 		<module>commons</module>
 		<module>send-gateway-cloud-default-measure</module>
+		<module>send-core-service-default-command</module>
 	</modules>
 
 	<dependencyManagement>
@@ -31,10 +32,6 @@
 				<groupId>iot-starterkit</groupId>
 				<artifactId>commons</artifactId>
 				<version>1.0.0</version>
-				<!--  
-				<scope>system</scope>
-				<systemPath>${basedir}/../commons/target/commons.jar</systemPath>
-				-->
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

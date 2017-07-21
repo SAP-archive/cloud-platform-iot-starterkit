@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import com.google.gson.Gson;
 
+/**
+ * An abstraction over connectivity clients.
+ */
 public abstract class AbstractClient {
 
 	protected Gson jsonParser;

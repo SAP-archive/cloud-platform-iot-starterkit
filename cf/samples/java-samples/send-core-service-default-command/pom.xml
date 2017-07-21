@@ -9,7 +9,7 @@
 		<version>1.0.0</version>
 	</parent>
 
-	<artifactId>send-gateway-cloud-default-measure</artifactId>
+	<artifactId>send-core-service-default-command</artifactId>
 
 	<dependencies>
 		<dependency>

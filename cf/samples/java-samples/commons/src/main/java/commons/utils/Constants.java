@@ -1,6 +1,10 @@
 package commons.utils;
 
+import java.nio.charset.StandardCharsets;
+
 public class Constants {
+
+	public static final String ENCODING = StandardCharsets.UTF_8.name();
 
 	public static final String SEPARATOR = "----------------------------------------------------";
 
