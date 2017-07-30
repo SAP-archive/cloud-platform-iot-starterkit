@@ -2,15 +2,17 @@ package commons.model.gateway;
 
 public class Measure {
 
-	private int[] measureIds;
+	private String[] measureIds;
 
 	private String[] values;
 
-	public int[] getMeasureIds() {
+	private String logNodeAddr;
+
+	public String[] getMeasureIds() {
 		return measureIds;
 	}
 
-	public void setMeasureIds(int[] measureIds) {
+	public void setMeasureIds(String[] measureIds) {
 		this.measureIds = measureIds;
 	}
 
@@ -20,6 +22,14 @@ public class Measure {
 
 	public void setValues(String[] values) {
 		this.values = values;
+	}
+
+	public String getLogNodeAddr() {
+		return logNodeAddr;
+	}
+
+	public void setLogNodeAddr(String logNodeAddr) {
+		this.logNodeAddr = logNodeAddr;
 	}
 
 }

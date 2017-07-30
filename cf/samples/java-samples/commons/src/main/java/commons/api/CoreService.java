@@ -10,8 +10,8 @@ import commons.model.Device;
 import commons.model.Gateway;
 import commons.model.GatewayStatus;
 import commons.model.GatewayType;
-import commons.utils.Constants;
-import commons.utils.ObjectFactory;
+import commons.model.Measure;
+import commons.model.Sensor;
 
 public class CoreService {
 
@@ -49,7 +49,7 @@ public class CoreService {
 			String.format("No online gateway of type '%1$s' found", type));
 	}
 
-	public Device getOnlineDevice(String id)
+	public Device getOnlineDevice(String id, Gateway gateway)
 	throws IOException {
 		String destination = String.format("%1$s/iot/core/api/v1/devices/%2$s", host, id);
 
@@ -62,42 +62,35 @@ public class CoreService {
 			httpClient.disconnect();
 		}
 
-		if (!device.isOnline()) {
+		if (!device.isOnline() || !device.getGatewayId().equals(gateway.getId())) {
 			throw new IllegalStateException(
-				String.format("No online device with ID '%1$s' found", id));
+				String.format("No online device with ID '%1$s' found in the '%2$s' gateway", id,
+					gateway.getType().getValue()));
 		}
 
 		return device;
 	}
 
-	public Device getOrAddDevice(String id, Gateway gateway)
-	throws IOException {
-		try {
-			return getOnlineDevice(id);
-		}
-		catch (IOException | IllegalStateException e) {
-			System.err.println(e.getMessage());
-			System.err.println();
-
-			return addDevice(gateway);
-		}
-	}
-
-	public Device addDevice(Gateway gateway)
+	public Device addDevice(Device device)
 	throws IOException {
 		String destination = String.format("%1$s/iot/core/api/v1/devices", host);
 
-		Device template = ObjectFactory.buildDevice();
-		template.setGatewayId(gateway.getId());
+		try {
+			httpClient.connect(destination);
+			return httpClient.doPostJson(device, Device.class);
+		}
+		finally {
+			httpClient.disconnect();
+		}
+	}
+
+	public Sensor addSensor(Sensor sensor)
+	throws IOException {
+		String destination = String.format("%1$s/iot/core/api/v1/sensors", host);
 
 		try {
 			httpClient.connect(destination);
-			Device device = httpClient.doPostJson(template, Device.class);
-
-			System.out.println();
-			System.out.printf("\t%-15s : %s %n", Constants.DEVICE_ID, device.getId());
-
-			return device;
+			return httpClient.doPostJson(sensor, Sensor.class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -127,7 +120,23 @@ public class CoreService {
 		return deviceAuthenticatons[0];
 	}
 
-	public void sendCommand(Device device, Command command)
+	public Measure[] getLatestMeasures(Device device)
+	throws IOException {
+		String destination = String
+			.format("%1$s/iot/core/api/v1/devices/%2$s/measures?orderby=timestamp desc", host,
+				device.getId())
+			.replaceAll(" ", "%20");
+
+		try {
+			httpClient.connect(destination);
+			return httpClient.doGetJson(Measure[].class);
+		}
+		finally {
+			httpClient.disconnect();
+		}
+	}
+
+	public void sendCommand(Command command, Device device)
 	throws IOException {
 		String destination = String.format("%1$s/iot/core/api/v1/devices/%2$s/commands", host,
 			device.getId());

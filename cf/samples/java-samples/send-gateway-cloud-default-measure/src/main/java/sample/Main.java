@@ -17,17 +17,16 @@ import commons.model.Authentication;
 import commons.model.Device;
 import commons.model.Gateway;
 import commons.model.GatewayType;
+import commons.model.Sensor;
 import commons.model.gateway.Measure;
 import commons.utils.Console;
-import commons.utils.Constants;
-import commons.utils.ObjectFactory;
+import commons.utils.EntityFactory;
 import commons.utils.SecurityUtil;
 
-/**
- * Main entry point of the sample application
- */
 public class Main
 extends AbstractSample {
+
+	private CoreService coreService;
 
 	private GatewayCloud gatewayCloud;
 
@@ -37,80 +36,140 @@ extends AbstractSample {
 
 	@Override
 	protected String getDescription() {
-		return "Send default device measures";
+		return "Send temperature measures on behalf of the sensor attached to the device" +
+			" and consume them later on via the API";
 	}
 
 	@Override
 	protected void promptProperties() {
 		Console console = Console.getInstance();
 
-		String host = properties.getProperty(Constants.IOT_HOST);
+		String host = properties.getProperty(IOT_HOST);
 		host = console.awaitNextLine(host, "Hostname (e.g. 'test.cp.iot.sap'): ");
-		properties.setProperty(Constants.IOT_HOST, host);
+		properties.setProperty(IOT_HOST, host);
 
-		String user = properties.getProperty(Constants.IOT_USER);
+		String user = properties.getProperty(IOT_USER);
 		user = console.awaitNextLine(user, "Username (e.g. 'root#0'): ");
-		properties.setProperty(Constants.IOT_USER, user);
+		properties.setProperty(IOT_USER, user);
 
-		String gatewayType = properties.getProperty(Constants.GATEWAY_TYPE);
+		String gatewayType = properties.getProperty(GATEWAY_TYPE);
 		gatewayType = console.awaitNextLine(gatewayType, "Gateway Type ('rest' or 'mqtt'): ");
-		properties.setProperty(Constants.GATEWAY_TYPE,
-			GatewayType.fromValue(gatewayType).getValue());
+		properties.setProperty(GATEWAY_TYPE, GatewayType.fromValue(gatewayType).getValue());
 
-		String physicalAddress = properties.getProperty(Constants.DEVICE_ID);
-		physicalAddress = console.awaitNextLine(physicalAddress, "Device ID (e.g. '100'): ");
-		properties.setProperty(Constants.DEVICE_ID, physicalAddress);
+		String deviceId = properties.getProperty(DEVICE_ID);
+		deviceId = console.awaitNextLine(deviceId, "Device ID (e.g. '100'): ");
+		properties.setProperty(DEVICE_ID, deviceId);
 
-		String password = properties.getProperty(Constants.IOT_PASSWORD);
-		password = console.nextPassword("Password for your username: ");
-		properties.setProperty(Constants.IOT_PASSWORD, password);
+		String sensorId = properties.getProperty(SENSOR_ID);
+		sensorId = console.awaitNextLine(sensorId, "Device sensor ID (e.g. '100'): ");
+		properties.setProperty(SENSOR_ID, sensorId);
+
+		String password = properties.getProperty(IOT_PASSWORD);
+		password = console.nextPassword("Password for your user: ");
+		properties.setProperty(IOT_PASSWORD, password);
 
 		console.close();
 	}
 
 	@Override
 	protected void execute() {
-		String host = properties.getProperty(Constants.IOT_HOST);
-		String user = properties.getProperty(Constants.IOT_USER);
-		String password = properties.getProperty(Constants.IOT_PASSWORD);
-		String deviceId = properties.getProperty(Constants.DEVICE_ID);
-		GatewayType gatewayType = GatewayType
-			.fromValue(properties.getProperty(Constants.GATEWAY_TYPE));
+		String host = properties.getProperty(IOT_HOST);
+		String user = properties.getProperty(IOT_USER);
+		String password = properties.getProperty(IOT_PASSWORD);
+		GatewayType gatewayType = GatewayType.fromValue(properties.getProperty(GATEWAY_TYPE));
 
-		CoreService coreService = new CoreService(host, user, password);
+		coreService = new CoreService(host, user, password);
 
 		try {
-			System.out.println(Constants.SEPARATOR);
+			printSeparator();
+
 			Gateway gateway = coreService.getOnlineGateway(gatewayType);
 
-			System.out.println(Constants.SEPARATOR);
-			Device device = coreService.getOrAddDevice(deviceId, gateway);
+			printSeparator();
 
-			System.out.println(Constants.SEPARATOR);
+			Device device = getOrAddDevice(gateway);
+
+			Sensor sensor = getOrAddDeviceSensor(device);
+
+			printSeparator();
+
 			Authentication authentication = coreService.getAuthentication(device);
+
 			SSLSocketFactory sslSocketFactory = SecurityUtil.getSSLSocketFactory(device,
 				authentication);
-
-			System.out.println(Constants.SEPARATOR);
 			gatewayCloud = GatewayType.REST.equals(gatewayType)
 				? new GatewayCloudHttp(device, sslSocketFactory)
 				: new GatewayCloudMqtt(device, sslSocketFactory);
 
-			sendMeasures();
+			printSeparator();
+
+			sendMeasures(sensor);
+
+			receiveMeasures(device);
 		}
 		catch (IOException | GeneralSecurityException | IllegalStateException e) {
-			System.err.println(String.format("[ERROR] Execution failure: %1$s", e.getMessage()));
+			printError(String.format("Execution failure: %1$s", e.getMessage()));
 			System.exit(1);
 		}
 	}
 
-	/**
-	 * Sends random temperature measures on behalf of the device to the Gateway Cloud. Temperature
-	 * measure is being sent each second during the 5 seconds time frame.
-	 */
-	private void sendMeasures()
+	private Device getOrAddDevice(Gateway gateway)
 	throws IOException {
-		String host = properties.getProperty(Constants.IOT_HOST);
+		String deviceId = properties.getProperty(DEVICE_ID);
+
+		Device device;
+		try {
+			device = coreService.getOnlineDevice(deviceId, gateway);
+		}
+		catch (IOException | IllegalStateException e) {
+			printWarning(e.getMessage());
+
+			printSeparator();
+
+			Device deviceTemplate = EntityFactory.buildDevice(gateway);
+			device = coreService.addDevice(deviceTemplate);
+
+			printNewLine();
+			printProperty(DEVICE_ID, device.getId());
+		}
+
+		return device;
+	}
+
+	private Sensor getOrAddDeviceSensor(Device device)
+	throws IOException {
+		String sensorId = properties.getProperty(SENSOR_ID);
+
+		Sensor sensor = null;
+		Sensor[] sensors = device.getSensors();
+		if (sensors != null) {
+			for (int i = 0; i < sensors.length; i++) {
+				Sensor nextSensor = sensors[i];
+				if (nextSensor.getId().equals(sensorId)) {
+					sensor = nextSensor;
+					break;
+				}
+			}
+		}
+		if (sensor == null) {
+			printWarning(String.format("No sensor '%1$s' is attached to the device '%2$s'",
+				sensorId, device.getId()));
+
+			printSeparator();
+
+			Sensor sensorTemplate = EntityFactory.buildSensor(device);
+			sensor = coreService.addSensor(sensorTemplate);
+
+			printNewLine();
+			printProperty(SENSOR_ID, sensor.getId());
+		}
+
+		return sensor;
+	}
+
+	private void sendMeasures(final Sensor sensor)
+	throws IOException {
+		String host = properties.getProperty(IOT_HOST);
 
 		try {
 			gatewayCloud.connect(host);
@@ -124,7 +183,7 @@ extends AbstractSample {
 
 			@Override
 			public void run() {
-				Measure measure = ObjectFactory.buildTemperatureMeasure();
+				Measure measure = EntityFactory.buildTemperatureMeasure(sensor);
 
 				try {
 					gatewayCloud.send(measure, Measure.class);
@@ -133,11 +192,11 @@ extends AbstractSample {
 					// do nothing
 				}
 				finally {
-					System.out.println(Constants.SEPARATOR);
+					printSeparator();
 				}
 			}
 
-		}, 0l, 1000, TimeUnit.MILLISECONDS);
+		}, 0, 1000, TimeUnit.MILLISECONDS);
 
 		try {
 			executor.awaitTermination(5000, TimeUnit.MILLISECONDS);
@@ -146,7 +205,38 @@ extends AbstractSample {
 			throw new IOException("Interrupted exception", e);
 		}
 		finally {
+			executor.shutdown();
 			gatewayCloud.disconnect();
+		}
+	}
+
+	private void receiveMeasures(final Device device)
+	throws IOException {
+		ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+		executor.schedule(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					coreService.getLatestMeasures(device);
+				}
+				catch (IOException e) {
+					// do nothing
+				}
+				finally {
+					printSeparator();
+				}
+			}
+
+		}, 5000, TimeUnit.MILLISECONDS);
+
+		try {
+			executor.awaitTermination(1000, TimeUnit.MILLISECONDS);
+		}
+		catch (InterruptedException e) {
+			throw new IOException("Interrupted exception", e);
+		}
+		finally {
 			executor.shutdown();
 		}
 	}

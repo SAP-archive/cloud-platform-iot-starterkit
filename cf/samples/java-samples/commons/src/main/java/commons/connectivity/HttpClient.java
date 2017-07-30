@@ -6,14 +6,12 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
 
 import com.google.gson.JsonSyntaxException;
 
-import commons.utils.Constants;
 import commons.utils.FileUtil;
 
 public class HttpClient
@@ -55,7 +53,7 @@ extends AbstractClient {
 		if (user != null && password != null) {
 			@SuppressWarnings("restriction")
 			String base64 = new sun.misc.BASE64Encoder()
-				.encode((user + ":" + password).getBytes(Constants.ENCODING));
+				.encode((user + ":" + password).getBytes(ENCODING));
 			connection.setRequestProperty("Authorization", "Basic " + base64);
 		}
 		else if (sslSocketFactory != null && connection instanceof HttpsURLConnection) {
@@ -101,14 +99,15 @@ extends AbstractClient {
 		connection.setUseCaches(false);
 		connection.setRequestProperty("Content-Type", "application/json");
 
-		InputStream is = connect(connection);
 		try {
-			String response = readString(is);
-			System.out.println(String.format("Response body %1$s", response));
-			return response;
+			Response response = connect(connection);
+			String body = response.getBody();
+
+			System.out.println(String.format("Response [%1$d] %2$s", response.getCode(), body));
+
+			return body;
 		}
 		finally {
-			FileUtil.closeStream(is);
 			disconnect();
 		}
 	}
@@ -136,15 +135,16 @@ extends AbstractClient {
 			connect(destination);
 		}
 
-		System.out.println(String.format("Request body %1$s", request));
-
 		connection.setRequestMethod("POST");
 		connection.setDoOutput(true);
 		connection.setDoInput(true);
 		connection.setUseCaches(false);
 		connection.setRequestProperty("Content-Type", "application/json");
 
-		byte[] bytes = request.getBytes(StandardCharsets.UTF_8);
+		System.out.println(String.format("Request %1$s", request));
+		System.out.println();
+
+		byte[] bytes = request.getBytes(ENCODING);
 
 		OutputStream os = connection.getOutputStream();
 		try {
@@ -154,14 +154,15 @@ extends AbstractClient {
 			FileUtil.closeStream(os);
 		}
 
-		InputStream is = connect(connection);
 		try {
-			String response = readString(is);
-			System.out.println(String.format("Response body %1$s", response));
-			return response;
+			Response response = connect(connection);
+			String body = response.getBody();
+
+			System.out.println(String.format("Response [%1$d] %2$s", response.getCode(), body));
+
+			return body;
 		}
 		finally {
-			FileUtil.closeStream(is);
 			disconnect();
 		}
 	}
@@ -193,31 +194,35 @@ extends AbstractClient {
 		return connection;
 	}
 
-	private InputStream connect(HttpURLConnection connection)
+	private Response connect(HttpURLConnection connection)
 	throws IOException {
 
 		connection.connect();
 
 		int code = connection.getResponseCode();
 
+		InputStream stream;
 		if (code < HttpURLConnection.HTTP_OK || code >= HttpURLConnection.HTTP_MOVED_PERM) {
-			InputStream errorStream = connection.getErrorStream();
-			String errorResponse = null;
-			try {
-				if (errorStream == null) {
-					errorResponse = connection.getResponseMessage();
-				}
-				else {
-					errorResponse = readString(errorStream);
-				}
-			}
-			finally {
-				FileUtil.closeStream(errorStream);
-			}
-			throw new IOException(errorResponse);
+			stream = connection.getErrorStream();
+		}
+		else {
+			stream = connection.getInputStream();
 		}
 
-		return connection.getInputStream();
+		String body = null;
+		try {
+			if (stream == null) {
+				body = connection.getResponseMessage();
+			}
+			else {
+				body = readString(stream);
+			}
+		}
+		finally {
+			FileUtil.closeStream(stream);
+		}
+
+		return new Response(code, body);
 	}
 
 	private String readString(InputStream stream)
@@ -243,6 +248,27 @@ extends AbstractClient {
 		}
 
 		return sb.toString();
+	}
+
+	private class Response {
+
+		private int code;
+
+		private String body;
+
+		public Response(int code, String body) {
+			this.code = code;
+			this.body = body;
+		}
+
+		public int getCode() {
+			return code;
+		}
+
+		public String getBody() {
+			return body;
+		}
+
 	}
 
 }

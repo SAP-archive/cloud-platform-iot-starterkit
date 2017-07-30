@@ -2,13 +2,16 @@ package commons.model;
 
 import java.util.Map;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Command {
 
 	private String capabilityId;
 
 	private String sensorId;
 
-	private Map<String, Object> command;
+	@SerializedName("command")
+	private Map<String, Object> properties;
 
 	public String getCapabilityId() {
 		return capabilityId;
@@ -26,12 +29,12 @@ public class Command {
 		this.sensorId = sensorId;
 	}
 
-	public Map<String, Object> getCommand() {
-		return command;
+	public Map<String, Object> getProperties() {
+		return properties;
 	}
 
-	public void setCommand(Map<String, Object> command) {
-		this.command = command;
+	public void setProperties(Map<String, Object> properties) {
+		this.properties = properties;
 	}
 
 }

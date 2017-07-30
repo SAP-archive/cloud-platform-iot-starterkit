@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import commons.utils.Constants;
 import commons.utils.FileUtil;
 
 /**
@@ -15,15 +14,24 @@ public abstract class AbstractSample {
 
 	private static final String PRODUCT_TITLE = "SAP Internet of Things for the Cloud Foundry Environment";
 
-	private static final String CONFIGURATIONS_FILE_NAME = "config.properties";
+	private static final String CONFIGURATIONS_FILE_NAME = "sample.properties";
+
+	public static final String IOT_HOST = "iot.host";
+	public static final String IOT_USER = "iot.user";
+	public static final String IOT_PASSWORD = "iot.password";
+	public static final String DEVICE_ID = "device.id";
+	public static final String SENSOR_ID = "sensor.id";
+	public static final String GATEWAY_TYPE = "gateway.type";
+	public static final String PROXY_PORT = "proxy.port";
+	public static final String PROXY_HOST = "proxy.host";
 
 	protected Properties properties;
 
 	public AbstractSample() {
-		System.out.println();
+		printNewLine();
 		System.out.println(PRODUCT_TITLE);
 		System.out.println(getDescription());
-		System.out.println();
+		printNewLine();
 
 		init();
 	}
@@ -59,15 +67,38 @@ public abstract class AbstractSample {
 	 * properties having empty values.
 	 */
 	protected void printProperties() {
-		System.out.println();
+		printNewLine();
 		System.out.println("Properties:");
 		for (Object key : properties.keySet()) {
-			if (Constants.IOT_PASSWORD.equals(key) ||
-				properties.get(key).toString().trim().isEmpty()) {
+			if (IOT_PASSWORD.equals(key) || properties.get(key).toString().trim().isEmpty()) {
 				continue;
 			}
-			System.out.printf("\t%-15s : %s %n", key, properties.get(key));
+			printProperty(key, properties.get(key));
 		}
+		printNewLine();
+	}
+
+	protected void printSeparator() {
+		for (int i = 0; i < 80; i++) {
+			System.out.print("-");
+		}
+		printNewLine();
+	}
+
+	protected void printError(String message) {
+		System.out.println(String.format("[ERROR] %1$s", message));
+	}
+
+	protected void printWarning(String message) {
+		printNewLine();
+		System.out.println(String.format("[WARN] %1$s", message));
+	}
+
+	protected void printProperty(Object key, Object value) {
+		System.out.printf("\t%-15s : %s %n", key, value);
+	}
+
+	protected void printNewLine() {
 		System.out.println();
 	}
 

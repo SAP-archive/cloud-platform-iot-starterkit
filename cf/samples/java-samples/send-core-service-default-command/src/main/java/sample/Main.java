@@ -11,6 +11,7 @@ import javax.net.ssl.SSLSocketFactory;
 import commons.AbstractSample;
 import commons.api.CoreService;
 import commons.connectivity.MqttClient;
+import commons.connectivity.MqttMessageListener;
 import commons.model.Authentication;
 import commons.model.Command;
 import commons.model.Device;
@@ -18,17 +19,15 @@ import commons.model.Gateway;
 import commons.model.GatewayType;
 import commons.model.Sensor;
 import commons.utils.Console;
-import commons.utils.Constants;
-import commons.utils.ObjectFactory;
+import commons.utils.EntityFactory;
 import commons.utils.SecurityUtil;
 
-/**
- * Main entry point of the sample application
- */
 public class Main
 extends AbstractSample {
 
 	private CoreService coreService;
+
+	private MqttClient mqttClient;
 
 	public static void main(String[] args) {
 		new Main().execute();
@@ -36,88 +35,163 @@ extends AbstractSample {
 
 	@Override
 	protected String getDescription() {
-		return "Send and listen to default device commands";
+		return "Send toggle valve commands to the device and listen to them on the device side";
 	}
 
 	@Override
 	protected void promptProperties() {
 		Console console = Console.getInstance();
 
-		String host = properties.getProperty(Constants.IOT_HOST);
+		String host = properties.getProperty(IOT_HOST);
 		host = console.awaitNextLine(host, "Hostname (e.g. 'test.cp.iot.sap'): ");
-		properties.setProperty(Constants.IOT_HOST, host);
+		properties.setProperty(IOT_HOST, host);
 
-		String user = properties.getProperty(Constants.IOT_USER);
+		String user = properties.getProperty(IOT_USER);
 		user = console.awaitNextLine(user, "Username (e.g. 'root#0'): ");
-		properties.setProperty(Constants.IOT_USER, user);
+		properties.setProperty(IOT_USER, user);
 
-		properties.setProperty(Constants.GATEWAY_TYPE, GatewayType.MQTT.getValue());
+		properties.setProperty(GATEWAY_TYPE, GatewayType.MQTT.getValue());
 
-		String physicalAddress = properties.getProperty(Constants.DEVICE_ID);
-		physicalAddress = console.awaitNextLine(physicalAddress, "Device ID (e.g. '100'): ");
-		properties.setProperty(Constants.DEVICE_ID, physicalAddress);
+		String deviceId = properties.getProperty(DEVICE_ID);
+		deviceId = console.awaitNextLine(deviceId, "Device ID (e.g. '100'): ");
+		properties.setProperty(DEVICE_ID, deviceId);
 
-		String password = properties.getProperty(Constants.IOT_PASSWORD);
-		password = console.nextPassword("Password for your username: ");
-		properties.setProperty(Constants.IOT_PASSWORD, password);
+		String sensorId = properties.getProperty(SENSOR_ID);
+		sensorId = console.awaitNextLine(sensorId, "Device sensor ID (e.g. '100'): ");
+		properties.setProperty(SENSOR_ID, sensorId);
+
+		String password = properties.getProperty(IOT_PASSWORD);
+		password = console.nextPassword("Password for your user: ");
+		properties.setProperty(IOT_PASSWORD, password);
 
 		console.close();
 	}
 
 	@Override
 	protected void execute() {
-		String host = properties.getProperty(Constants.IOT_HOST);
-		String user = properties.getProperty(Constants.IOT_USER);
-		String password = properties.getProperty(Constants.IOT_PASSWORD);
-		String deviceId = properties.getProperty(Constants.DEVICE_ID);
-		GatewayType gatewayType = GatewayType
-			.fromValue(properties.getProperty(Constants.GATEWAY_TYPE));
+		String host = properties.getProperty(IOT_HOST);
+		String user = properties.getProperty(IOT_USER);
+		String password = properties.getProperty(IOT_PASSWORD);
+		GatewayType gatewayType = GatewayType.fromValue(properties.getProperty(GATEWAY_TYPE));
 
 		coreService = new CoreService(host, user, password);
 
 		try {
-			System.out.println(Constants.SEPARATOR);
+			printSeparator();
+
 			Gateway gateway = coreService.getOnlineGateway(gatewayType);
 
-			System.out.println(Constants.SEPARATOR);
-			Device device = coreService.getOrAddDevice(deviceId, gateway);
+			printSeparator();
 
-			System.out.println(Constants.SEPARATOR);
+			Device device = getOrAddDevice(gateway);
+
+			Sensor sensor = getOrAddDeviceSensor(device);
+
+			printSeparator();
+
 			Authentication authentication = coreService.getAuthentication(device);
+
 			SSLSocketFactory sslSocketFactory = SecurityUtil.getSSLSocketFactory(device,
 				authentication);
+			String clientId = device.getPhysicalAddress();
+			mqttClient = new MqttClient(clientId, sslSocketFactory);
 
-			System.out.println(Constants.SEPARATOR);
-			listenCommands(device, sslSocketFactory);
+			printSeparator();
 
-			System.out.println(Constants.SEPARATOR);
-			sendCommands(device);
+			listenCommands(device);
+
+			sendCommands(device, sensor);
+
+			disconnect();
 		}
 		catch (IOException | GeneralSecurityException | IllegalStateException e) {
-			System.err.println(String.format("[ERROR] Execution failure: %1$s", e.getMessage()));
+			printError(String.format("Execution failure: %1$s", e.getMessage()));
 			System.exit(1);
 		}
 	}
 
-	/**
-	 * Listens to incoming commands coming from the Gateway MQTT.
-	 */
-	private void listenCommands(Device device, SSLSocketFactory sslSocketFactory)
+	private Device getOrAddDevice(Gateway gateway)
 	throws IOException {
-		String host = properties.getProperty(Constants.IOT_HOST);
-		String clientId = device.getPhysicalAddress();
+		String deviceId = properties.getProperty(DEVICE_ID);
+
+		Device device;
+		try {
+			device = coreService.getOnlineDevice(deviceId, gateway);
+		}
+		catch (IOException | IllegalStateException e) {
+			printWarning(e.getMessage());
+
+			printSeparator();
+
+			Device deviceTemplate = EntityFactory.buildDevice(gateway);
+			device = coreService.addDevice(deviceTemplate);
+
+			printNewLine();
+			printProperty(DEVICE_ID, device.getId());
+		}
+
+		return device;
+	}
+
+	private Sensor getOrAddDeviceSensor(Device device)
+	throws IOException {
+		String sensorId = properties.getProperty(SENSOR_ID);
+
+		Sensor sensor = null;
+		Sensor[] sensors = device.getSensors();
+		if (sensors != null) {
+			for (int i = 0; i < sensors.length; i++) {
+				Sensor nextSensor = sensors[i];
+				if (nextSensor.getId().equals(sensorId)) {
+					sensor = nextSensor;
+					break;
+				}
+			}
+		}
+		if (sensor == null) {
+			printWarning(String.format("No sensor '%1$s' is attached to the device '%2$s'",
+				sensorId, device.getId()));
+
+			printSeparator();
+
+			Sensor sensorTemplate = EntityFactory.buildSensor(device);
+			sensor = coreService.addSensor(sensorTemplate);
+
+			printNewLine();
+			printProperty(SENSOR_ID, sensor.getId());
+		}
+
+		return sensor;
+	}
+
+	private void listenCommands(Device device)
+	throws IOException {
+		String host = properties.getProperty(IOT_HOST);
 		String topic = String.format("commands/%1$s", device.getPhysicalAddress());
 		String destination = String.format("ssl://%1$s:8883", host);
 
-		final MqttClient mqttClient = new MqttClient(clientId, sslSocketFactory);
 		try {
 			mqttClient.connect(destination);
-			mqttClient.subscribe(topic);
+			printSeparator();
+			mqttClient.subscribe(topic, new MqttMessageListener() {
+
+				@Override
+				public void onMessage(String topic, String message) {
+					System.out.println(String.format("Message on topic '%1$s'", topic));
+					printNewLine();
+					System.out.println(String.format("Message %1$s", message));
+					printSeparator();
+				}
+
+			});
 		}
 		catch (IOException e) {
 			throw new IOException("Unable to subscribe over MQTT", e);
 		}
+	}
 
+	private void disconnect()
+	throws IOException {
 		ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 		executor.schedule(new Runnable() {
 
@@ -128,36 +202,38 @@ extends AbstractSample {
 
 		}, 20000, TimeUnit.MILLISECONDS);
 
-		executor.shutdown();
+		try {
+			executor.awaitTermination(1000, TimeUnit.MILLISECONDS);
+		}
+		catch (InterruptedException e) {
+			throw new IOException("Interrupted exception", e);
+		}
+		finally {
+			executor.shutdown();
+		}
 	}
 
-	/**
-	 * Sends random toggle valve commands to the device. Commands are being sent each second during
-	 * the 5 seconds time frame.
-	 */
-	private void sendCommands(final Device device)
+	private void sendCommands(final Device device, final Sensor sensor)
 	throws IOException {
 		ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 		executor.scheduleAtFixedRate(new Runnable() {
 
 			@Override
 			public void run() {
-				Sensor sensor = device.getSensors()[0];
-				Command command = ObjectFactory.buildToggleValveCommand();
-				command.setSensorId(sensor.getId());
+				Command command = EntityFactory.buildToggleValveCommand(sensor);
 
 				try {
-					coreService.sendCommand(device, command);
+					coreService.sendCommand(command, device);
 				}
 				catch (IOException e) {
 					// do nothing
 				}
 				finally {
-					System.out.println(Constants.SEPARATOR);
+					printSeparator();
 				}
 			}
 
-		}, 0l, 1000, TimeUnit.MILLISECONDS);
+		}, 0, 1000, TimeUnit.MILLISECONDS);
 
 		try {
 			executor.awaitTermination(5000, TimeUnit.MILLISECONDS);

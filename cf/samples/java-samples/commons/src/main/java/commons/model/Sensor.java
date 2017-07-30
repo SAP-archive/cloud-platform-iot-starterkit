@@ -4,6 +4,10 @@ public class Sensor {
 
 	private String id;
 
+	private String deviceId;
+
+	private String sensorTypeId;
+
 	private String name;
 
 	private String physicalAddress;
@@ -14,6 +18,22 @@ public class Sensor {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getDeviceId() {
+		return deviceId;
+	}
+
+	public void setDeviceId(String deviceId) {
+		this.deviceId = deviceId;
+	}
+
+	public String getSensorTypeId() {
+		return sensorTypeId;
+	}
+
+	public void setSensorTypeId(String sensorTypeId) {
+		this.sensorTypeId = sensorTypeId;
 	}
 
 	public String getName() {

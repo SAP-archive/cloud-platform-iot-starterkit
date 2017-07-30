@@ -2,7 +2,7 @@
 
 A sample Java application which is capable to send Temperature measures to the Gateway Cloud either via HTTP or MQTT protocol using the PEM-Certificate based authentication. The following steps are being performed during execution:
 
-1. Get online gateway (either REST or MQTT based on the user-defined type)
+1. Get online gateway (either REST or MQTT based on the user-specified type)
 ```
 Authorization: Basic <base64-encoded credentials>
 GET https://%iot.host%:443/iot/core/api/v1/gateways
@@ -12,13 +12,24 @@ GET https://%iot.host%:443/iot/core/api/v1/gateways
 Authorization: Basic <base64-encoded credentials>
 GET https://%iot.host%:443/iot/core/api/v1/devices/%device.id%
 ```
-3. Create a device if does not exists or no online device with the specified identifier was found
+2.1. Create a device if does not exists or no online device with the specified identifier was found
 ```
 Authorization: Basic <base64-encoded credentials>
 POST https://%iot.host%:443/iot/core/api/v1/devices  
 {
 	"gatewayId" : "%gateway.id%",
 	"name" : "%device.name%"
+}
+```
+3. Get device sensor having the user-specified identifier assigned to the device
+3.1. Create a sensor if none is assigned to the device
+```
+Authorization: Basic <base64-encoded credentials>
+POST https://%iot.host%:443/iot/core/api/v1/sensors  
+{
+	"deviceId" : "%device.id%",
+	"sensorTypeId" : "%sensorType.id%",
+	"name" : "%sensor.name%"
 }
 ```
 4. Get device PEM-certificate 
@@ -29,12 +40,13 @@ GET https://%iot.host%:443/iot/core/api/v1/devices/%device.id%/authentication/pe
 5. Create Java SSL context out PEM certificate
 6. Send random Temperature measures on behalf of the device (frequency = 1 seconds; duration = 5 seconds)
 ```
-For REST: POST https://%iot.host%:443/iot/gateway/rest/measures/%device.physical.address%
-For MQTT: PUBLISH ssl://%iot.host%:8883 on topic 'measures/%device.physical.address%'  
+For REST: POST https://%iot.host%:443/iot/gateway/rest/measures/%device.physicalAddress%
+For MQTT: PUBLISH ssl://%iot.host%:8883 on topic 'measures/%device.physicalAddress%'  
 
 {
 	"measureIds" : [ 1 ],
 	"values" : [ "%temperature.random.value%" ]
+	"logNodeAddr" : [ "%sensor.physicalAddress%" ]
 }
 ```
  
@@ -55,6 +67,6 @@ It is possible to build an executable JAR with Maven. Simply run `mvn clean inst
 - Find the compiled version under project's `target` directory
 - Execute from the command line `java -jar send-gateway-cloud-default-measure.jar`
 
->Note: In order to save efforts when typing configuration properties every time you start an application, you may place the `config.properties` file at the same level to your executable JAR. A template for such a file could be found in [resources](src/main/resources/config.properties)
+>Note: In order to save efforts when typing configuration properties every time you start an application, you may place the `config.properties` file at the same level to your executable JAR. A template for such a file could be found in [resources](src/main/resources/sample.properties)
 
 ![In Action](src/main/resources/send-gateway-cloud-default-measure.jpg "In Action")

@@ -10,8 +10,6 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-import commons.utils.Constants;
-
 public class MqttClient
 extends AbstractClient {
 
@@ -57,9 +55,12 @@ extends AbstractClient {
 	public <T> void publish(String topic, T payload, Class<T> clazz)
 	throws IOException {
 		String request = jsonParser.toJson(payload);
-		System.out.println(String.format("Request body %1$s", request));
 
-		MqttMessage mqttMessage = new MqttMessage(request.getBytes(Constants.ENCODING));
+		System.out.println(String.format("Publish on topic '%1$s'", topic));
+		System.out.println();
+		System.out.println(String.format("Message %1$s", request));
+
+		MqttMessage mqttMessage = new MqttMessage(request.getBytes(ENCODING));
 		mqttMessage.setQos(1);
 
 		try {
@@ -72,12 +73,7 @@ extends AbstractClient {
 		}
 	}
 
-	public void subscribe()
-	throws IOException {
-		subscribe(topic);
-	}
-
-	public void subscribe(String topic)
+	public void subscribe(String topic, final MqttMessageListener listener)
 	throws IOException {
 		try {
 			client.subscribe(topic, new IMqttMessageListener() {
@@ -85,10 +81,7 @@ extends AbstractClient {
 				@Override
 				public void messageArrived(String topic, MqttMessage message)
 				throws Exception {
-					System.out
-						.println(String.format("Received a MQTT message on topic '%1$s'", topic));
-					System.out.println(message);
-					System.out.println(Constants.SEPARATOR);
+					listener.onMessage(topic, message.toString());
 				}
 
 			});
@@ -109,6 +102,7 @@ extends AbstractClient {
 		}
 
 		System.out.println(String.format("Connect to %1$s", destination));
+		System.out.println();
 
 		try {
 			client = new org.eclipse.paho.client.mqttv3.MqttClient(destination, clientId,
