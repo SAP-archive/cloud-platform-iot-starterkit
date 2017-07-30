@@ -70,6 +70,8 @@ extends AbstractCoreServiceSample {
 
 	@Override
 	protected void execute() {
+		String deviceId = properties.getProperty(DEVICE_ID);
+		String sensorId = properties.getProperty(SENSOR_ID);
 		GatewayType gatewayType = GatewayType.fromValue(properties.getProperty(GATEWAY_TYPE));
 
 		try {
@@ -79,9 +81,9 @@ extends AbstractCoreServiceSample {
 
 			printSeparator();
 
-			Device device = getOrAddDevice(gateway);
+			Device device = getOrAddDevice(deviceId, gateway);
 
-			Sensor sensor = getOrAddDeviceSensor(device);
+			Sensor sensor = getOrAddDeviceSensor(sensorId, device);
 
 			printSeparator();
 

@@ -66,6 +66,8 @@ extends AbstractCoreServiceSample {
 
 	@Override
 	protected void execute() {
+		String deviceId = properties.getProperty(DEVICE_ID);
+		String sensorId = properties.getProperty(SENSOR_ID);
 		GatewayType gatewayType = GatewayType.fromValue(properties.getProperty(GATEWAY_TYPE));
 
 		try {
@@ -75,9 +77,9 @@ extends AbstractCoreServiceSample {
 
 			printSeparator();
 
-			Device device = getOrAddDevice(gateway);
+			Device device = getOrAddDevice(deviceId, gateway);
 
-			Sensor sensor = getOrAddDeviceSensor(device);
+			Sensor sensor = getOrAddDeviceSensor(sensorId, device);
 
 			printSeparator();
 
@@ -93,8 +95,6 @@ extends AbstractCoreServiceSample {
 			listenCommands(device);
 
 			sendCommands(device, sensor);
-
-			disconnect();
 		}
 		catch (IOException | GeneralSecurityException | IllegalStateException e) {
 			printError(String.format("Execution failure: %1$s", e.getMessage()));
@@ -126,6 +126,8 @@ extends AbstractCoreServiceSample {
 		catch (IOException e) {
 			throw new IOException("Unable to subscribe over MQTT", e);
 		}
+
+		disconnect();
 	}
 
 	private void sendCommands(final Device device, final Sensor sensor)

@@ -23,10 +23,8 @@ extends AbstractSample {
 		coreService = new CoreService(host, user, password);
 	}
 
-	protected Device getOrAddDevice(Gateway gateway)
+	protected Device getOrAddDevice(String deviceId, Gateway gateway)
 	throws IOException {
-		String deviceId = properties.getProperty(DEVICE_ID);
-
 		Device device;
 		try {
 			device = coreService.getOnlineDevice(deviceId, gateway);
@@ -46,10 +44,8 @@ extends AbstractSample {
 		return device;
 	}
 
-	protected Sensor getOrAddDeviceSensor(Device device)
+	protected Sensor getOrAddDeviceSensor(String sensorId, Device device)
 	throws IOException {
-		String sensorId = properties.getProperty(SENSOR_ID);
-
 		Sensor sensor = null;
 		Sensor[] sensors = device.getSensors();
 		if (sensors != null) {
