@@ -8,8 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLSocketFactory;
 
-import commons.AbstractSample;
-import commons.api.CoreService;
+import commons.AbstractCoreServiceSample;
 import commons.api.GatewayCloud;
 import commons.api.GatewayCloudHttp;
 import commons.api.GatewayCloudMqtt;
@@ -24,9 +23,7 @@ import commons.utils.EntityFactory;
 import commons.utils.SecurityUtil;
 
 public class Main
-extends AbstractSample {
-
-	private CoreService coreService;
+extends AbstractCoreServiceSample {
 
 	private GatewayCloud gatewayCloud;
 
@@ -73,12 +70,7 @@ extends AbstractSample {
 
 	@Override
 	protected void execute() {
-		String host = properties.getProperty(IOT_HOST);
-		String user = properties.getProperty(IOT_USER);
-		String password = properties.getProperty(IOT_PASSWORD);
 		GatewayType gatewayType = GatewayType.fromValue(properties.getProperty(GATEWAY_TYPE));
-
-		coreService = new CoreService(host, user, password);
 
 		try {
 			printSeparator();
@@ -111,60 +103,6 @@ extends AbstractSample {
 			printError(String.format("Execution failure: %1$s", e.getMessage()));
 			System.exit(1);
 		}
-	}
-
-	private Device getOrAddDevice(Gateway gateway)
-	throws IOException {
-		String deviceId = properties.getProperty(DEVICE_ID);
-
-		Device device;
-		try {
-			device = coreService.getOnlineDevice(deviceId, gateway);
-		}
-		catch (IOException | IllegalStateException e) {
-			printWarning(e.getMessage());
-
-			printSeparator();
-
-			Device deviceTemplate = EntityFactory.buildDevice(gateway);
-			device = coreService.addDevice(deviceTemplate);
-
-			printNewLine();
-			printProperty(DEVICE_ID, device.getId());
-		}
-
-		return device;
-	}
-
-	private Sensor getOrAddDeviceSensor(Device device)
-	throws IOException {
-		String sensorId = properties.getProperty(SENSOR_ID);
-
-		Sensor sensor = null;
-		Sensor[] sensors = device.getSensors();
-		if (sensors != null) {
-			for (int i = 0; i < sensors.length; i++) {
-				Sensor nextSensor = sensors[i];
-				if (nextSensor.getId().equals(sensorId)) {
-					sensor = nextSensor;
-					break;
-				}
-			}
-		}
-		if (sensor == null) {
-			printWarning(String.format("No sensor '%1$s' is attached to the device '%2$s'",
-				sensorId, device.getId()));
-
-			printSeparator();
-
-			Sensor sensorTemplate = EntityFactory.buildSensor(device);
-			sensor = coreService.addSensor(sensorTemplate);
-
-			printNewLine();
-			printProperty(SENSOR_ID, sensor.getId());
-		}
-
-		return sensor;
 	}
 
 	private void sendMeasures(final Sensor sensor)
