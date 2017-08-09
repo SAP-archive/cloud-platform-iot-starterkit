@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+// default is ASYNC mode
+enum Mode {
+    ASYNC = 0;
+    SYNC = 1;
+    ASYNC_ACK = 2;
+}
+
+// MMS request schema
+message Request {
+   string messageType = 1;
+   Mode mode = 2;
+   string sequence = 3;
+   repeated Message messages = 4; 
+}
+
+// Message schema that reflects a corresponding message type definition 
+message Message {
+   string sensor = 1;
+   string value = 2;
+   int64 timestamp = 3;
+}
