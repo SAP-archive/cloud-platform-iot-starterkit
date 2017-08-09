@@ -10,7 +10,7 @@ compiler as well as language bindings) for protobuf in Version 3 installed -
 see
 [https://github.com/google/protobuf/releases](https://github.com/google/protobuf/releases)
 
-* [Upstream example]./protobuf-upstream()
-* [Downstream example]./protobuf-downstream()
+* [Upstream example](./protobuf-upstream)
+* [Downstream example](./protobuf-downstream)
 
 
