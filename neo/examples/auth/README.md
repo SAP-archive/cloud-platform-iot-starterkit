@@ -111,7 +111,7 @@ Country Name (2 letter code) [AU]:DE
 State or Province Name (full name) [Some-State]:.
 Locality Name (eg, city) []:.
 Organization Name (eg, company) [Internet Widgits Pty Ltd]:SAP Trust Community
-Organizational Unit Name (eg, section) []:SAP POC IOT
+Organizational Unit Name (eg, section) []:IoT Services
 Common Name (e.g. server FQDN or YOUR name) []:deviceId:Device01|tenantId:fdas567d-6f4e-49a6-a2f8-7bn836g99cd0
 Email Address []:.
 
