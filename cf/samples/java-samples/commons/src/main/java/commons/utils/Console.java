@@ -34,7 +34,7 @@ public class Console {
 			}
 			while (value.trim().isEmpty());
 		}
-		return value;
+		return value.trim();
 	}
 
 	public String nextLine(String format, Object... args) {

@@ -5,7 +5,7 @@ A sample Java application which is capable to send Temperature measures to the G
 1. Get online gateway (either REST or MQTT) based on the user input.
 ```
 Authorization: Basic <base64-encoded credentials>
-GET https://%iot.host%:443/iot/core/api/v1/gateways
+GET https://%iot.host%:443/iot/core/api/v1/gateways?filter=type eq '%gateway.type%' and status eq 'online'&top=1
 ```
 2. Get online device by its identifier.
 ```

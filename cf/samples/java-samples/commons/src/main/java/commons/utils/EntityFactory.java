@@ -18,7 +18,7 @@ public class EntityFactory {
 		Device device = new Device();
 
 		device.setGatewayId(gateway.getId());
-		device.setName("device-".concat(buildString()).concat("-name"));
+		device.setName("device-".concat(buildString()));
 
 		return device;
 	}
@@ -38,7 +38,7 @@ public class EntityFactory {
 
 		sensor.setDeviceId(device.getId());
 		sensor.setSensorTypeId(sensorType.getId());
-		sensor.setName("sensor-".concat(buildString()).concat("-name"));
+		sensor.setName("sensor-".concat(buildString()));
 
 		return sensor;
 	}
@@ -47,7 +47,7 @@ public class EntityFactory {
 		Measure measure = new Measure();
 
 		/*
-		 * Physical address '1' stands for Temperature measure in the default Sensor Type
+		 * Physical Address '1' stands for Temperature measure in the default Sensor Type
 		 */
 		measure.setMeasureIds(new String[] { "1" });
 		measure.setValues(new String[] { String.format("%.1f", buildDegreesCelsius()) });
@@ -60,9 +60,10 @@ public class EntityFactory {
 		Command command = new Command();
 
 		/*
-		 * ID '*_0_0_3' stands for Toggle Valve command in the default Sensor Type
+		 * ID '00000000-0000-0000-0000-000000000003' stands for Toggle Valve command in the default
+		 * Sensor Type
 		 */
-		command.setCapabilityId("*_0_0_3");
+		command.setCapabilityId("00000000-0000-0000-0000-000000000003");
 		Map<String, Object> properties = new HashMap<>();
 		properties.put("val", new Random().nextBoolean() ? "1" : "0");
 		command.setProperties(properties);

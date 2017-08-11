@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -175,17 +177,19 @@ extends AbstractClient {
 		System.out.println(String.format("Connect to %1$s", destination));
 		System.out.println();
 
-		URL url = null;
+		URI uri = null;
 		try {
-			url = new URL(destination);
+			URL url = new URL(destination);
+			uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(),
+				url.getPath(), url.getQuery(), null);
 		}
-		catch (MalformedURLException e) {
+		catch (MalformedURLException | URISyntaxException e) {
 			throw new IOException("Invalid HTTPS connection URL specified", e);
 		}
 
 		HttpURLConnection connection = null;
 		try {
-			connection = (HttpsURLConnection) url.openConnection();
+			connection = (HttpsURLConnection) uri.toURL().openConnection();
 		}
 		catch (IOException e) {
 			throw new IOException("Unable to open a HTTP connection", e);

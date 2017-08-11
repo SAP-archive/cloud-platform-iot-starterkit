@@ -5,7 +5,7 @@ A sample Java application which is capable to send Toggle Valve commands to the 
 1. Get online MQTT gateway.
 ```
 Authorization: Basic <base64-encoded credentials>
-GET https://%iot.host%:443/iot/core/api/v1/gateways
+GET https://%iot.host%:443/iot/core/api/v1/gateways?filter=type eq 'mqtt' and status eq 'online'&top=1
 ```
 2. Get online device by its identifier.
 ```
@@ -53,7 +53,7 @@ SUBSCRIBE ssl://%iot.host%:8883 on topic 'commands/%device.physical.address%'
 Authorization: Basic <base64-encoded credentials>
 POST https://%iot.host%:443/iot/core/api/v1/devices/%device.id%/commands
 {
-	"capabilityId" : "3",
+	"capabilityId" : "00000000-0000-0000-0000-000000000003",
 	"sensorId" : "%sensor.id%",
 	"command" : {
 		"val" : "%0 | 1%"
