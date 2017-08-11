@@ -49,7 +49,8 @@ import sun.security.x509.X500Name;
 @SuppressWarnings("restriction")
 public class KeyStoreClient {
 
-	private static final char[] SSL_KEYSTORE_SECRET = "hkRPusjglo".toCharArray();
+	private static final char[] KEYSTORE_SECRET = "hkRPusjglo".toCharArray();
+	private static final char[] KEYSTORE_SECRET_SSL = "irjcVIEy78nre".toCharArray();
 
 	private static final String JDK_TRUSTSTORE_PATH = System.getProperty("java.home") +
 		"/lib/security/cacerts";
@@ -59,14 +60,19 @@ public class KeyStoreClient {
 
 	private KeyStore keyStore;
 
+	private KeyStore keyStoreSSL;
+
 	private String keyStorePath;
+	private String keyStorePathSSL;
 
 	public KeyStoreClient()
 	throws KeyStoreException {
 		ClassLoader classLoader = KeyStoreClient.class.getClassLoader();
 		keyStorePath = classLoader.getResource("").getPath() + "/" + "keystore.p12";
+		keyStorePathSSL = classLoader.getResource("").getPath() + "/" + "keystoreSSL.p12";
 
-		keyStore = load("PKCS12", keyStorePath, SSL_KEYSTORE_SECRET);
+		keyStore = load("PKCS12", keyStorePath, KEYSTORE_SECRET);
+		keyStoreSSL = load("PKCS12", keyStorePathSSL, KEYSTORE_SECRET_SSL);
 	}
 
 	/**
@@ -90,7 +96,9 @@ public class KeyStoreClient {
 			key = tempKeyStore.getKey(alias, secretAsChars);
 			certificate = tempKeyStore.getCertificate(alias);
 
-			storeCertificate("private", certificate, key);
+			storeCertificate(keyStore, KEYSTORE_SECRET, keyStorePath, "private", certificate, key);
+			storeCertificate(keyStoreSSL, KEYSTORE_SECRET_SSL, keyStorePathSSL, "private",
+				certificate, key);
 		}
 		catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
 			throw new KeyStoreException("Unable to get X.509 certificate from P12 file", e);
@@ -108,9 +116,11 @@ public class KeyStoreClient {
 
 	public void storeDeviceCertificate(Certificate certificate, KeyPair keyPair, Device device)
 	throws KeyStoreException {
-		storeCertificate(device.getId(), certificate, keyPair.getPrivate());
+		storeCertificate(keyStore, KEYSTORE_SECRET, keyStorePath, device.getId(), certificate,
+			keyPair.getPrivate());
 
-		setPrivateCertificate(certificate, keyPair.getPrivate());
+		setPrivateCertificate(keyStoreSSL, KEYSTORE_SECRET_SSL, keyStorePathSSL, certificate,
+			keyPair.getPrivate());
 	}
 
 	/**
@@ -151,7 +161,7 @@ public class KeyStoreClient {
 			.getCertificate(device.getId());
 		Key deviceCertificateKey;
 		try {
-			deviceCertificateKey = keyStore.getKey(device.getId(), SSL_KEYSTORE_SECRET);
+			deviceCertificateKey = keyStore.getKey(device.getId(), KEYSTORE_SECRET);
 		}
 		catch (UnrecoverableKeyException | NoSuchAlgorithmException e1) {
 			System.err.println("Device certificate private key could not be retrieved.");
@@ -175,7 +185,8 @@ public class KeyStoreClient {
 
 			// device certificate is in the key store, set it as private for SSL connection
 
-			setPrivateCertificate(deviceCertificate, deviceCertificateKey);
+			setPrivateCertificate(keyStoreSSL, KEYSTORE_SECRET_SSL, keyStorePathSSL,
+				deviceCertificate, deviceCertificateKey);
 
 			return true;
 		}
@@ -231,7 +242,7 @@ public class KeyStoreClient {
 			KeyManagerFactory keyManagerFactory = KeyManagerFactory
 				.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 
-			keyManagerFactory.init(keyStore, SSL_KEYSTORE_SECRET);
+			keyManagerFactory.init(keyStoreSSL, KEYSTORE_SECRET_SSL);
 
 			KeyManager[] keyManagers = keyManagerFactory.getKeyManagers();
 			TrustManager[] trustManagers = new TrustManager[] {
@@ -266,26 +277,28 @@ public class KeyStoreClient {
 		return createTrustManager(jdkTrustStore);
 	}
 
-	private void storeCertificate(String alias, Certificate certificate, Key key)
+	private void storeCertificate(KeyStore keyStore, char[] secret, String keyStorePath,
+		String alias, Certificate certificate, Key key)
 	throws KeyStoreException {
-		keyStore.setKeyEntry(alias, key, SSL_KEYSTORE_SECRET, new Certificate[] { certificate });
+		keyStore.setKeyEntry(alias, key, secret, new Certificate[] { certificate });
 
-		store();
+		store(keyStore, secret, keyStorePath);
 	}
 
 	/**
 	 * Set given certificate as a private one for SSL connectivity
 	 */
-	private void setPrivateCertificate(Certificate certificate, Key key)
+	private void setPrivateCertificate(KeyStore keyStore, char[] secret, String keyStorePath,
+		Certificate certificate, Key key)
 	throws KeyStoreException {
 		String alias = "private";
 
 		keyStore.deleteEntry(alias);
-		keyStore.setKeyEntry(alias, key, SSL_KEYSTORE_SECRET, new Certificate[] { certificate });
+		keyStore.setKeyEntry(alias, key, secret, new Certificate[] { certificate });
 
 		// necessary for the correct TLS-Handshake
-		store();
-		keyStore = load("PKCS12", keyStorePath, SSL_KEYSTORE_SECRET);
+		store(keyStore, secret, keyStorePath);
+		keyStore = load("PKCS12", keyStorePath, secret);
 
 	}
 
@@ -308,7 +321,7 @@ public class KeyStoreClient {
 			keyStore.load(is, secret);
 		}
 		catch (NoSuchAlgorithmException | CertificateException | IOException e) {
-			throw new KeyStoreException("Unable to load a key tore from P12 file", e);
+			throw new KeyStoreException("Unable to load a key store from P12 file", e);
 		}
 		return keyStore;
 	}
@@ -373,7 +386,7 @@ public class KeyStoreClient {
 		}
 	}
 
-	private void store()
+	private void store(KeyStore keyStore, char[] secret, String keyStorePath)
 	throws KeyStoreException {
 		OutputStream os = null;
 		try {
@@ -384,7 +397,7 @@ public class KeyStoreClient {
 		}
 
 		try {
-			keyStore.store(os, SSL_KEYSTORE_SECRET);
+			keyStore.store(os, secret);
 		}
 		catch (NoSuchAlgorithmException | CertificateException | IOException e) {
 			throw new KeyStoreException("Unable to store the key store into output stream", e);

@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+// MMS response array schema
+message Array {
+   repeated Response array = 1;
+}
+
+// MMS response schema
+message Response {
+  string messageType = 1;
+  string sender = 2; 
+  repeated Message messages = 3; 
+}
+
+// Message schema that reflects a corresponding message type definition
+message Message {
+  string opcode = 1;
+  string operand = 2;
+}
