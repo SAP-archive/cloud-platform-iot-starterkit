@@ -13,6 +13,7 @@ import commons.api.GatewayCloud;
 import commons.api.GatewayCloudHttp;
 import commons.api.GatewayCloudMqtt;
 import commons.model.Authentication;
+import commons.model.Capability;
 import commons.model.Device;
 import commons.model.Gateway;
 import commons.model.GatewayType;
@@ -97,9 +98,18 @@ extends AbstractCoreServiceSample {
 
 			printSeparator();
 
-			sendMeasures(sensor);
+			/*
+			 * ID '00000000-0000-0000-0000-000000000001' stands for the pre-defined Temperature
+			 * capability referenced by the the default Sensor Type as a measure.
+			 */
+			Capability capability = coreService
+				.getCapability("00000000-0000-0000-0000-000000000001");
 
-			receiveMeasures(device);
+			printSeparator();
+
+			sendMeasures(sensor, capability);
+
+			receiveMeasures(device, capability);
 		}
 		catch (IOException | GeneralSecurityException | IllegalStateException e) {
 			printError(String.format("Execution failure: %1$s", e.getMessage()));
@@ -107,7 +117,7 @@ extends AbstractCoreServiceSample {
 		}
 	}
 
-	private void sendMeasures(final Sensor sensor)
+	private void sendMeasures(final Sensor sensor, final Capability capability)
 	throws IOException {
 		String host = properties.getProperty(IOT_HOST);
 
@@ -123,7 +133,7 @@ extends AbstractCoreServiceSample {
 
 			@Override
 			public void run() {
-				Measure measure = EntityFactory.buildTemperatureMeasure(sensor);
+				Measure measure = EntityFactory.buildTemperatureMeasure(sensor, capability);
 
 				try {
 					gatewayCloud.send(measure, Measure.class);
@@ -147,37 +157,6 @@ extends AbstractCoreServiceSample {
 		finally {
 			executor.shutdown();
 			gatewayCloud.disconnect();
-		}
-	}
-
-	private void receiveMeasures(final Device device)
-	throws IOException {
-		ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-		executor.schedule(new Runnable() {
-
-			@Override
-			public void run() {
-				try {
-					coreService.getLatestMeasures(device);
-				}
-				catch (IOException e) {
-					// do nothing
-				}
-				finally {
-					printSeparator();
-				}
-			}
-
-		}, 5000, TimeUnit.MILLISECONDS);
-
-		try {
-			executor.awaitTermination(1000, TimeUnit.MILLISECONDS);
-		}
-		catch (InterruptedException e) {
-			throw new IOException("Interrupted exception", e);
-		}
-		finally {
-			executor.shutdown();
 		}
 	}
 

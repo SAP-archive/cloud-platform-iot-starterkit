@@ -1,8 +1,12 @@
 package commons;
 
 import java.io.IOException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import commons.api.CoreService;
+import commons.model.Capability;
 import commons.model.Device;
 import commons.model.Gateway;
 import commons.model.Sensor;
@@ -71,6 +75,37 @@ extends AbstractSample {
 		}
 
 		return sensor;
+	}
+
+	protected void receiveMeasures(final Device device, final Capability capability)
+	throws IOException {
+		ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+		executor.schedule(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					coreService.getLatestMeasures(device, capability);
+				}
+				catch (IOException e) {
+					// do nothing
+				}
+				finally {
+					printSeparator();
+				}
+			}
+
+		}, 5000, TimeUnit.MILLISECONDS);
+
+		try {
+			executor.awaitTermination(1000, TimeUnit.MILLISECONDS);
+		}
+		catch (InterruptedException e) {
+			throw new IOException("Interrupted exception", e);
+		}
+		finally {
+			executor.shutdown();
+		}
 	}
 
 }

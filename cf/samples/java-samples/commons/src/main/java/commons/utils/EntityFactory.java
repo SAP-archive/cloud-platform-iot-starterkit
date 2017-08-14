@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
+import commons.model.Capability;
 import commons.model.Command;
 import commons.model.Device;
 import commons.model.Gateway;
@@ -25,7 +26,7 @@ public class EntityFactory {
 
 	public static Sensor buildSensor(Device device) {
 		/*
-		 * ID "0" stands for default Sensor Type
+		 * ID "0" stands for the "default" Sensor Type
 		 */
 		SensorType sensorType = new SensorType();
 		sensorType.setId("0");
@@ -43,27 +44,20 @@ public class EntityFactory {
 		return sensor;
 	}
 
-	public static Measure buildTemperatureMeasure(Sensor sensor) {
+	public static Measure buildTemperatureMeasure(Sensor sensor, Capability capability) {
 		Measure measure = new Measure();
 
-		/*
-		 * Physical Address '1' stands for Temperature measure in the default Sensor Type
-		 */
-		measure.setMeasureIds(new String[] { "1" });
+		measure.setMeasureIds(new String[] { capability.getPhysicalAddress() });
 		measure.setValues(new String[] { String.format("%.1f", buildDegreesCelsius()) });
 		measure.setLogNodeAddr(sensor.getPhysicalAddress());
 
 		return measure;
 	}
 
-	public static Command buildToggleValveCommand(Sensor sensor) {
+	public static Command buildToggleValveCommand(Sensor sensor, Capability capability) {
 		Command command = new Command();
 
-		/*
-		 * ID '00000000-0000-0000-0000-000000000003' stands for Toggle Valve command in the default
-		 * Sensor Type
-		 */
-		command.setCapabilityId("00000000-0000-0000-0000-000000000003");
+		command.setCapabilityId(capability.getId());
 		Map<String, Object> properties = new HashMap<>();
 		properties.put("val", new Random().nextBoolean() ? "1" : "0");
 		command.setProperties(properties);

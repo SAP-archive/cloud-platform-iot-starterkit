@@ -12,6 +12,7 @@ import commons.AbstractCoreServiceSample;
 import commons.connectivity.MqttClient;
 import commons.connectivity.MqttMessageListener;
 import commons.model.Authentication;
+import commons.model.Capability;
 import commons.model.Command;
 import commons.model.Device;
 import commons.model.Gateway;
@@ -92,9 +93,18 @@ extends AbstractCoreServiceSample {
 
 			printSeparator();
 
+			/*
+			 * ID '00000000-0000-0000-0000-000000000003' stands for the pre-defined Toggle Valve
+			 * capability referenced by the the default Sensor Type as a command.
+			 */
+			Capability capability = coreService
+				.getCapability("00000000-0000-0000-0000-000000000003");
+
+			printSeparator();
+
 			listenCommands(device);
 
-			sendCommands(device, sensor);
+			sendCommands(device, sensor, capability);
 		}
 		catch (IOException | GeneralSecurityException | IllegalStateException e) {
 			printError(String.format("Execution failure: %1$s", e.getMessage()));
@@ -130,14 +140,14 @@ extends AbstractCoreServiceSample {
 		disconnect();
 	}
 
-	private void sendCommands(final Device device, final Sensor sensor)
+	private void sendCommands(final Device device, final Sensor sensor, final Capability capability)
 	throws IOException {
 		ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 		executor.scheduleAtFixedRate(new Runnable() {
 
 			@Override
 			public void run() {
-				Command command = EntityFactory.buildToggleValveCommand(sensor);
+				Command command = EntityFactory.buildToggleValveCommand(sensor, capability);
 
 				try {
 					coreService.sendCommand(command, device);

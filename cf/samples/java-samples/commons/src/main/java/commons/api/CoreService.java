@@ -5,6 +5,7 @@ import java.io.IOException;
 import commons.connectivity.HttpClient;
 import commons.model.Authentication;
 import commons.model.Authentications;
+import commons.model.Capability;
 import commons.model.Command;
 import commons.model.Device;
 import commons.model.Gateway;
@@ -117,11 +118,11 @@ public class CoreService {
 		return deviceAuthenticatons[0];
 	}
 
-	public Measure[] getLatestMeasures(Device device)
+	public Measure[] getLatestMeasures(Device device, Capability capability)
 	throws IOException {
 		String destination = String.format(
-			"%1$s/iot/core/api/v1/devices/%2$s/measures?orderby=timestamp desc", host,
-			device.getId());
+			"%1$s/iot/core/api/v1/devices/%2$s/measures?orderby=timestamp desc&filter=capabilityId eq '%3$s'",
+			host, device.getId(), capability.getId());
 
 		try {
 			httpClient.connect(destination);
@@ -140,6 +141,19 @@ public class CoreService {
 		try {
 			httpClient.connect(destination);
 			httpClient.doPost(command, Command.class);
+		}
+		finally {
+			httpClient.disconnect();
+		}
+	}
+
+	public Capability getCapability(String id)
+	throws IOException {
+		String destination = String.format("%1$s/iot/core/api/v1/capabilities/%2$s", host, id);
+
+		try {
+			httpClient.connect(destination);
+			return httpClient.doGetJson(Capability.class);
 		}
 		finally {
 			httpClient.disconnect();
