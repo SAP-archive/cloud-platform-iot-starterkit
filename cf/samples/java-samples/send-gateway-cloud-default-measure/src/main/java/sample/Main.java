@@ -18,6 +18,7 @@ import commons.model.Device;
 import commons.model.Gateway;
 import commons.model.GatewayType;
 import commons.model.Sensor;
+import commons.model.SensorType;
 import commons.model.gateway.Measure;
 import commons.utils.Console;
 import commons.utils.EntityFactory;
@@ -84,7 +85,15 @@ extends AbstractCoreServiceSample {
 
 			Device device = getOrAddDevice(deviceId, gateway);
 
-			Sensor sensor = getOrAddDeviceSensor(sensorId, device);
+			printSeparator();
+
+			/*
+			 * ID '0' stands for the pre-defined Sensor Type which already has some measures and
+			 * commands.
+			 */
+			SensorType sensorType = coreService.getSensorType("0");
+
+			Sensor sensor = getOrAddDeviceSensor(sensorId, device, sensorType);
 
 			printSeparator();
 

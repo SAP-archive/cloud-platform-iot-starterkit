@@ -10,6 +10,7 @@ import commons.model.Capability;
 import commons.model.Device;
 import commons.model.Gateway;
 import commons.model.Sensor;
+import commons.model.SensorType;
 import commons.utils.EntityFactory;
 
 public abstract class AbstractCoreServiceSample
@@ -48,7 +49,7 @@ extends AbstractSample {
 		return device;
 	}
 
-	protected Sensor getOrAddDeviceSensor(String sensorId, Device device)
+	protected Sensor getOrAddDeviceSensor(String sensorId, Device device, SensorType sensorType)
 	throws IOException {
 		Sensor sensor = null;
 		Sensor[] sensors = device.getSensors();
@@ -67,11 +68,18 @@ extends AbstractSample {
 
 			printSeparator();
 
-			Sensor sensorTemplate = EntityFactory.buildSensor(device);
+			Sensor sensorTemplate = EntityFactory.buildSensor(device, sensorType);
 			sensor = coreService.addSensor(sensorTemplate);
 
 			printNewLine();
 			printProperty(SENSOR_ID, sensor.getId());
+		}
+		else {
+			if (!sensor.getSensorTypeId().equals(sensorType.getId())) {
+				throw new IllegalStateException(
+					String.format("A sensor '%1$s' has no reference to Sensor Type '%2$s'",
+						sensorId, sensorType.getId()));
+			}
 		}
 
 		return sensor;

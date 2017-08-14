@@ -12,6 +12,7 @@ import commons.model.Gateway;
 import commons.model.GatewayType;
 import commons.model.Measure;
 import commons.model.Sensor;
+import commons.model.SensorType;
 
 public class CoreService {
 
@@ -154,6 +155,19 @@ public class CoreService {
 		try {
 			httpClient.connect(destination);
 			return httpClient.doGetJson(Capability.class);
+		}
+		finally {
+			httpClient.disconnect();
+		}
+	}
+
+	public SensorType getSensorType(String id)
+	throws IOException {
+		String destination = String.format("%1$s/iot/core/api/v1/sensorTypes/%2$s", host, id);
+
+		try {
+			httpClient.connect(destination);
+			return httpClient.doGetJson(SensorType.class);
 		}
 		finally {
 			httpClient.disconnect();

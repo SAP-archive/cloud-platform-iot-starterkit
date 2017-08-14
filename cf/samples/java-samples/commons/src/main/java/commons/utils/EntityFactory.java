@@ -24,16 +24,6 @@ public class EntityFactory {
 		return device;
 	}
 
-	public static Sensor buildSensor(Device device) {
-		/*
-		 * ID "0" stands for the "default" Sensor Type
-		 */
-		SensorType sensorType = new SensorType();
-		sensorType.setId("0");
-
-		return buildSensor(device, sensorType);
-	}
-
 	public static Sensor buildSensor(Device device, SensorType sensorType) {
 		Sensor sensor = new Sensor();
 
@@ -49,6 +39,16 @@ public class EntityFactory {
 
 		measure.setMeasureIds(new String[] { capability.getPhysicalAddress() });
 		measure.setValues(new String[] { String.format("%.1f", buildDegreesCelsius()) });
+		measure.setLogNodeAddr(sensor.getPhysicalAddress());
+
+		return measure;
+	}
+
+	public static Measure buildHumidityMeasure(Sensor sensor, Capability capability) {
+		Measure measure = new Measure();
+
+		measure.setMeasureIds(new String[] { capability.getPhysicalAddress() });
+		measure.setValues(new String[] { String.valueOf(buildHumidityPercentage()) });
 		measure.setLogNodeAddr(sensor.getPhysicalAddress());
 
 		return measure;
@@ -71,6 +71,13 @@ public class EntityFactory {
 		float max = 100.0f;
 
 		return new Random().nextFloat() * (max - min) + min;
+	}
+
+	private static int buildHumidityPercentage() {
+		int min = 0;
+		int max = 100;
+
+		return new Random().nextInt(max - min + 1) + min;
 	}
 
 	private static String buildString() {
