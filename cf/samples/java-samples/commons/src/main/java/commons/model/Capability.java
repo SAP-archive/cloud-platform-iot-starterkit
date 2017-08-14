@@ -8,6 +8,8 @@ public class Capability {
 
 	private String physicalAddress;
 
+	private Property[] properties;
+
 	public String getId() {
 		return id;
 	}
@@ -30,6 +32,14 @@ public class Capability {
 
 	public void setPhysicalAddress(String physicalAddress) {
 		this.physicalAddress = physicalAddress;
+	}
+
+	public Property[] getProperties() {
+		return properties;
+	}
+
+	public void setProperties(Property[] properties) {
+		this.properties = properties;
 	}
 
 }

@@ -9,11 +9,16 @@ import commons.model.Capability;
 import commons.model.Command;
 import commons.model.Device;
 import commons.model.Gateway;
+import commons.model.Property;
+import commons.model.PropertyType;
 import commons.model.Sensor;
 import commons.model.SensorType;
+import commons.model.SensorTypeCapability;
 import commons.model.gateway.Measure;
 
 public class EntityFactory {
+
+	public static final String ROOM_HUMIDITY = "Room Humidity";
 
 	public static Device buildDevice(Gateway gateway) {
 		Device device = new Device();
@@ -34,6 +39,15 @@ public class EntityFactory {
 		return sensor;
 	}
 
+	public static SensorType buildHumiditySensorType(SensorTypeCapability sensorTypeCapability) {
+		SensorType sensorType = new SensorType();
+
+		sensorType.setName(ROOM_HUMIDITY);
+		sensorType.setCapabilities(new SensorTypeCapability[] { sensorTypeCapability });
+
+		return sensorType;
+	}
+
 	public static Measure buildTemperatureMeasure(Sensor sensor, Capability capability) {
 		Measure measure = new Measure();
 
@@ -52,6 +66,20 @@ public class EntityFactory {
 		measure.setLogNodeAddr(sensor.getPhysicalAddress());
 
 		return measure;
+	}
+
+	public static Capability buildHumidityCapability() {
+		Capability capability = new Capability();
+
+		Property property = new Property();
+		property.setName("Humidity");
+		property.setDataType(PropertyType.INTEGER);
+		property.setUnitOfMeasure("%");
+
+		capability.setName(ROOM_HUMIDITY);
+		capability.setProperties(new Property[] { property });
+
+		return capability;
 	}
 
 	public static Command buildToggleValveCommand(Sensor sensor, Capability capability) {

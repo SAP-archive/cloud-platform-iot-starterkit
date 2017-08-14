@@ -148,6 +148,19 @@ public class CoreService {
 		}
 	}
 
+	public Capability[] getCapabilities()
+	throws IOException {
+		String destination = String.format("%1$s/iot/core/api/v1/capabilities", host);
+
+		try {
+			httpClient.connect(destination);
+			return httpClient.doGetJson(Capability[].class);
+		}
+		finally {
+			httpClient.disconnect();
+		}
+	}
+
 	public Capability getCapability(String id)
 	throws IOException {
 		String destination = String.format("%1$s/iot/core/api/v1/capabilities/%2$s", host, id);
@@ -161,6 +174,32 @@ public class CoreService {
 		}
 	}
 
+	public Capability addCapability(Capability capability)
+	throws IOException {
+		String destination = String.format("%1$s/iot/core/api/v1/capabilities", host);
+
+		try {
+			httpClient.connect(destination);
+			return httpClient.doPostJson(capability, Capability.class);
+		}
+		finally {
+			httpClient.disconnect();
+		}
+	}
+
+	public SensorType[] getSensorTypes()
+	throws IOException {
+		String destination = String.format("%1$s/iot/core/api/v1/sensorTypes", host);
+
+		try {
+			httpClient.connect(destination);
+			return httpClient.doGetJson(SensorType[].class);
+		}
+		finally {
+			httpClient.disconnect();
+		}
+	}
+
 	public SensorType getSensorType(String id)
 	throws IOException {
 		String destination = String.format("%1$s/iot/core/api/v1/sensorTypes/%2$s", host, id);
@@ -168,6 +207,19 @@ public class CoreService {
 		try {
 			httpClient.connect(destination);
 			return httpClient.doGetJson(SensorType.class);
+		}
+		finally {
+			httpClient.disconnect();
+		}
+	}
+
+	public SensorType addSensorType(SensorType sensorType)
+	throws IOException {
+		String destination = String.format("%1$s/iot/core/api/v1/sensorTypes", host);
+
+		try {
+			httpClient.connect(destination);
+			return httpClient.doPostJson(sensorType, SensorType.class);
 		}
 		finally {
 			httpClient.disconnect();

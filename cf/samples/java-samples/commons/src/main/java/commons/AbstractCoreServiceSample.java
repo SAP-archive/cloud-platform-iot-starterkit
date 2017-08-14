@@ -49,7 +49,7 @@ extends AbstractSample {
 		return device;
 	}
 
-	protected Sensor getOrAddDeviceSensor(String sensorId, Device device, SensorType sensorType)
+	protected Sensor getOrAddSensor(String sensorId, Device device, SensorType sensorType)
 	throws IOException {
 		Sensor sensor = null;
 		Sensor[] sensors = device.getSensors();
@@ -62,25 +62,27 @@ extends AbstractSample {
 				}
 			}
 		}
-		if (sensor == null) {
-			printWarning(String.format("No sensor '%1$s' is attached to the device '%2$s'",
-				sensorId, device.getId()));
-
-			printSeparator();
-
-			Sensor sensorTemplate = EntityFactory.buildSensor(device, sensorType);
-			sensor = coreService.addSensor(sensorTemplate);
-
-			printNewLine();
-			printProperty(SENSOR_ID, sensor.getId());
-		}
-		else {
-			if (!sensor.getSensorTypeId().equals(sensorType.getId())) {
-				throw new IllegalStateException(
-					String.format("A sensor '%1$s' has no reference to Sensor Type '%2$s'",
-						sensorId, sensorType.getId()));
+		if (sensor != null) {
+			if (sensor.getSensorTypeId().equals(sensorType.getId())) {
+				return sensor;
+			}
+			else {
+				printWarning(String.format("A sensor '%1$s' has no reference to Sensor Type '%2$s'",
+					sensorId, sensorType.getId()));
 			}
 		}
+		else {
+			printWarning(String.format("No sensor '%1$s' is attached to the device '%2$s'",
+				sensorId, device.getId()));
+		}
+
+		printSeparator();
+
+		Sensor sensorTemplate = EntityFactory.buildSensor(device, sensorType);
+		sensor = coreService.addSensor(sensorTemplate);
+
+		printNewLine();
+		printProperty(SENSOR_ID, sensor.getId());
 
 		return sensor;
 	}
@@ -96,7 +98,7 @@ extends AbstractSample {
 					coreService.getLatestMeasures(device, capability);
 				}
 				catch (IOException e) {
-					// do nothing
+					printError(e.getMessage());
 				}
 				finally {
 					printSeparator();

@@ -84,12 +84,21 @@ extends AbstractCoreServiceSample {
 			printSeparator();
 
 			/*
+			 * ID '00000000-0000-0000-0000-000000000003' stands for the pre-defined Toggle Valve
+			 * capability referenced by the the default Sensor Type as a command.
+			 */
+			Capability capability = coreService
+				.getCapability("00000000-0000-0000-0000-000000000003");
+
+			printSeparator();
+
+			/*
 			 * ID '0' stands for the pre-defined Sensor Type which already has some measures and
 			 * commands.
 			 */
 			SensorType sensorType = coreService.getSensorType("0");
 
-			Sensor sensor = getOrAddDeviceSensor(sensorId, device, sensorType);
+			Sensor sensor = getOrAddSensor(sensorId, device, sensorType);
 
 			printSeparator();
 
@@ -99,15 +108,6 @@ extends AbstractCoreServiceSample {
 				authentication);
 			String clientId = device.getPhysicalAddress();
 			mqttClient = new MqttClient(clientId, sslSocketFactory);
-
-			printSeparator();
-
-			/*
-			 * ID '00000000-0000-0000-0000-000000000003' stands for the pre-defined Toggle Valve
-			 * capability referenced by the the default Sensor Type as a command.
-			 */
-			Capability capability = coreService
-				.getCapability("00000000-0000-0000-0000-000000000003");
 
 			printSeparator();
 

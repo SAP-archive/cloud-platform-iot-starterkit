@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import commons.model.GatewayType;
+import commons.utils.Console;
 import commons.utils.FileUtil;
 
 /**
@@ -21,6 +23,8 @@ public abstract class AbstractSample {
 	public static final String IOT_PASSWORD = "iot.password";
 	public static final String DEVICE_ID = "device.id";
 	public static final String SENSOR_ID = "sensor.id";
+	public static final String SENSOR_TYPE_ID = "sensorType.id";
+	public static final String CAPABILITY_ID = "capability.id";
 	public static final String GATEWAY_TYPE = "gateway.type";
 	public static final String PROXY_PORT = "proxy.port";
 	public static final String PROXY_HOST = "proxy.host";
@@ -103,14 +107,42 @@ public abstract class AbstractSample {
 	}
 
 	/**
+	 * Prompts the user for missing configuration properties.
+	 */
+	protected void promptProperties() {
+		Console console = Console.getInstance();
+
+		String host = properties.getProperty(IOT_HOST);
+		host = console.awaitNextLine(host, "Hostname (e.g. 'test.cp.iot.sap'): ");
+		properties.setProperty(IOT_HOST, host);
+
+		String user = properties.getProperty(IOT_USER);
+		user = console.awaitNextLine(user, "Username (e.g. 'root#0'): ");
+		properties.setProperty(IOT_USER, user);
+
+		String gatewayType = properties.getProperty(GATEWAY_TYPE);
+		gatewayType = console.awaitNextLine(gatewayType, "Gateway Type ('rest' or 'mqtt'): ");
+		properties.setProperty(GATEWAY_TYPE, GatewayType.fromValue(gatewayType).getValue());
+
+		String deviceId = properties.getProperty(DEVICE_ID);
+		deviceId = console.awaitNextLine(deviceId, "Device ID (e.g. '100'): ");
+		properties.setProperty(DEVICE_ID, deviceId);
+
+		String sensorId = properties.getProperty(SENSOR_ID);
+		sensorId = console.awaitNextLine(sensorId, "Device sensor ID (e.g. '100'): ");
+		properties.setProperty(SENSOR_ID, sensorId);
+
+		String password = properties.getProperty(IOT_PASSWORD);
+		password = console.nextPassword("Password for your user: ");
+		properties.setProperty(IOT_PASSWORD, password);
+
+		console.close();
+	};
+
+	/**
 	 * Gets a description of the sample application.
 	 */
 	protected abstract String getDescription();
-
-	/**
-	 * Prompts the user for missing configuration properties.
-	 */
-	protected abstract void promptProperties();
 
 	/**
 	 * Executes the logic of the sample application.
