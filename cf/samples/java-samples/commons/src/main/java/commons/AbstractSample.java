@@ -23,7 +23,7 @@ public abstract class AbstractSample {
 	public static final String IOT_PASSWORD = "iot.password";
 	public static final String DEVICE_ID = "device.id";
 	public static final String SENSOR_ID = "sensor.id";
-	public static final String SENSOR_TYPE_ID = "sensorType.id";
+	public static final String SENSOR_TYPE_ID = "sensor.type.id";
 	public static final String CAPABILITY_ID = "capability.id";
 	public static final String GATEWAY_TYPE = "gateway.type";
 	public static final String PROXY_PORT = "proxy.port";
@@ -129,7 +129,7 @@ public abstract class AbstractSample {
 		properties.setProperty(DEVICE_ID, deviceId);
 
 		String sensorId = properties.getProperty(SENSOR_ID);
-		sensorId = console.awaitNextLine(sensorId, "Device sensor ID (e.g. '100'): ");
+		sensorId = console.awaitNextLine(sensorId, "Sensor ID (e.g. '100'): ");
 		properties.setProperty(SENSOR_ID, sensorId);
 
 		String password = properties.getProperty(IOT_PASSWORD);

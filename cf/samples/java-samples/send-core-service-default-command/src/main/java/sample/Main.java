@@ -56,7 +56,7 @@ extends AbstractCoreServiceSample {
 		properties.setProperty(DEVICE_ID, deviceId);
 
 		String sensorId = properties.getProperty(SENSOR_ID);
-		sensorId = console.awaitNextLine(sensorId, "Device sensor ID (e.g. '100'): ");
+		sensorId = console.awaitNextLine(sensorId, "Sensor ID (e.g. '100'): ");
 		properties.setProperty(SENSOR_ID, sensorId);
 
 		String password = properties.getProperty(IOT_PASSWORD);
