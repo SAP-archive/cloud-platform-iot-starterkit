@@ -12,13 +12,11 @@ Then assign the Role IoT-MMS-User for the newly deployed ```iotmms``` Java Appli
 * Go to the Java Applications tab in your SAP Cloud Platform Cockpit of your account
 * Choose the ```iotmms``` application
 * Choose the Security tab of the Application details and then select Roles
-<br />
-<br />
+
 ![Role assignment for MMS](../../../images/mms_role_assignment_01.png)
 
 * Do the assignment of the role to your user.
-<br />
-<br />
+
 ![Role assignment for MMS](../../../images/mms_role_assignment_02.png)
 
 Once MMS is deployed and you have correctly done role assignment you can click on the
