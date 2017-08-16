@@ -110,12 +110,12 @@ extends AbstractCoreServiceSample {
 	throws IOException {
 		SensorType[] sensorTypes = coreService.getSensorTypes();
 		for (SensorType nextSensorType : sensorTypes) {
-			if (EntityFactory.ROOM_HUMIDITY.equals(nextSensorType.getName())) {
+			if (EntityFactory.HUMIDITY_SENSORS.equals(nextSensorType.getName())) {
 				return nextSensorType;
 			}
 		}
 
-		printWarning(String.format("No '%1$s' Sensor Type found", EntityFactory.ROOM_HUMIDITY));
+		printWarning(String.format("No '%1$s' Sensor Type found", EntityFactory.HUMIDITY_SENSORS));
 
 		printSeparator();
 

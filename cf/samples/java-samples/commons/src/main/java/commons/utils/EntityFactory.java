@@ -18,7 +18,11 @@ import commons.model.gateway.Measure;
 
 public class EntityFactory {
 
+	public static final String HUMIDITY = "Humidity";
+
 	public static final String ROOM_HUMIDITY = "Room Humidity";
+
+	public static final String HUMIDITY_SENSORS = "Humidity Sensors";
 
 	public static Device buildDevice(Gateway gateway) {
 		Device device = new Device();
@@ -42,7 +46,7 @@ public class EntityFactory {
 	public static SensorType buildHumiditySensorType(SensorTypeCapability sensorTypeCapability) {
 		SensorType sensorType = new SensorType();
 
-		sensorType.setName(ROOM_HUMIDITY);
+		sensorType.setName(HUMIDITY_SENSORS);
 		sensorType.setCapabilities(new SensorTypeCapability[] { sensorTypeCapability });
 
 		return sensorType;
@@ -72,7 +76,7 @@ public class EntityFactory {
 		Capability capability = new Capability();
 
 		Property property = new Property();
-		property.setName("Humidity");
+		property.setName(HUMIDITY);
 		property.setDataType(PropertyType.INTEGER);
 		property.setUnitOfMeasure("%");
 

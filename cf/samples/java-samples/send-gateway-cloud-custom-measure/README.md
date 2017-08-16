@@ -65,17 +65,17 @@ GET https://%iot.host%:443/iot/core/api/v1/capabilities
 		]
 	}
 	```
-4. Check if custom "Room Humidity" sensor type exists.
+4. Check if custom "Humidity Sensors" sensor type exists.
 ```
 Authorization: Basic <base64-encoded credentials>
 GET https://%iot.host%:443/iot/core/api/v1/sensorTypes
 ```
-	1. Create "Room Humidity" sensor type if not found.
+	1. Create "Humidity Sensors" sensor type if not found.
 	```
 	Authorization: Basic <base64-encoded credentials>
 	POST https://%iot.host%:443/iot/core/api/v1/sensorTypes  
 	{
-		"name" : "Room Humidity",
+		"name" : "Humidity Sensors",
 		"capabilities" : [
 			{
 				"id" : "%humidity.capability.id%",
@@ -87,7 +87,7 @@ GET https://%iot.host%:443/iot/core/api/v1/sensorTypes
 5. Get device sensor by its identifier which is assigned to the device.
 	1. Create a new sensor and assign it to the device if no sensor is assigned to the device or a sensor has no reference to the "Room Humidity" sensor type.
 	
-	>Note: A new sensor will be mapped to the custom "Room Humidity" Sensor Type.
+	>Note: A new sensor will be mapped to the custom "Humidity Sensors" Sensor Type.
 	
 	```
 	Authorization: Basic <base64-encoded credentials>
