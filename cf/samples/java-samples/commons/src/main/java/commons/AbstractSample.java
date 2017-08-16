@@ -117,7 +117,7 @@ public abstract class AbstractSample {
 		properties.setProperty(IOT_HOST, host);
 
 		String user = properties.getProperty(IOT_USER);
-		user = console.awaitNextLine(user, "Username (e.g. 'root#0'): ");
+		user = console.awaitNextLine(user, "Username (e.g. 'root'): ");
 		properties.setProperty(IOT_USER, user);
 
 		String gatewayType = properties.getProperty(GATEWAY_TYPE);
@@ -145,8 +145,9 @@ public abstract class AbstractSample {
 	protected abstract String getDescription();
 
 	/**
-	 * Executes the logic of the sample application.
+	 * Runs the logic of the sample application.
 	 */
-	protected abstract void execute();
+	protected abstract void run()
+	throws SampleException;
 
 }

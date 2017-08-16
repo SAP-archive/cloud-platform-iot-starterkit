@@ -11,6 +11,7 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
+import javax.xml.bind.DatatypeConverter;
 
 import com.google.gson.JsonSyntaxException;
 
@@ -53,9 +54,8 @@ extends AbstractClient {
 		connection = openConnection(destination);
 
 		if (user != null && password != null) {
-			@SuppressWarnings("restriction")
-			String base64 = new sun.misc.BASE64Encoder()
-				.encode((user + ":" + password).getBytes(ENCODING));
+			String base64 = DatatypeConverter
+				.printBase64Binary((user + ":" + password).getBytes(ENCODING));
 			connection.setRequestProperty("Authorization", "Basic " + base64);
 		}
 		else if (sslSocketFactory != null && connection instanceof HttpsURLConnection) {

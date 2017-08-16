@@ -19,7 +19,8 @@ It is possible to build an executable JAR with Maven. Simply run `mvn clean inst
 
 >Note: In order to save efforts when typing sample properties every time you launch an application, you may place the `sample.properties` file at the same level to your executable JAR. A template for such a file could be found under [resources](src/main/resources/sample.properties)
 
-![In Action](src/main/resources/send-gateway-cloud-default-measure.jpg "In Action")
+![In Action](src/main/resources/send-gateway-cloud-default-measure_0.jpg "In Action")
+![In Action](src/main/resources/send-gateway-cloud-default-measure_1.jpg "In Action")
 
 ## Execution Steps
 
