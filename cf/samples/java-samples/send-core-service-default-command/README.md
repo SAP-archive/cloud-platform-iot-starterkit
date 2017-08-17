@@ -1,5 +1,4 @@
 # SAP Internet of Things for the Cloud Foundry Environment
-
 A sample Java application which is capable to send Toggle Valve commands to the Device connected over MQTT and listen to them at the same time. 
 
 ## Import project
@@ -23,77 +22,72 @@ It is possible to build an executable JAR with Maven. Simply run `mvn clean inst
 ![In Action](src/main/resources/send-core-service-default-command_1.jpg "In Action")
 
 ## Execution Steps
-
 The following steps are being performed during execution:
 
 1. Get online MQTT gateway.
-```
-Authorization: Basic <base64-encoded credentials>
-GET https://%iot.host%:443/iot/core/api/v1/gateways?filter=type eq 'mqtt' and status eq 'online'&top=1
-```
+    ```
+    Authorization: Basic <base64-encoded credentials>
+    GET https://%iot.host%:443/iot/core/api/v1/gateways?filter=type eq 'mqtt' and status eq 'online'&top=1
+    ```
 2. Get online device by its identifier.
-```
-Authorization: Basic <base64-encoded credentials>
-GET https://%iot.host%:443/iot/core/api/v1/devices/%device.id%
-```
+    ```
+    Authorization: Basic <base64-encoded credentials>
+    GET https://%iot.host%:443/iot/core/api/v1/devices/%device.id%
+    ```
 	1. Create a new device if it does not exist or no online device with the specified identifier was found in the MQTT gateway.
-	```
-	Authorization: Basic <base64-encoded credentials>
-	POST https://%iot.host%:443/iot/core/api/v1/devices  
-	{
-		"gatewayId" : "%gateway.id%",
-		"name" : "%random.device.name%"
-	}
-	```
+	    ```
+	    Authorization: Basic <base64-encoded credentials>
+	    POST https://%iot.host%:443/iot/core/api/v1/devices  
+	    {
+		    "gatewayId" : "%gateway.id%",
+		    "name" : "%random.device.name%"
+	    }
+	    ```
 3. Get default Toggle Valve capability.
-```
-Authorization: Basic <base64-encoded credentials>
-GET https://%iot.host%:443/iot/core/api/v1/capabilities/00000000-0000-0000-0000-000000000003
-```
+    ```
+    Authorization: Basic <base64-encoded credentials>
+    GET https://%iot.host%:443/iot/core/api/v1/capabilities/00000000-0000-0000-0000-000000000003
+    ```
 4. Get default sensor type.
-```
-Authorization: Basic <base64-encoded credentials>
-GET https://%iot.host%:443/iot/core/api/v1/sensorTypes/0
-```
+    ```
+    Authorization: Basic <base64-encoded credentials>
+    GET https://%iot.host%:443/iot/core/api/v1/sensorTypes/0
+    ```
 5. Get device sensor by its identifier which is assigned to the device.
 	1. Create a new sensor and assign it to the device if no sensor is assigned to the device or a sensor has no reference to the default sensor type.
-	
-	>Note: A new sensor will be mapped to the pre-configured Sensor Type having ID "0".
-	
-	```
-	Authorization: Basic <base64-encoded credentials>
-	POST https://%iot.host%:443/iot/core/api/v1/sensors  
-	{
-		"deviceId" : "%device.id%",
-		"sensorTypeId" : "0",
-		"name" : "%random.sensor.name%"
-	}
-	```
+	    ```
+	    Authorization: Basic <base64-encoded credentials>
+	    POST https://%iot.host%:443/iot/core/api/v1/sensors  
+	    {
+		    "deviceId" : "%device.id%",
+		    "sensorTypeId" : "0",
+		    "name" : "%random.sensor.name%"
+	    }
+	    ```
+	    >Note: A new sensor will be mapped to the pre-configured Sensor Type having ID "0".
 6. Get device PEM-certificate.
-```
-Authorization: Basic <base64-encoded credentials>
-GET https://%iot.host%:443/iot/core/api/v1/devices/%device.id%/authentication/pem
-```
+    ```
+    Authorization: Basic <base64-encoded credentials>
+    GET https://%iot.host%:443/iot/core/api/v1/devices/%device.id%/authentication/pem
+    ```
 7. Create Java SSL context based on the PEM certificate.
 8. As a device, subscribe for incoming commands over MQTT.
-```
-SUBSCRIBE ssl://%iot.host%:8883 on topic 'commands/%device.physical.address%'  
-```
-
->Note: A subscription is going to be terminated automatically after 20 seconds.
+    ```
+    SUBSCRIBE ssl://%iot.host%:8883 on topic 'commands/%device.physical.address%'  
+    ```
+    >Note: A subscription is going to be terminated automatically after 20 seconds.
 
 9. Send random Toggle Valve commands to the the device.
-```
-Authorization: Basic <base64-encoded credentials>
-POST https://%iot.host%:443/iot/core/api/v1/devices/%device.id%/commands
-{
-	"capabilityId" : "00000000-0000-0000-0000-000000000003",
-	"sensorId" : "%sensor.id%",
-	"command" : {
-		"val" : "%0 | 1%"
-	}
-}
-```
- 
->Note: A pre-configured "Toggle Valve" Capability having ID "00000000-0000-0000-0000-000000000003" and mapped to the pre-configured Sensor Type having ID "0" will be used by this sample.
->Note: The sending rate is one command per second. Duration is 5 seconds.
+    ```
+    Authorization: Basic <base64-encoded credentials>
+    POST https://%iot.host%:443/iot/core/api/v1/devices/%device.id%/commands
+    {
+	    "capabilityId" : "00000000-0000-0000-0000-000000000003",
+	    "sensorId" : "%sensor.id%",
+    	"command" : {
+		    "val" : "0 | 1"
+	    }
+    }
+    ```
+    >Note: A pre-configured "Toggle Valve" Capability having ID "00000000-0000-0000-0000-000000000003" and mapped to the pre-configured Sensor Type having ID "0" will be used by this sample.
+    >Note: The sending rate is one command per second. Duration is 5 seconds.
