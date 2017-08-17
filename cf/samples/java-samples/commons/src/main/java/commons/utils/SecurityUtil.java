@@ -64,7 +64,7 @@ public class SecurityUtil {
 		TrustManager[] trustManagers)
 	throws GeneralSecurityException, IOException {
 
-		SSLContext sslContext = SSLContext.getInstance("TLS");
+		SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
 		sslContext.init(keyManagers, trustManagers, new java.security.SecureRandom());
 
 		return sslContext.getSocketFactory();
@@ -148,6 +148,28 @@ public class SecurityUtil {
 		return keyFactory.generatePrivate(pkcsKeySpec);
 	}
 
+	/*
+	 * Do not use in production! This trust manager trusts whatever certificate is provided.
+	 * 
+	 * When connecting through wss with a broker which uses a self-signed certificate or a
+	 * certificate that is not trusted by default, there are two options.
+	 * 
+	 * 1. Disable host verification. This should only be used for testing. It is not recommended in
+	 * productive environments.
+	 * 
+	 * options.setSocketFactory(getTrustManagers()); // will trust all certificates
+	 * 
+	 * 2. Add the certificate to your keystore. The default keystore is located in the JRE in <jre
+	 * home>/lib/security/cacerts. The certificate can be added with
+	 * 
+	 * "keytool -import -alias my.broker.com -keystore cacerts -file my.broker.com.pem".
+	 * 
+	 * It is also possible to point to a custom keystore:
+	 * 
+	 * Properties properties = new Properties();
+	 * properties.setProperty("com.ibm.ssl.trustStore","my.cacerts");
+	 * options.setSSLProperties(properties);
+	 */
 	private static TrustManager[] getTrustManagers() {
 		return new TrustManager[] { new X509TrustManager() {
 
