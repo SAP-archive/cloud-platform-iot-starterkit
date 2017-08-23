@@ -10,7 +10,7 @@ public class Sensor {
 
 	private String name;
 
-	private String physicalAddress;
+	private String alternateId;
 
 	public String getId() {
 		return id;
@@ -44,12 +44,12 @@ public class Sensor {
 		this.name = name;
 	}
 
-	public String getPhysicalAddress() {
-		return physicalAddress;
+	public String getAlternateId() {
+		return alternateId;
 	}
 
-	public void setPhysicalAddress(String physicalAddress) {
-		this.physicalAddress = physicalAddress;
+	public void setAlternateId(String alternateId) {
+		this.alternateId = alternateId;
 	}
 
 }

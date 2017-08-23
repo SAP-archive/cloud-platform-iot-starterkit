@@ -4,11 +4,11 @@
 
 export REQUEST_URL=https://${INSTANCE}/iot/core/api/v1/devices
 
-export MY_DESIRED_PHYSICAL_ADDRESS_4_DEVICE=${PHYSICAL_ADDRESS_4_DEVICE}
+export MY_DESIRED_ALTERNATE_ID_4_DEVICE=${ALTERNATE_ID_4_DEVICE}
 
 export DESIRED_NAME_4_DEVICE="STARTERKIT_DEVICE_REST_01"
 
-export PAYLOAD='{ "gatewayId" : "'${GW_ID_4_REST}'", "name" : "'${DESIRED_NAME_4_DEVICE}'", "physicalAddress" : "'${MY_DESIRED_PHYSICAL_ADDRESS_4_DEVICE}'" }'
+export PAYLOAD='{ "gatewayId" : "'${GW_ID_4_REST}'", "name" : "'${DESIRED_NAME_4_DEVICE}'", "alternateId" : "'${MY_DESIRED_ALTERNATE_ID_4_DEVICE}'" }'
 
 # echo "Request URL is: ${REQUEST_URL}"
 

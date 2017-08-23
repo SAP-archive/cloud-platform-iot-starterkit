@@ -9,8 +9,8 @@ export USER_PASS="${USER}:${PASSWORD}"
 # export PROXY_SETTING="--proxy http://<proxy>:<port>"
 export PROXY_SETTING="--noproxy \"*\""
 
-export PHYSICAL_ADDRESS_4_DEVICE="SK-0123456789"
-export PHYSICAL_ADDRESS_4_SENSOR="SK-0123456789"
+export ALTERNATE_ID_4_DEVICE="SK-0123456789"
+export ALTERNATE_ID_4_SENSOR="SK-0123456789"
 
 export CERT_FILE="cert"
 export CREDENTIALS_FILE="credentials"

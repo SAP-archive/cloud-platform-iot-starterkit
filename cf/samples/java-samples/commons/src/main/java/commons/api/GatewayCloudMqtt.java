@@ -13,7 +13,7 @@ implements GatewayCloud {
 	private MqttClient mqttClient;
 
 	public GatewayCloudMqtt(Device device, SSLSocketFactory sslSocketFactory) {
-		String physicalAddress = device.getPhysicalAddress();
+		String physicalAddress = device.getAlternateId();
 		String clientId = physicalAddress;
 		String topic = String.format("measures/%1$s", physicalAddress);
 

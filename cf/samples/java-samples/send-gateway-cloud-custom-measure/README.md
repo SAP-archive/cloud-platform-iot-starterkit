@@ -103,13 +103,13 @@ The following steps are being performed during execution:
 8. Send random Humidity measures on behalf of the device sensor.
     ```
     Authorization: <device-certificate>
-    REST: POST https://%iot.host%:443/iot/gateway/rest/measures/%device.physical.address%
-    MQTT: PUBLISH ssl://%iot.host%:8883 on topic 'measures/%device.physical.address%'  
+    REST: POST https://%iot.host%:443/iot/gateway/rest/measures/%device.alternate.id%
+    MQTT: PUBLISH ssl://%iot.host%:8883 on topic 'measures/%device.alternate.id%'  
 
     {
-	    "measureIds" : [ "%humidity.capability.physical.address%" ],
+	    "measureIds" : [ "%humidity.capability.alternate.id%" ],
 	    "values" : [ "%random.humidity.percentage%" ],
-	    "logNodeAddr" : [ "%sensor.physical.address%" ]
+	    "logNodeAddr" : [ "%sensor.alternate.id%" ]
     }
     ```
 

@@ -96,7 +96,7 @@ public class SecurityUtil {
 		}
 
 		File p12KeyStore = new File(destination.toFile(),
-			device.getPhysicalAddress().replaceAll(":", "") + ".p12");
+			device.getAlternateId().replaceAll(":", "") + ".p12");
 
 		KeyStore keyStore;
 		try {

@@ -104,7 +104,7 @@ extends AbstractCoreServiceSample {
 
 			SSLSocketFactory sslSocketFactory = SecurityUtil.getSSLSocketFactory(device,
 				authentication);
-			String clientId = device.getPhysicalAddress();
+			String clientId = device.getAlternateId();
 			mqttClient = new MqttClient(clientId, sslSocketFactory);
 
 			printSeparator();
@@ -121,7 +121,7 @@ extends AbstractCoreServiceSample {
 	private void listenCommands(Device device)
 	throws IOException {
 		String host = properties.getProperty(IOT_HOST);
-		String topic = String.format("commands/%1$s", device.getPhysicalAddress());
+		String topic = String.format("commands/%1$s", device.getAlternateId());
 		String destination = String.format("ssl://%1$s:8883", host);
 
 		try {

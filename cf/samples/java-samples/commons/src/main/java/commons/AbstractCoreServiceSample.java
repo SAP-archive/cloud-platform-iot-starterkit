@@ -67,12 +67,12 @@ extends AbstractSample {
 				return sensor;
 			}
 			else {
-				printWarning(String.format("A sensor '%1$s' has no reference to Sensor Type '%2$s'",
+				printWarning(String.format("A Sensor '%1$s' has no reference to Sensor Type '%2$s'",
 					sensorId, sensorType.getId()));
 			}
 		}
 		else {
-			printWarning(String.format("No sensor '%1$s' is attached to the device '%2$s'",
+			printWarning(String.format("No Sensor '%1$s' is attached to the Device '%2$s'",
 				sensorId, device.getId()));
 		}
 

@@ -74,17 +74,17 @@ The following steps are being performed during execution:
 8. Send random Temperature measures on behalf of the device sensor.
     ```
     Authorization: <device-certificate>
-    REST: POST https://%iot.host%:443/iot/gateway/rest/measures/%device.physical.address%
-    MQTT: PUBLISH ssl://%iot.host%:8883 on topic 'measures/%device.physical.address%'  
+    REST: POST https://%iot.host%:443/iot/gateway/rest/measures/%device.alternate.id%
+    MQTT: PUBLISH ssl://%iot.host%:8883 on topic 'measures/%device.alternate.id%'  
 
     {
 	    "measureIds" : [ "1" ],
 	    "values" : [ "%random.degrees.celcius%" ],
-	    "logNodeAddr" : [ "%sensor.physical.address%" ]
+	    "logNodeAddr" : [ "%sensor.alternate.id%" ]
     }
     ```
 
-    >Note: A pre-configured "Temperature" Capability having physical address "1" and mapped to the pre-configured Sensor Type having ID "0" will be used by this sample.
+    >Note: A pre-configured "Temperature" Capability having alternate id "1" and mapped to the pre-configured Sensor Type having ID "0" will be used by this sample.
     >Note: The sending rate is one measure per second. Duration is 5 seconds.
 
 9. Consume the latest measures via the RESTful API.

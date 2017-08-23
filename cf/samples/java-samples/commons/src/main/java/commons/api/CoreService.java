@@ -42,7 +42,7 @@ public class CoreService {
 
 		if (gateways.length == 0) {
 			throw new IllegalStateException(
-				String.format("No online gateway of type '%1$s' found", type));
+				String.format("No online Gateway of type '%1$s' found", type));
 		}
 
 		return gateways[0];
@@ -63,7 +63,7 @@ public class CoreService {
 
 		if (!device.isOnline() || !device.getGatewayId().equals(gateway.getId())) {
 			throw new IllegalStateException(
-				String.format("No online device with ID '%1$s' found in the '%2$s' gateway", id,
+				String.format("No online Device with ID '%1$s' found in the '%2$s' Gateway", id,
 					gateway.getType().getValue()));
 		}
 
@@ -113,7 +113,7 @@ public class CoreService {
 		Authentication[] deviceAuthenticatons = authentications.getAuthentications();
 		if (deviceAuthenticatons == null || deviceAuthenticatons.length == 0) {
 			throw new IllegalStateException(String
-				.format("No authentications for device with ID '%1$s' found", device.getId()));
+				.format("No authentications for Device with ID '%1$s' found", device.getId()));
 		}
 
 		return deviceAuthenticatons[0];

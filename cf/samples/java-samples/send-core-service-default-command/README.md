@@ -73,7 +73,7 @@ The following steps are being performed during execution:
 7. Create Java SSL context based on the PEM certificate.
 8. As a device, subscribe for incoming commands over MQTT.
     ```
-    SUBSCRIBE ssl://%iot.host%:8883 on topic 'commands/%device.physical.address%'  
+    SUBSCRIBE ssl://%iot.host%:8883 on topic 'commands/%device.alternate.id%'  
     ```
     >Note: A subscription is going to be terminated automatically after 20 seconds.
 

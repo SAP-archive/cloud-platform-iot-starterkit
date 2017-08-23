@@ -23,7 +23,7 @@ implements GatewayCloud {
 	public void connect(String host)
 	throws IOException {
 		host = String.format("https://%1$s:443/iot/gateway/rest/measures/%2$s", host,
-			device.getPhysicalAddress());
+			device.getAlternateId());
 
 		httpClient.connect(host);
 	}

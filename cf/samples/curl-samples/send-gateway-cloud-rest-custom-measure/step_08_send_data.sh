@@ -2,9 +2,9 @@
 
 . ./config.sh
 
-export REQUEST_URL=https://${INSTANCE}/iot/gateway/rest/measures/${PHYSICAL_ADDRESS_4_DEVICE}
+export REQUEST_URL=https://${INSTANCE}/iot/gateway/rest/measures/${ALTERNATE_ID_4_DEVICE}
 
-export PAYLOAD='{ "measureIds" : [ '${MY_CAPABILITY}' ], "values" : [ "value for A", "value for B" ], "logNodeAddr":"'${PHYSICAL_ADDRESS_4_SENSOR}'" }'
+export PAYLOAD='{ "measureIds" : [ '${MY_CAPABILITY}' ], "values" : [ "value for A", "value for B" ], "logNodeAddr":"'${ALTERNATE_ID_4_SENSOR}'" }'
 
 # echo "Request URL is: ${REQUEST_URL}" 
 

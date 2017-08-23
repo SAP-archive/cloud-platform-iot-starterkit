@@ -8,7 +8,7 @@ public class Device {
 
 	private String name;
 
-	private String physicalAddress;
+	private String alternateId;
 
 	private boolean online;
 
@@ -38,12 +38,12 @@ public class Device {
 		this.name = name;
 	}
 
-	public String getPhysicalAddress() {
-		return physicalAddress;
+	public String getAlternateId() {
+		return alternateId;
 	}
 
-	public void setPhysicalAddress(String physicalAddress) {
-		this.physicalAddress = physicalAddress;
+	public void setAlternateId(String alternateId) {
+		this.alternateId = alternateId;
 	}
 
 	public boolean isOnline() {

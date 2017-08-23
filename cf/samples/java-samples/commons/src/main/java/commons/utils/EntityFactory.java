@@ -55,9 +55,9 @@ public class EntityFactory {
 	public static Measure buildTemperatureMeasure(Sensor sensor, Capability capability) {
 		Measure measure = new Measure();
 
-		measure.setMeasureIds(new String[] { capability.getPhysicalAddress() });
+		measure.setMeasureIds(new String[] { capability.getAlternateId() });
 		measure.setValues(new String[] { String.format("%.1f", buildDegreesCelsius()) });
-		measure.setLogNodeAddr(sensor.getPhysicalAddress());
+		measure.setLogNodeAddr(sensor.getAlternateId());
 
 		return measure;
 	}
@@ -65,9 +65,9 @@ public class EntityFactory {
 	public static Measure buildHumidityMeasure(Sensor sensor, Capability capability) {
 		Measure measure = new Measure();
 
-		measure.setMeasureIds(new String[] { capability.getPhysicalAddress() });
+		measure.setMeasureIds(new String[] { capability.getAlternateId() });
 		measure.setValues(new String[] { String.valueOf(buildHumidityPercentage()) });
-		measure.setLogNodeAddr(sensor.getPhysicalAddress());
+		measure.setLogNodeAddr(sensor.getAlternateId());
 
 		return measure;
 	}
