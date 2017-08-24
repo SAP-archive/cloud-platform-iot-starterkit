@@ -24,6 +24,12 @@ public class EntityFactory {
 
 	public static final String HUMIDITY_SENSORS = "Humidity Sensors";
 
+	public static final String TEXT = "Text";
+
+	public static final String DISPLAY_TEXT = "Display Text";
+
+	public static final String DISPLAY_SENSORS = "Display Sensors";
+
 	public static Device buildDevice(Gateway gateway) {
 		Device device = new Device();
 
@@ -47,6 +53,15 @@ public class EntityFactory {
 		SensorType sensorType = new SensorType();
 
 		sensorType.setName(HUMIDITY_SENSORS);
+		sensorType.setCapabilities(new SensorTypeCapability[] { sensorTypeCapability });
+
+		return sensorType;
+	}
+
+	public static SensorType buildDisplayTextSensorType(SensorTypeCapability sensorTypeCapability) {
+		SensorType sensorType = new SensorType();
+
+		sensorType.setName(DISPLAY_SENSORS);
 		sensorType.setCapabilities(new SensorTypeCapability[] { sensorTypeCapability });
 
 		return sensorType;
@@ -86,12 +101,37 @@ public class EntityFactory {
 		return capability;
 	}
 
+	public static Capability buildDisplayTextCapability() {
+		Capability capability = new Capability();
+
+		Property property = new Property();
+		property.setName(TEXT);
+		property.setDataType(PropertyType.STRING);
+
+		capability.setName(DISPLAY_TEXT);
+		capability.setProperties(new Property[] { property });
+
+		return capability;
+	}
+
 	public static Command buildToggleValveCommand(Sensor sensor, Capability capability) {
 		Command command = new Command();
 
 		command.setCapabilityId(capability.getId());
 		Map<String, Object> properties = new HashMap<>();
 		properties.put("val", new Random().nextBoolean() ? "1" : "0");
+		command.setProperties(properties);
+		command.setSensorId(sensor.getId());
+
+		return command;
+	}
+
+	public static Command buildDisaplyTextCommand(Sensor sensor, Capability capability) {
+		Command command = new Command();
+
+		command.setCapabilityId(capability.getId());
+		Map<String, Object> properties = new HashMap<>();
+		properties.put(TEXT, "Hello IoT");
 		command.setProperties(properties);
 		command.setSensorId(sensor.getId());
 

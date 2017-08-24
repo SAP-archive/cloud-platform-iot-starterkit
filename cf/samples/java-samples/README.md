@@ -12,3 +12,4 @@ Contains various Java samples which illustrate the API usage across different us
 ## Downstream. Sending commands to the device.
 
 * [Send default Toggle Valve commands to the device and listen to them on the device side](./send-core-service-default-command)
+* [Send custom Display Text commands to the device and listen to them on the device side](./send-core-service-custom-command)
