@@ -90,6 +90,6 @@ The following steps are being performed during execution:
 9. Consume the latest measures via the RESTful API.
     ```
     Authorization: Basic <base64-encoded credentials>
-    GET https://%iot.host%:443/iot/core/api/v1/devices/%device.id%/measures?orderby=timestamp desc&filter=capabilityId eq '00000000-0000-0000-0000-000000000001'
+    GET https://%iot.host%:443/iot/core/api/v1/devices/%device.id%/measures?orderby=timestamp desc&filter=capabilityId eq '00000000-0000-0000-0000-000000000001'&top=5
     ```
 

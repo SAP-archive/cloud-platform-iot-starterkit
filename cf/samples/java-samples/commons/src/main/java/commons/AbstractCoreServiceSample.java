@@ -95,7 +95,7 @@ extends AbstractSample {
 			@Override
 			public void run() {
 				try {
-					coreService.getLatestMeasures(device, capability);
+					coreService.getLatestMeasures(device, capability, 5);
 				}
 				catch (IOException e) {
 					printError(e.getMessage());

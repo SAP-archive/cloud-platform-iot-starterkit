@@ -119,11 +119,11 @@ public class CoreService {
 		return deviceAuthenticatons[0];
 	}
 
-	public Measure[] getLatestMeasures(Device device, Capability capability)
+	public Measure[] getLatestMeasures(Device device, Capability capability, int top)
 	throws IOException {
 		String destination = String.format(
-			"%1$s/iot/core/api/v1/devices/%2$s/measures?orderby=timestamp desc&filter=capabilityId eq '%3$s'",
-			host, device.getId(), capability.getId());
+			"%1$s/iot/core/api/v1/devices/%2$s/measures?orderby=timestamp desc&filter=capabilityId eq '%3$s'&top=%4$d",
+			host, device.getId(), capability.getId(), top);
 
 		try {
 			httpClient.connect(destination);
