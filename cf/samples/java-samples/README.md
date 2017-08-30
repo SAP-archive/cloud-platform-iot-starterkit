@@ -6,10 +6,8 @@ Contains various Java samples which illustrate the API usage across different us
 
 ## Upstream. Sending measures from the device.
 
-* [Send default Temperature measures either through HTTP or MQTT to the Gateway Cloud and consume them later on via the API](./send-gateway-cloud-default-measure)
-* [Send custom Humidity measures either through HTTP or MQTT to the Gateway Cloud and consume them later on via the API](./send-gateway-cloud-custom-measure)
+* [Model "Humidity" measure and send its values either through HTTP or MQTT to the Gateway as well as consume them later on via the API](./send-measure)
 
 ## Downstream. Sending commands to the device.
 
-* [Send default Toggle Valve commands to the device and listen to them on the device side](./send-core-service-default-command)
-* [Send custom Display Text commands to the device and listen to them on the device side](./send-core-service-custom-command)
+* [Model "Display Text" command and send it to the device as well as listen to incoming commands on the device side](./send-command)

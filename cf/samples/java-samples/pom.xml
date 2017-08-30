@@ -22,10 +22,8 @@
 
 	<modules>
 		<module>commons</module>
-		<module>send-gateway-cloud-default-measure</module>
-		<module>send-gateway-cloud-custom-measure</module>
-		<module>send-core-service-default-command</module>
-		<module>send-core-service-custom-command</module>
+		<module>send-measure</module>
+		<module>send-command</module>
 	</modules>
 
 	<dependencyManagement>
