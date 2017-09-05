@@ -27,7 +27,7 @@ The following steps are being performed during execution:
 1. Get online gateway (either REST or MQTT) based on the user input.
     ```
     Authorization: Basic <base64-encoded credentials>
-    GET https://%iot.host%:443/iot/core/api/v1/gateways?filter=type eq '%gateway.type%' and status eq 'online'&top=1
+    GET https://%iot.host%:443/iot/core/api/v1/gateways
     ```
 2. Get online device by its identifier.
     ```
