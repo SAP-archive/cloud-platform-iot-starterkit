@@ -9,6 +9,7 @@ import commons.model.Capability;
 import commons.model.Command;
 import commons.model.Device;
 import commons.model.Gateway;
+import commons.model.GatewayStatus;
 import commons.model.GatewayType;
 import commons.model.Measure;
 import commons.model.Sensor;
@@ -27,9 +28,7 @@ public class CoreService {
 
 	public Gateway getOnlineGateway(GatewayType type)
 	throws IOException {
-		String destination = String.format(
-			"%1$s/iot/core/api/v1/gateways?filter=type eq '%2$s' and status eq 'online'&top=1",
-			host, type.getValue());
+		String destination = String.format("%1$s/iot/core/api/v1/gateways", host);
 
 		Gateway[] gateways = null;
 		try {
@@ -40,12 +39,16 @@ public class CoreService {
 			httpClient.disconnect();
 		}
 
-		if (gateways.length == 0) {
-			throw new IllegalStateException(
-				String.format("No online Gateway of type '%1$s' found", type));
+		for (Gateway gateway : gateways) {
+			GatewayType gatewayType = gateway.getType();
+			GatewayStatus gatewayStatus = gateway.getStatus();
+			if (type.equals(gatewayType) && GatewayStatus.ONLINE.equals(gatewayStatus)) {
+				return gateway;
+			}
 		}
 
-		return gateways[0];
+		throw new IllegalStateException(
+			String.format("No online Gateway of type '%1$s' found", type));
 	}
 
 	public Device getOnlineDevice(String id, Gateway gateway)
