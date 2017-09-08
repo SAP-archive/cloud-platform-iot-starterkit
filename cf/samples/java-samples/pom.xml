@@ -22,7 +22,8 @@
 
 	<modules>
 		<module>commons</module>
-		<module>send-gateway-cloud-default-measure</module>
+		<module>send-measure</module>
+		<module>send-command</module>
 	</modules>
 
 	<dependencyManagement>
@@ -31,10 +32,6 @@
 				<groupId>iot-starterkit</groupId>
 				<artifactId>commons</artifactId>
 				<version>1.0.0</version>
-				<!--  
-				<scope>system</scope>
-				<systemPath>${basedir}/../commons/target/commons.jar</systemPath>
-				-->
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -55,6 +52,10 @@
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.6</version>
 				<configuration>
+					<excludes>
+						<exclude>**/*.properties</exclude>
+						<exclude>**/*.jpg</exclude>
+					</excludes>
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>

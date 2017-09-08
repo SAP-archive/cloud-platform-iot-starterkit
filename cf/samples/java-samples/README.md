@@ -1,3 +1,13 @@
-# Java Samples for the SAP Cloud Platform Internet of Things for the Cloud Foundry Environment
+# Java samples for the SAP Cloud Platform Internet of Things for the Cloud Foundry Environment
 
->Note: After the very first import/checkout from GitHub, ensure to run `mvn clean install` from the current reactor project.
+Contains various Java samples which illustrate the API usage across different use cases.
+
+>IMPORTANT: After the very first import from GitHub, ensure to run `mvn clean install` for the current reactor project in order to build [commons](./commons) - a Maven module containing generic logic which is used by the provided samples.
+
+## Upstream. Sending measures from the device.
+
+* [Model "Humidity" measure and send its values either through HTTP or MQTT to the Gateway as well as consume them later on via the API](./send-measure)
+
+## Downstream. Sending commands to the device.
+
+* [Model "Display Text" command and send it to the device as well as listen to incoming commands on the device side](./send-command)

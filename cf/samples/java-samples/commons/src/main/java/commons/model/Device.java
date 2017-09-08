@@ -8,9 +8,11 @@ public class Device {
 
 	private String name;
 
-	private String physicalAddress;
+	private String alternateId;
 
 	private boolean online;
+
+	private Sensor[] sensors;
 
 	public String getId() {
 		return id;
@@ -36,12 +38,12 @@ public class Device {
 		this.name = name;
 	}
 
-	public String getPhysicalAddress() {
-		return physicalAddress;
+	public String getAlternateId() {
+		return alternateId;
 	}
 
-	public void setPhysicalAddress(String physicalAddress) {
-		this.physicalAddress = physicalAddress;
+	public void setAlternateId(String alternateId) {
+		this.alternateId = alternateId;
 	}
 
 	public boolean isOnline() {
@@ -50,6 +52,14 @@ public class Device {
 
 	public void setOnline(boolean online) {
 		this.online = online;
+	}
+
+	public Sensor[] getSensors() {
+		return sensors;
+	}
+
+	public void setSensors(Sensor[] sensors) {
+		this.sensors = sensors;
 	}
 
 }

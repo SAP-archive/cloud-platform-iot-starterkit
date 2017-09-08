@@ -1,10 +1,10 @@
 package commons.connectivity;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 import javax.net.ssl.SSLSocketFactory;
 
+import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -43,6 +43,56 @@ extends AbstractClient {
 		connectOptions.setSocketFactory(sslSocketFactory);
 	}
 
+	public MqttClient(String clientId, SSLSocketFactory sslSocketFactory) {
+		this(clientId, "*", sslSocketFactory);
+	}
+
+	public <T> void publish(T payload, Class<T> clazz)
+	throws IOException {
+		publish(topic, payload, clazz);
+	}
+
+	public <T> void publish(String topic, T payload, Class<T> clazz)
+	throws IOException {
+		String request = jsonParser.toJson(payload);
+
+		System.out.println(String.format("Publish on topic '%1$s'", topic));
+		System.out.println();
+		System.out.println(String.format("Message %1$s", request));
+
+		MqttMessage mqttMessage = new MqttMessage(request.getBytes(ENCODING));
+		mqttMessage.setQos(1);
+
+		try {
+			client.publish(topic, mqttMessage);
+		}
+		catch (MqttException e) {
+			String errorMessage = String
+				.format("Unable to publish the MQTT message on topic '%1$s'", topic);
+			throw new IOException(errorMessage, e);
+		}
+	}
+
+	public void subscribe(String topic, final MqttMessageListener listener)
+	throws IOException {
+		try {
+			client.subscribe(topic, new IMqttMessageListener() {
+
+				@Override
+				public void messageArrived(String topic, MqttMessage message)
+				throws Exception {
+					listener.onMessage(topic, message.toString());
+				}
+
+			});
+		}
+		catch (MqttException e) {
+			String errorMessage = String.format("Unable to subscribe for the MQTT topic '%1$s'",
+				topic);
+			throw new IOException(errorMessage, e);
+		}
+	}
+
 	@Override
 	public void connect(String destination)
 	throws IOException {
@@ -52,6 +102,7 @@ extends AbstractClient {
 		}
 
 		System.out.println(String.format("Connect to %1$s", destination));
+		System.out.println();
 
 		try {
 			client = new org.eclipse.paho.client.mqttv3.MqttClient(destination, clientId,
@@ -79,19 +130,7 @@ extends AbstractClient {
 	@Override
 	public <T> void send(T payload, Class<T> clazz)
 	throws IOException {
-		String request = jsonParser.toJson(payload);
-		System.out.println(String.format("Request body %1$s", request));
-
-		byte[] bytes = request.getBytes(StandardCharsets.UTF_8);
-		MqttMessage message = new MqttMessage(bytes);
-		message.setQos(1);
-
-		try {
-			client.publish(topic, message);
-		}
-		catch (MqttException e) {
-			throw new IOException("Unable to publish the MQTT message", e);
-		}
+		publish(payload, clazz);
 	}
 
 }

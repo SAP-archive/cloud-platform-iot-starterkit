@@ -1,10 +1,16 @@
 package commons.connectivity;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import com.google.gson.Gson;
 
+/**
+ * An abstraction over connectivity clients.
+ */
 public abstract class AbstractClient {
+
+	public static final String ENCODING = StandardCharsets.UTF_8.name();
 
 	protected Gson jsonParser;
 

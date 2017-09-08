@@ -3,7 +3,7 @@ package commons.api;
 import java.io.IOException;
 
 /**
- * An abstraction over Gateway Cloud clients
+ * An abstraction over Cloud Gateways.
  */
 public interface GatewayCloud {
 

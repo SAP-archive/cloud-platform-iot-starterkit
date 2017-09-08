@@ -5,12 +5,15 @@ import java.io.IOException;
 import commons.connectivity.HttpClient;
 import commons.model.Authentication;
 import commons.model.Authentications;
+import commons.model.Capability;
+import commons.model.Command;
 import commons.model.Device;
 import commons.model.Gateway;
 import commons.model.GatewayStatus;
 import commons.model.GatewayType;
-import commons.utils.Constants;
-import commons.utils.ObjectFactory;
+import commons.model.Measure;
+import commons.model.Sensor;
+import commons.model.SensorType;
 
 public class CoreService {
 
@@ -45,10 +48,10 @@ public class CoreService {
 		}
 
 		throw new IllegalStateException(
-			String.format("No online gateway of type '%1$s' found", type));
+			String.format("No online Gateway of type '%1$s' found", type));
 	}
 
-	public Device getOnlineDevice(String id)
+	public Device getOnlineDevice(String id, Gateway gateway)
 	throws IOException {
 		String destination = String.format("%1$s/iot/core/api/v1/devices/%2$s", host, id);
 
@@ -61,42 +64,35 @@ public class CoreService {
 			httpClient.disconnect();
 		}
 
-		if (!device.isOnline()) {
+		if (!device.isOnline() || !device.getGatewayId().equals(gateway.getId())) {
 			throw new IllegalStateException(
-				String.format("No online device with ID '%1$s' found", id));
+				String.format("No online Device with ID '%1$s' found in the '%2$s' Gateway", id,
+					gateway.getType().getValue()));
 		}
 
 		return device;
 	}
 
-	public Device getOrAddDevice(String id, Gateway gateway)
-	throws IOException {
-		try {
-			return getOnlineDevice(id);
-		}
-		catch (IOException | IllegalStateException e) {
-			System.err.println(e.getMessage());
-			System.err.println();
-
-			return addDevice(gateway);
-		}
-	}
-
-	public Device addDevice(Gateway gateway)
+	public Device addDevice(Device device)
 	throws IOException {
 		String destination = String.format("%1$s/iot/core/api/v1/devices", host);
 
-		Device template = ObjectFactory.buildDevice();
-		template.setGatewayId(gateway.getId());
+		try {
+			httpClient.connect(destination);
+			return httpClient.doPostJson(device, Device.class);
+		}
+		finally {
+			httpClient.disconnect();
+		}
+	}
+
+	public Sensor addSensor(Sensor sensor)
+	throws IOException {
+		String destination = String.format("%1$s/iot/core/api/v1/sensors", host);
 
 		try {
 			httpClient.connect(destination);
-			Device device = httpClient.doPostJson(template, Device.class);
-
-			System.out.println();
-			System.out.printf("\t%-15s : %s %n", Constants.DEVICE_ID, device.getId());
-
-			return device;
+			return httpClient.doPostJson(sensor, Sensor.class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -120,10 +116,117 @@ public class CoreService {
 		Authentication[] deviceAuthenticatons = authentications.getAuthentications();
 		if (deviceAuthenticatons == null || deviceAuthenticatons.length == 0) {
 			throw new IllegalStateException(String
-				.format("No authentications for device with ID '%1$s' found", device.getId()));
+				.format("No authentications for Device with ID '%1$s' found", device.getId()));
 		}
 
 		return deviceAuthenticatons[0];
+	}
+
+	public Measure[] getLatestMeasures(Device device, Capability capability, int top)
+	throws IOException {
+		String destination = String.format(
+			"%1$s/iot/core/api/v1/devices/%2$s/measures?orderby=timestamp desc&filter=capabilityId eq '%3$s'&top=%4$d",
+			host, device.getId(), capability.getId(), top);
+
+		try {
+			httpClient.connect(destination);
+			return httpClient.doGetJson(Measure[].class);
+		}
+		finally {
+			httpClient.disconnect();
+		}
+	}
+
+	public void sendCommand(Command command, Device device)
+	throws IOException {
+		String destination = String.format("%1$s/iot/core/api/v1/devices/%2$s/commands", host,
+			device.getId());
+
+		try {
+			httpClient.connect(destination);
+			httpClient.doPost(command, Command.class);
+		}
+		finally {
+			httpClient.disconnect();
+		}
+	}
+
+	public Capability[] getCapabilities()
+	throws IOException {
+		String destination = String.format("%1$s/iot/core/api/v1/capabilities", host);
+
+		try {
+			httpClient.connect(destination);
+			return httpClient.doGetJson(Capability[].class);
+		}
+		finally {
+			httpClient.disconnect();
+		}
+	}
+
+	public Capability getCapability(String id)
+	throws IOException {
+		String destination = String.format("%1$s/iot/core/api/v1/capabilities/%2$s", host, id);
+
+		try {
+			httpClient.connect(destination);
+			return httpClient.doGetJson(Capability.class);
+		}
+		finally {
+			httpClient.disconnect();
+		}
+	}
+
+	public Capability addCapability(Capability capability)
+	throws IOException {
+		String destination = String.format("%1$s/iot/core/api/v1/capabilities", host);
+
+		try {
+			httpClient.connect(destination);
+			return httpClient.doPostJson(capability, Capability.class);
+		}
+		finally {
+			httpClient.disconnect();
+		}
+	}
+
+	public SensorType[] getSensorTypes()
+	throws IOException {
+		String destination = String.format("%1$s/iot/core/api/v1/sensorTypes", host);
+
+		try {
+			httpClient.connect(destination);
+			return httpClient.doGetJson(SensorType[].class);
+		}
+		finally {
+			httpClient.disconnect();
+		}
+	}
+
+	public SensorType getSensorType(String id)
+	throws IOException {
+		String destination = String.format("%1$s/iot/core/api/v1/sensorTypes/%2$s", host, id);
+
+		try {
+			httpClient.connect(destination);
+			return httpClient.doGetJson(SensorType.class);
+		}
+		finally {
+			httpClient.disconnect();
+		}
+	}
+
+	public SensorType addSensorType(SensorType sensorType)
+	throws IOException {
+		String destination = String.format("%1$s/iot/core/api/v1/sensorTypes", host);
+
+		try {
+			httpClient.connect(destination);
+			return httpClient.doPostJson(sensorType, SensorType.class);
+		}
+		finally {
+			httpClient.disconnect();
+		}
 	}
 
 }
