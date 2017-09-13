@@ -123,13 +123,12 @@ hardware platforms. Thus, before making use of code snippets or integrated
 examples in productive scenarios please pay additional attention on hardening
 against potential attacks. We will continuously provide further guidance on
 potential attack vectors and how to harden your solution on the dedicated
-[Security aspects](./misc/security/README.md) page.
+[Security aspects](./../misc/security/README.md) page.
 
 ## Revision history and related advice
 
 The SAP Cloud Platform Internet of Things is continuously developed further. Please pay attention to
-the dedicated page [Revision history and related
-advice](./misc/revision-history/README.md) to ensure you get specific
+the dedicated page [Revision history and related advice](./../misc/revision-history/README.md) to ensure you get specific
 information about potentially necessary modifications to your older usage
 examples.
 

@@ -1,6 +1,6 @@
 # Revision history and related advice
 
-The SAP HANA Cloud Platform Internet of Things (IoT) Services are continously
+The SAP Cloud Platform Internet of Things (IoT) Services are continously
 developed further and thus a new version of the Message Management Service (MMS)
 becomes available from time to time. The availability of such an update is
 indicated in the respective MMS User Interface and an update is highly
