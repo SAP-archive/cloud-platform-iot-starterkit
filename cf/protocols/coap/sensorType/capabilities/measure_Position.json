@@ -1,0 +1,21 @@
+{
+    "alternateId": "4",
+    "name": "Position",
+    "properties": [
+        {
+            "dataType": "float",
+            "name": "latitude",
+            "unitOfMeasure": "°"
+        },
+        {
+            "dataType": "float",
+            "name": "longitude",
+            "unitOfMeasure": "°"
+        },
+        {
+            "dataType": "float",
+            "name": "altitude",
+            "unitOfMeasure": "m"
+        }
+    ]
+}

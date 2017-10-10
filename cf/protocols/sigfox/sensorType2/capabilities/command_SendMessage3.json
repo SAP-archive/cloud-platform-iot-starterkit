@@ -1,0 +1,26 @@
+{
+    "alternateId": "70",
+    "name": "SendMessage3",
+    "properties": [
+        {
+            "dataType": "integer",
+            "name": "AMRType"
+        },
+        {
+            "dataType": "integer",
+            "name": "transmitPeriod"
+        },
+        {
+            "dataType": "integer",
+            "name": "channelOnOff"
+        },
+        {
+            "dataType": "integer",
+            "name": "channel1Type"
+        },
+        {
+            "dataType": "integer",
+            "name": "channel2Type"
+        }
+    ]
+}

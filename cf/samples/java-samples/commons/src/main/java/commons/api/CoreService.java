@@ -4,13 +4,12 @@ import java.io.IOException;
 
 import commons.connectivity.HttpClient;
 import commons.model.Authentication;
-import commons.model.Authentications;
 import commons.model.Capability;
 import commons.model.Command;
 import commons.model.Device;
 import commons.model.Gateway;
+import commons.model.GatewayProtocol;
 import commons.model.GatewayStatus;
-import commons.model.GatewayType;
 import commons.model.Measure;
 import commons.model.Sensor;
 import commons.model.SensorType;
@@ -26,7 +25,7 @@ public class CoreService {
 		httpClient = new HttpClient(user, password);
 	}
 
-	public Gateway getOnlineGateway(GatewayType type)
+	public Gateway getOnlineGateway(GatewayProtocol protocolId)
 	throws IOException {
 		String destination = String.format("%1$s/iot/core/api/v1/gateways", host);
 
@@ -40,15 +39,16 @@ public class CoreService {
 		}
 
 		for (Gateway gateway : gateways) {
-			GatewayType gatewayType = gateway.getType();
+			GatewayProtocol gatewayProtocolId = gateway.getProtocolId();
 			GatewayStatus gatewayStatus = gateway.getStatus();
-			if (type.equals(gatewayType) && GatewayStatus.ONLINE.equals(gatewayStatus)) {
+			if (protocolId.equals(gatewayProtocolId) &&
+				GatewayStatus.ONLINE.equals(gatewayStatus)) {
 				return gateway;
 			}
 		}
 
 		throw new IllegalStateException(
-			String.format("No online Gateway of type '%1$s' found", type));
+			String.format("No online Gateway with protocol ID '%1$s' found", protocolId));
 	}
 
 	public Device getOnlineDevice(String id, Gateway gateway)
@@ -67,7 +67,7 @@ public class CoreService {
 		if (!device.isOnline() || !device.getGatewayId().equals(gateway.getId())) {
 			throw new IllegalStateException(
 				String.format("No online Device with ID '%1$s' found in the '%2$s' Gateway", id,
-					gateway.getType().getValue()));
+					gateway.getProtocolId().getValue()));
 		}
 
 		return device;
@@ -101,25 +101,17 @@ public class CoreService {
 
 	public Authentication getAuthentication(Device device)
 	throws IOException {
-		String destination = String.format("%1$s/iot/core/api/v1/devices/%2$s/authentication/pem",
-			host, device.getId());
+		String destination = String.format(
+			"%1$s/iot/core/api/v1/devices/%2$s/authentications/clientCertificate/pem", host,
+			device.getId());
 
-		Authentications authentications = null;
 		try {
 			httpClient.connect(destination);
-			authentications = httpClient.doGetJson(Authentications.class);
+			return httpClient.doGetJson(Authentication.class);
 		}
 		finally {
 			httpClient.disconnect();
 		}
-
-		Authentication[] deviceAuthenticatons = authentications.getAuthentications();
-		if (deviceAuthenticatons == null || deviceAuthenticatons.length == 0) {
-			throw new IllegalStateException(String
-				.format("No authentications for Device with ID '%1$s' found", device.getId()));
-		}
-
-		return deviceAuthenticatons[0];
 	}
 
 	public Measure[] getLatestMeasures(Device device, Capability capability, int top)

@@ -1,0 +1,11 @@
+{
+    "alternateId": "11",
+    "name": "Consumed Reactive Power",
+    "properties": [
+        {
+            "dataType": "float",
+            "name": "Consumed Reactive Power",
+            "unitOfMeasure": "KWAR"
+        }
+    ]
+}

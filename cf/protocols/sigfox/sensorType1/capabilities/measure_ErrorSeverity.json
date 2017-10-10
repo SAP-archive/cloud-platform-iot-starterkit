@@ -1,0 +1,13 @@
+{
+    "alternateId": "6",
+    "name": "ErrorSeverity",
+    "properties": [
+        {
+            "dataType": "string",
+            "formatter": {
+                "swap": true
+            },
+            "name": "ErrorSeverity"
+        }
+    ]
+}

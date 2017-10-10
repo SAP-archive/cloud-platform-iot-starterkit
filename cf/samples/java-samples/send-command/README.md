@@ -43,17 +43,17 @@ The following steps are being performed during execution:
 		    "name" : "%random.device.name%"
 	    }
 	    ```
-3. Check if custom "Display Text" capability exists.
+3. Check if custom "Display_Text" capability exists.
     ```
     Authorization: Basic <base64-encoded credentials>
     GET https://%iot.host%:443/iot/core/api/v1/capabilities
     ```
-	1. Create "Display Text" capability if not found.
+	1. Create "Display_Text" capability if not found.
 	    ```
 	    Authorization: Basic <base64-encoded credentials>
 	    POST https://%iot.host%:443/iot/core/api/v1/capabilities  
 	    {
-		    "name" : "Display Text",
+		    "name" : "Display_Text",
 		    "properties" : [
 			    {
 				    "name" : "Text",
@@ -62,17 +62,17 @@ The following steps are being performed during execution:
 		    ]
 	    }
 	    ```
-4. Check if custom "Display Sensors" sensor type exists.
+4. Check if custom "Display_Sensors" sensor type exists.
     ```
     Authorization: Basic <base64-encoded credentials>
     GET https://%iot.host%:443/iot/core/api/v1/sensorTypes
     ```
-	1. Create "Display Sensors" sensor type if not found.
+	1. Create "Display_Sensors" sensor type if not found.
 	    ```
 	    Authorization: Basic <base64-encoded credentials>
 	    POST https://%iot.host%:443/iot/core/api/v1/sensorTypes  
 	    {
-		    "name" : "Display Sensors",
+		    "name" : "Display_Sensors",
 		    "capabilities" : [
 			    {
 				    "id" : "%display.text.capability.id%",
@@ -92,11 +92,11 @@ The following steps are being performed during execution:
 		    "name" : "%random.sensor.name%"
 	    }
 	    ```
-	    >Note: A new sensor will be mapped to the pre-configured Sensor Type having ID "0".
+	    >Note: A new sensor will be mapped to the custom "Display_Sensors" Sensor Type.
 6. Get device PEM-certificate.
     ```
     Authorization: Basic <base64-encoded credentials>
-    GET https://%iot.host%:443/iot/core/api/v1/devices/%device.id%/authentication/pem
+    GET https://%iot.host%:443/iot/core/api/v1/devices/%device.id%/authentications/clientCertificate/pem
     ```
 7. Create Java SSL context based on the PEM certificate.
 8. As a device, subscribe for incoming commands over MQTT.
@@ -112,8 +112,8 @@ The following steps are being performed during execution:
     {
 	    "capabilityId" : "%display.text.capability.id%",
 	    "sensorId" : "%sensor.id%",
-    	"command" : {
-		    "Text" : "Hello IoT"
+        "command" : {
+	       "Text" : "Hello IoT"
 	    }
     }
     ```

@@ -1,0 +1,11 @@
+{
+    "alternateId": "16",
+    "name": "Fuel",
+    "properties": [
+        {
+            "dataType": "float",
+            "name": "Fuel",
+            "unitOfMeasure": "l"
+        }
+    ]
+}

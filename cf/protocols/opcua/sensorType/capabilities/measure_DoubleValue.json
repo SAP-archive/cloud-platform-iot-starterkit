@@ -1,0 +1,10 @@
+{
+    "alternateId": "DoubleValue",
+    "name": "DoubleValue",
+    "properties": [
+        {
+            "dataType": "double",
+            "name": "DoubleValue"
+        }
+    ]
+}

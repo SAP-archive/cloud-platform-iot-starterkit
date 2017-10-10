@@ -1,0 +1,10 @@
+{
+    "alternateId": "6",
+    "name": "ZoneQty",
+    "properties": [
+        {
+            "dataType": "integer",
+            "name": "ZoneQty"
+        }
+    ]
+}

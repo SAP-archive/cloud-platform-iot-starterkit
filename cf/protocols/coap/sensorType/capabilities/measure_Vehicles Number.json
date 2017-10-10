@@ -1,0 +1,13 @@
+{
+    "alternateId": "14",
+    "name": "Vehicles Number",
+    "properties": [
+        {
+            "dataType": "integer",
+            "formatter": {
+                "swap": true
+            },
+            "name": "Vehicles Number"
+        }
+    ]
+}

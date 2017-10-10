@@ -1,0 +1,22 @@
+{
+    "alternateId": "20",
+    "name": "EditDevice",
+    "properties": [
+        {
+            "dataType": "string",
+            "name": "deviceName"
+        },
+        {
+            "dataType": "string",
+            "name": "latitude"
+        },
+        {
+            "dataType": "string",
+            "name": "longitude"
+        },
+        {
+            "dataType": "string",
+            "name": "deviceTypeId"
+        }
+    ]
+}

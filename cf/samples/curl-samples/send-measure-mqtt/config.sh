@@ -3,7 +3,7 @@ export CURL=/usr/bin/curl
 export INSTANCE='<your instance>.cp.iot.sap'
 export CRT_4_LANDSCAPE='<crt for the landsacpe you are in> e.g. eu10cpiotsap.crt'
 
-export USER='root#0'
+export USER='root'
 export PASSWORD='<your password>'
 export USER_PASS="${USER}:${PASSWORD}"
 

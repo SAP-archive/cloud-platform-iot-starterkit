@@ -1,0 +1,10 @@
+{
+    "alternateId": "4",
+    "name": "LaneNo",
+    "properties": [
+        {
+            "dataType": "integer",
+            "name": "LaneNo"
+        }
+    ]
+}

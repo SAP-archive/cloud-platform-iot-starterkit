@@ -43,17 +43,17 @@ The following steps are being performed during execution:
 		    "name" : "%random.device.name%"
 	    }
 	    ```
-3. Check if custom "Room Humidity" capability exists.
+3. Check if custom "Room_Humidity" capability exists.
     ```
     Authorization: Basic <base64-encoded credentials>
     GET https://%iot.host%:443/iot/core/api/v1/capabilities
     ```
-	1. Create "Room Humidity" capability if not found.
+	1. Create "Room_Humidity" capability if not found.
 	    ```
 	    Authorization: Basic <base64-encoded credentials>
 	    POST https://%iot.host%:443/iot/core/api/v1/capabilities  
 	    {
-		    "name" : "Room Humidity",
+		    "name" : "Room_Humidity",
 		    "properties" : [
 			    {
 				    "name" : "Humidity",
@@ -63,17 +63,17 @@ The following steps are being performed during execution:
 		    ]
 	    }
 	    ```
-4. Check if custom "Humidity Sensors" sensor type exists.
+4. Check if custom "Humidity_Sensors" sensor type exists.
     ```
     Authorization: Basic <base64-encoded credentials>
     GET https://%iot.host%:443/iot/core/api/v1/sensorTypes
     ```
-	1. Create "Humidity Sensors" sensor type if not found.
+	1. Create "Humidity_Sensors" sensor type if not found.
 	    ```
 	    Authorization: Basic <base64-encoded credentials>
 	    POST https://%iot.host%:443/iot/core/api/v1/sensorTypes  
 	    {
-		    "name" : "Humidity Sensors",
+		    "name" : "Humidity_Sensors",
 		    "capabilities" : [
 			    {
 				    "id" : "%humidity.capability.id%",
@@ -83,7 +83,7 @@ The following steps are being performed during execution:
 	    }
 	    ```
 5. Get device sensor by its identifier which is assigned to the device.
-    1. Create a new sensor and assign it to the device if no sensor is assigned to the device or a sensor has no reference to the "Room Humidity" sensor type.
+    1. Create a new sensor and assign it to the device if no sensor is assigned to the device or a sensor has no reference to the "Room_Humidity" sensor type.
 	    ```
 	    Authorization: Basic <base64-encoded credentials>
 	    POST https://%iot.host%:443/iot/core/api/v1/sensors  
@@ -93,11 +93,11 @@ The following steps are being performed during execution:
 		    "name" : "%random.sensor.name%"
 	    }
 	    ```
-	    >Note: A new sensor will be mapped to the custom "Humidity Sensors" Sensor Type.
+	    >Note: A new sensor will be mapped to the custom "Humidity_Sensors" Sensor Type.
 6. Get device PEM-certificate.
     ```
     Authorization: Basic <base64-encoded credentials>
-    GET https://%iot.host%:443/iot/core/api/v1/devices/%device.id%/authentication/pem
+    GET https://%iot.host%:443/iot/core/api/v1/devices/%device.id%/authentications/clientCertificate/pem
     ```
 7. Create Java SSL context based on the PEM certificate.
 8. Send random Humidity measures on behalf of the device sensor.
@@ -107,9 +107,9 @@ The following steps are being performed during execution:
     MQTT: PUBLISH ssl://%iot.host%:8883 on topic 'measures/%device.alternate.id%'  
 
     {
-	    "measureIds" : [ "%humidity.capability.alternate.id%" ],
-	    "values" : [ "%random.humidity.percentage%" ],
-	    "logNodeAddr" : [ "%sensor.alternate.id%" ]
+	    "capabilityAlternateId" : "%humidity.capability.alternate.id%",
+	    "measures" : [ "%random.humidity.percentage%" ],
+	    "sensorAlternateId" : "%sensor.alternate.id%"
     }
     ```
 

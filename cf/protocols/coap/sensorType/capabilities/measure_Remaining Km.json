@@ -1,0 +1,11 @@
+{
+    "alternateId": "7",
+    "name": "Remaining Km",
+    "properties": [
+        {
+            "dataType": "float",
+            "name": "Remaining Km",
+            "unitOfMeasure": "km"
+        }
+    ]
+}

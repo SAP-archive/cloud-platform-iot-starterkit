@@ -1,0 +1,11 @@
+{
+    "alternateId": "8",
+    "name": "WaterVolume",
+    "properties": [
+        {
+            "dataType": "long",
+            "name": "WaterVolume",
+            "unitOfMeasure": "dm3"
+        }
+    ]
+}

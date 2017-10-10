@@ -1,0 +1,10 @@
+{
+    "alternateId": "WriteDouble",
+    "name": "WriteDouble",
+    "properties": [
+        {
+            "dataType": "double",
+            "name": "value"
+        }
+    ]
+}

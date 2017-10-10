@@ -1,0 +1,13 @@
+{
+    "alternateId": "4",
+    "name": "RSSI",
+    "properties": [
+        {
+            "dataType": "float",
+            "formatter": {
+                "swap": true
+            },
+            "name": "RSSI"
+        }
+    ]
+}

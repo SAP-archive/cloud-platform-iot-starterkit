@@ -1,0 +1,11 @@
+{
+    "alternateId": "12",
+    "name": "Discount",
+    "properties": [
+        {
+            "dataType": "float",
+            "name": "Discount",
+            "unitOfMeasure": "%"
+        }
+    ]
+}

@@ -1,0 +1,10 @@
+{
+    "alternateId": "25",
+    "name": "UploadSchema",
+    "properties": [
+        {
+            "dataType": "binary",
+            "name": "schemaFile"
+        }
+    ]
+}

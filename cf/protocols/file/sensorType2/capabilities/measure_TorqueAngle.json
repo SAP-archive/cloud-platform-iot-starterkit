@@ -1,0 +1,10 @@
+{
+    "alternateId": "506",
+    "name": "TorqueAngle",
+    "properties": [
+        {
+            "dataType": "double",
+            "name": "TorqueAngle"
+        }
+    ]
+}

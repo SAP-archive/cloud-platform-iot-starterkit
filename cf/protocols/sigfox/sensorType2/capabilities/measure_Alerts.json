@@ -1,0 +1,10 @@
+{
+    "alternateId": "30",
+    "name": "Alerts",
+    "properties": [
+        {
+            "dataType": "long",
+            "name": "Alerts"
+        }
+    ]
+}

@@ -1,0 +1,42 @@
+{
+    "alternateId": "40",
+    "name": "CreateDeviceType",
+    "properties": [
+        {
+            "dataType": "string",
+            "name": "name"
+        },
+        {
+            "dataType": "string",
+            "name": "description"
+        },
+        {
+            "dataType": "long",
+            "name": "keepAlive"
+        },
+        {
+            "dataType": "string",
+            "name": "alertEmail"
+        },
+        {
+            "dataType": "string",
+            "name": "payloadType"
+        },
+        {
+            "dataType": "string",
+            "name": "group"
+        },
+        {
+            "dataType": "integer",
+            "name": "downlinkMode"
+        },
+        {
+            "dataType": "string",
+            "name": "downlinkDataString"
+        },
+        {
+            "dataType": "string",
+            "name": "contractId"
+        }
+    ]
+}

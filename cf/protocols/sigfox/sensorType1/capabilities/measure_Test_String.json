@@ -1,0 +1,10 @@
+{
+    "alternateId": "1",
+    "name": "Test_String",
+    "properties": [
+        {
+            "dataType": "string",
+            "name": "Test_String"
+        }
+    ]
+}

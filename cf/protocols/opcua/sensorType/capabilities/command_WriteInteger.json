@@ -1,0 +1,10 @@
+{
+    "alternateId": "WriteInteger",
+    "name": "WriteInteger",
+    "properties": [
+        {
+            "dataType": "integer",
+            "name": "value"
+        }
+    ]
+}

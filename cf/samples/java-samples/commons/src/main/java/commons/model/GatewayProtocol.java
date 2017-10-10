@@ -2,7 +2,7 @@ package commons.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public enum GatewayType {
+public enum GatewayProtocol {
 
 	@SerializedName("mqtt") MQTT("mqtt"),
 
@@ -10,7 +10,7 @@ public enum GatewayType {
 
 	private String value;
 
-	private GatewayType(String value) {
+	private GatewayProtocol(String value) {
 		this.value = value;
 	}
 
@@ -23,12 +23,12 @@ public enum GatewayType {
 		return value;
 	}
 
-	public static GatewayType getDefault() {
+	public static GatewayProtocol getDefault() {
 		return REST;
 	}
 
-	public static GatewayType fromValue(String value) {
-		for (GatewayType next : GatewayType.values()) {
+	public static GatewayProtocol fromValue(String value) {
+		for (GatewayProtocol next : GatewayProtocol.values()) {
 			if (next.getValue().equalsIgnoreCase(value)) {
 				return next;
 			}

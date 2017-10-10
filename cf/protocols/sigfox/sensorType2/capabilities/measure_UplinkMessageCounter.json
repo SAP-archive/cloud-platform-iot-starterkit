@@ -1,0 +1,10 @@
+{
+    "alternateId": "27",
+    "name": "UplinkMessageCounter",
+    "properties": [
+        {
+            "dataType": "long",
+            "name": "UplinkMessageCounter"
+        }
+    ]
+}

@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-import commons.model.GatewayType;
+import commons.model.GatewayProtocol;
 import commons.utils.Console;
 import commons.utils.FileUtil;
 
@@ -25,7 +25,7 @@ public abstract class AbstractSample {
 	public static final String SENSOR_ID = "sensor.id";
 	public static final String SENSOR_TYPE_ID = "sensor.type.id";
 	public static final String CAPABILITY_ID = "capability.id";
-	public static final String GATEWAY_TYPE = "gateway.type";
+	public static final String GATEWAY_PROTOCOL_ID = "gateway.protocol.id";
 	public static final String PROXY_PORT = "proxy.port";
 	public static final String PROXY_HOST = "proxy.host";
 
@@ -99,7 +99,7 @@ public abstract class AbstractSample {
 	}
 
 	protected void printProperty(Object key, Object value) {
-		System.out.printf("\t%-15s : %s %n", key, value);
+		System.out.printf("\t%-25s : %s %n", key, value);
 	}
 
 	protected void printNewLine() {
@@ -120,9 +120,11 @@ public abstract class AbstractSample {
 		user = console.awaitNextLine(user, "Username (e.g. 'root'): ");
 		properties.setProperty(IOT_USER, user);
 
-		String gatewayType = properties.getProperty(GATEWAY_TYPE);
-		gatewayType = console.awaitNextLine(gatewayType, "Gateway Type ('rest' or 'mqtt'): ");
-		properties.setProperty(GATEWAY_TYPE, GatewayType.fromValue(gatewayType).getValue());
+		String gatewayType = properties.getProperty(GATEWAY_PROTOCOL_ID);
+		gatewayType = console.awaitNextLine(gatewayType,
+			"Gateway Protocol ID ('rest' or 'mqtt'): ");
+		properties.setProperty(GATEWAY_PROTOCOL_ID,
+			GatewayProtocol.fromValue(gatewayType).getValue());
 
 		String deviceId = properties.getProperty(DEVICE_ID);
 		deviceId = console.awaitNextLine(deviceId, "Device ID (e.g. '100'): ");

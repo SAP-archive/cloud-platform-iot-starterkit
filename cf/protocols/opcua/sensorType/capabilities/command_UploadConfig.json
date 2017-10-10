@@ -1,0 +1,10 @@
+{
+    "alternateId": "UploadConfig",
+    "name": "UploadConfig",
+    "properties": [
+        {
+            "dataType": "binary",
+            "name": "configFilePath"
+        }
+    ]
+}

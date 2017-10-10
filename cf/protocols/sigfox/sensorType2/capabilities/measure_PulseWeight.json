@@ -1,0 +1,10 @@
+{
+    "alternateId": "15",
+    "name": "PulseWeight",
+    "properties": [
+        {
+            "dataType": "integer",
+            "name": "PulseWeight"
+        }
+    ]
+}

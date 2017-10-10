@@ -1,0 +1,10 @@
+{
+    "alternateId": "WriteDateTime",
+    "name": "WriteDateTime",
+    "properties": [
+        {
+            "dataType": "long",
+            "name": "value"
+        }
+    ]
+}

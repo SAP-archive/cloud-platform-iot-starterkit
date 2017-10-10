@@ -1,0 +1,30 @@
+{
+    "alternateId": "10",
+    "name": "Position",
+    "properties": [
+        {
+            "dataType": "double",
+            "formatter": {
+                "swap": true
+            },
+            "name": "Position",
+            "unitOfMeasure": "[x]"
+        },
+        {
+            "dataType": "double",
+            "formatter": {
+                "swap": true
+            },
+            "name": "Position",
+            "unitOfMeasure": "[y]"
+        },
+        {
+            "dataType": "double",
+            "formatter": {
+                "swap": true
+            },
+            "name": "Position",
+            "unitOfMeasure": "[z]"
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+{
+    "alternateId": "20",
+    "name": "Test",
+    "properties": [
+        {
+            "dataType": "integer",
+            "name": "param1"
+        },
+        {
+            "dataType": "string",
+            "name": "param2"
+        },
+        {
+            "dataType": "float",
+            "name": "param3"
+        }
+    ]
+}

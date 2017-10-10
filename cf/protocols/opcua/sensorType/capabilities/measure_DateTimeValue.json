@@ -1,0 +1,10 @@
+{
+    "alternateId": "DateTimeValue",
+    "name": "DateTimeValue",
+    "properties": [
+        {
+            "dataType": "long",
+            "name": "DateTimeValue"
+        }
+    ]
+}
