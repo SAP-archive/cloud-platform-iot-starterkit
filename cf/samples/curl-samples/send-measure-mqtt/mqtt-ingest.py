@@ -33,7 +33,7 @@ client.connect(broker, broker_port, 60)
 client.loop_start()
 
 my_publish_topic='measures/' + my_device
-my_mqtt_payload='{ "measureIds" : [ ' + config_capability + ' ], "values" : [ "value for A", "value for B" ], "logNodeAddr":"' + config_alternate_id_sensor + '" }'
+my_mqtt_payload='{ "capabilityAlternateId" : ' + config_capability + ', "measures" : [ "value for A", "value for B" ], "sensorAlternateId":"' + config_alternate_id_sensor + '" }'
 
 interval=5
 while 1==1:

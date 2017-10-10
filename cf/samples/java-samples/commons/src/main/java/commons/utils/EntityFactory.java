@@ -20,15 +20,15 @@ public class EntityFactory {
 
 	public static final String HUMIDITY = "Humidity";
 
-	public static final String ROOM_HUMIDITY = "Room Humidity";
+	public static final String ROOM_HUMIDITY = "Room_Humidity";
 
-	public static final String HUMIDITY_SENSORS = "Humidity Sensors";
+	public static final String HUMIDITY_SENSORS = "Humidity_Sensors";
 
 	public static final String TEXT = "Text";
 
-	public static final String DISPLAY_TEXT = "Display Text";
+	public static final String DISPLAY_TEXT = "Display_Text";
 
-	public static final String DISPLAY_SENSORS = "Display Sensors";
+	public static final String DISPLAY_SENSORS = "Display_Sensors";
 
 	public static Device buildDevice(Gateway gateway) {
 		Device device = new Device();
@@ -70,9 +70,9 @@ public class EntityFactory {
 	public static Measure buildTemperatureMeasure(Sensor sensor, Capability capability) {
 		Measure measure = new Measure();
 
-		measure.setMeasureIds(new String[] { capability.getAlternateId() });
-		measure.setValues(new String[] { String.format("%.1f", buildDegreesCelsius()) });
-		measure.setLogNodeAddr(sensor.getAlternateId());
+		measure.setCapabilityAlternateId(capability.getAlternateId());
+		measure.setMeasures(new String[] { String.format("%.1f", buildDegreesCelsius()) });
+		measure.setSensorAlternateId(sensor.getAlternateId());
 
 		return measure;
 	}
@@ -80,9 +80,9 @@ public class EntityFactory {
 	public static Measure buildHumidityMeasure(Sensor sensor, Capability capability) {
 		Measure measure = new Measure();
 
-		measure.setMeasureIds(new String[] { capability.getAlternateId() });
-		measure.setValues(new String[] { String.valueOf(buildHumidityPercentage()) });
-		measure.setLogNodeAddr(sensor.getAlternateId());
+		measure.setCapabilityAlternateId(capability.getAlternateId());
+		measure.setMeasures(new String[] { String.valueOf(buildHumidityPercentage()) });
+		measure.setSensorAlternateId(sensor.getAlternateId());
 
 		return measure;
 	}
@@ -126,7 +126,7 @@ public class EntityFactory {
 		return command;
 	}
 
-	public static Command buildDisaplyTextCommand(Sensor sensor, Capability capability) {
+	public static Command buildDispalyTextCommand(Sensor sensor, Capability capability) {
 		Command command = new Command();
 
 		command.setCapabilityId(capability.getId());

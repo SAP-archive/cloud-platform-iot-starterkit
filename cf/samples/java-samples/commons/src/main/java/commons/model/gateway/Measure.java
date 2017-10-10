@@ -2,34 +2,34 @@ package commons.model.gateway;
 
 public class Measure {
 
-	private String[] measureIds;
+	private String capabilityAlternateId;
 
-	private String[] values;
+	private String[] measures;
 
-	private String logNodeAddr;
+	private String sensorAlternateId;
 
-	public String[] getMeasureIds() {
-		return measureIds;
+	public String getMeasureIds() {
+		return capabilityAlternateId;
 	}
 
-	public void setMeasureIds(String[] measureIds) {
-		this.measureIds = measureIds;
+	public void setCapabilityAlternateId(String capabilityAlternateId) {
+		this.capabilityAlternateId = capabilityAlternateId;
 	}
 
-	public String[] getValues() {
-		return values;
+	public String[] getMeasures() {
+		return measures;
 	}
 
-	public void setValues(String[] values) {
-		this.values = values;
+	public void setMeasures(String[] measures) {
+		this.measures = measures;
 	}
 
-	public String getLogNodeAddr() {
-		return logNodeAddr;
+	public String getSensorAlternateId() {
+		return sensorAlternateId;
 	}
 
-	public void setLogNodeAddr(String logNodeAddr) {
-		this.logNodeAddr = logNodeAddr;
+	public void setSensorAlternateId(String sensorAlternateId) {
+		this.sensorAlternateId = sensorAlternateId;
 	}
 
 }

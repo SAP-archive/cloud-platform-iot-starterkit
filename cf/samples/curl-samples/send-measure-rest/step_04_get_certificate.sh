@@ -5,7 +5,7 @@
 
 . ./config.sh
 
-export REQUEST_URL=https://${INSTANCE}/iot/core/api/v1/devices/${MY_DEVICE}/authentication/pem
+export REQUEST_URL=https://${INSTANCE}/iot/core/api/v1/devices/${MY_DEVICE}/authentications/clientCertificate/pem
 
 # echo "Request URL is: ${REQUEST_URL}"
 

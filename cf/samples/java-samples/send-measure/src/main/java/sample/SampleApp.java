@@ -18,7 +18,7 @@ import commons.model.Capability;
 import commons.model.CapabilityType;
 import commons.model.Device;
 import commons.model.Gateway;
-import commons.model.GatewayType;
+import commons.model.GatewayProtocol;
 import commons.model.Sensor;
 import commons.model.SensorType;
 import commons.model.SensorTypeCapability;
@@ -42,7 +42,7 @@ extends AbstractCoreServiceSample {
 	throws SampleException {
 		String deviceId = properties.getProperty(DEVICE_ID);
 		String sensorId = properties.getProperty(SENSOR_ID);
-		GatewayType gatewayType = GatewayType.fromValue(properties.getProperty(GATEWAY_TYPE));
+		GatewayProtocol gatewayType = GatewayProtocol.fromValue(properties.getProperty(GATEWAY_PROTOCOL_ID));
 
 		try {
 			printSeparator();
@@ -69,7 +69,7 @@ extends AbstractCoreServiceSample {
 
 			SSLSocketFactory sslSocketFactory = SecurityUtil.getSSLSocketFactory(device,
 				authentication);
-			gatewayCloud = GatewayType.REST.equals(gatewayType)
+			gatewayCloud = GatewayProtocol.REST.equals(gatewayType)
 				? new GatewayCloudHttp(device, sslSocketFactory)
 				: new GatewayCloudMqtt(device, sslSocketFactory);
 

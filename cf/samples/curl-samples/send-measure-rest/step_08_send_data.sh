@@ -4,7 +4,7 @@
 
 export REQUEST_URL=https://${INSTANCE}/iot/gateway/rest/measures/${ALTERNATE_ID_4_DEVICE}
 
-export PAYLOAD='{ "measureIds" : [ '${MY_CAPABILITY}' ], "values" : [ "value for A", "value for B" ], "logNodeAddr":"'${ALTERNATE_ID_4_SENSOR}'" }'
+export PAYLOAD='{ "capabilityAlternateId" : '${MY_CAPABILITY}', "measures" : [ "value for A", "value for B" ], "sensorAlternateId":"'${ALTERNATE_ID_4_SENSOR}'" }'
 
 # echo "Request URL is: ${REQUEST_URL}" 
 

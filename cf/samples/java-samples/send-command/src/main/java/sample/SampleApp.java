@@ -18,7 +18,7 @@ import commons.model.CapabilityType;
 import commons.model.Command;
 import commons.model.Device;
 import commons.model.Gateway;
-import commons.model.GatewayType;
+import commons.model.GatewayProtocol;
 import commons.model.Sensor;
 import commons.model.SensorType;
 import commons.model.SensorTypeCapability;
@@ -48,7 +48,7 @@ extends AbstractCoreServiceSample {
 		user = console.awaitNextLine(user, "Username (e.g. 'root'): ");
 		properties.setProperty(IOT_USER, user);
 
-		properties.setProperty(GATEWAY_TYPE, GatewayType.MQTT.getValue());
+		properties.setProperty(GATEWAY_PROTOCOL_ID, GatewayProtocol.MQTT.getValue());
 
 		String deviceId = properties.getProperty(DEVICE_ID);
 		deviceId = console.awaitNextLine(deviceId, "Device ID (e.g. '100'): ");
@@ -70,7 +70,7 @@ extends AbstractCoreServiceSample {
 	throws SampleException {
 		String deviceId = properties.getProperty(DEVICE_ID);
 		String sensorId = properties.getProperty(SENSOR_ID);
-		GatewayType gatewayType = GatewayType.fromValue(properties.getProperty(GATEWAY_TYPE));
+		GatewayProtocol gatewayType = GatewayProtocol.fromValue(properties.getProperty(GATEWAY_PROTOCOL_ID));
 
 		try {
 			printSeparator();
@@ -195,7 +195,7 @@ extends AbstractCoreServiceSample {
 
 			@Override
 			public void run() {
-				Command command = EntityFactory.buildDisaplyTextCommand(sensor, capability);
+				Command command = EntityFactory.buildDispalyTextCommand(sensor, capability);
 
 				try {
 					coreService.sendCommand(command, device);

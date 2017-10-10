@@ -6,7 +6,7 @@ public class Gateway {
 
 	private String name;
 
-	private GatewayType type;
+	private GatewayProtocol protocolId;
 
 	private GatewayStatus status;
 
@@ -20,8 +20,8 @@ public class Gateway {
 		return name;
 	}
 
-	public GatewayType getType() {
-		return type;
+	public GatewayProtocol getProtocolId() {
+		return protocolId;
 	}
 
 	public GatewayStatus getStatus() {
