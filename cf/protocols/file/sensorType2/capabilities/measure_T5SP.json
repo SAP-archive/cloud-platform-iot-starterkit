@@ -1,0 +1,10 @@
+{
+    "alternateId": "48",
+    "name": "T5SP",
+    "properties": [
+        {
+            "dataType": "integer",
+            "name": "T5SP"
+        }
+    ]
+}

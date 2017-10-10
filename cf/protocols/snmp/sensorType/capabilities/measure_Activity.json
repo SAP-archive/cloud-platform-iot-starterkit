@@ -1,0 +1,13 @@
+{
+    "alternateId": "24",
+    "name": "Activity",
+    "properties": [
+        {
+            "dataType": "integer",
+            "formatter": {
+                "swap": true
+            },
+            "name": "Activity"
+        }
+    ]
+}

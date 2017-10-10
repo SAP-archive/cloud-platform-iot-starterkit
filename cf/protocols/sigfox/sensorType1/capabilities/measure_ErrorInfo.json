@@ -1,0 +1,13 @@
+{
+    "alternateId": "5",
+    "name": "ErrorInfo",
+    "properties": [
+        {
+            "dataType": "string",
+            "formatter": {
+                "swap": true
+            },
+            "name": "ErrorInfo"
+        }
+    ]
+}

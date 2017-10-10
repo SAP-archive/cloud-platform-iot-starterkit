@@ -1,0 +1,10 @@
+{
+    "alternateId": "18",
+    "name": "Vehicles Status",
+    "properties": [
+        {
+            "dataType": "float",
+            "name": "Vehicles Status"
+        }
+    ]
+}

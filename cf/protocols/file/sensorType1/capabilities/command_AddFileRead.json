@@ -1,0 +1,30 @@
+{
+    "alternateId": "26",
+    "name": "AddFileRead",
+    "properties": [
+        {
+            "dataType": "string",
+            "name": "filePath"
+        },
+        {
+            "dataType": "string",
+            "name": "mode"
+        },
+        {
+            "dataType": "long",
+            "name": "interval"
+        },
+        {
+            "dataType": "string",
+            "name": "schemaName"
+        },
+        {
+            "dataType": "string",
+            "name": "deviceAddress"
+        },
+        {
+            "dataType": "string",
+            "name": "backupFolder"
+        }
+    ]
+}

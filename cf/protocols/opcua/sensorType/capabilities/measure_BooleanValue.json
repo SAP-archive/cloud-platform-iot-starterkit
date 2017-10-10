@@ -1,0 +1,10 @@
+{
+    "alternateId": "BooleanValue",
+    "name": "BooleanValue",
+    "properties": [
+        {
+            "dataType": "boolean",
+            "name": "BooleanValue"
+        }
+    ]
+}

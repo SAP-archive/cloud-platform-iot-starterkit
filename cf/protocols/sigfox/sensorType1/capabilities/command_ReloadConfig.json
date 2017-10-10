@@ -1,0 +1,10 @@
+{
+    "alternateId": "30",
+    "name": "ReloadConfig",
+    "properties": [
+        {
+            "dataType": "boolean",
+            "name": "reloadCallbackServer"
+        }
+    ]
+}

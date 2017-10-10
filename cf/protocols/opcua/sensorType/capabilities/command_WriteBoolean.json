@@ -1,0 +1,10 @@
+{
+    "alternateId": "WriteBoolean",
+    "name": "WriteBoolean",
+    "properties": [
+        {
+            "dataType": "boolean",
+            "name": "value"
+        }
+    ]
+}

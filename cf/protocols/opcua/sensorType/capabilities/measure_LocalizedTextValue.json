@@ -1,0 +1,10 @@
+{
+    "alternateId": "LocalizedTextValue",
+    "name": "LocalizedTextValue",
+    "properties": [
+        {
+            "dataType": "string",
+            "name": "LocalizedTextValue"
+        }
+    ]
+}

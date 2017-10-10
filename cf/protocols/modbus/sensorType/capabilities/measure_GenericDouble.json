@@ -1,0 +1,10 @@
+{
+    "alternateId": "50",
+    "name": "GenericDouble",
+    "properties": [
+        {
+            "dataType": "double",
+            "name": "GenericDouble"
+        }
+    ]
+}

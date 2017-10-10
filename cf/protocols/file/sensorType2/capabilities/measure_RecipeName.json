@@ -1,0 +1,10 @@
+{
+    "alternateId": "7",
+    "name": "RecipeName",
+    "properties": [
+        {
+            "dataType": "string",
+            "name": "RecipeName"
+        }
+    ]
+}

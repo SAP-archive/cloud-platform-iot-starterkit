@@ -1,0 +1,15 @@
+{
+    "alternateId": "1",
+    "name": "Temperature",
+    "properties": [
+        {
+            "dataType": "float",
+            "formatter": {
+                "scale": -2,
+                "swap": true
+            },
+            "name": "Temperature",
+            "unitOfMeasure": "°C"
+        }
+    ]
+}

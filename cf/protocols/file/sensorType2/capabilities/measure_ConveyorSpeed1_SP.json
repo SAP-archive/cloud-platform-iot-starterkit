@@ -1,0 +1,10 @@
+{
+    "alternateId": "8",
+    "name": "ConveyorSpeed1_SP",
+    "properties": [
+        {
+            "dataType": "float",
+            "name": "ConveyorSpeed1_SP"
+        }
+    ]
+}

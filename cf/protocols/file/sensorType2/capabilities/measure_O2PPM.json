@@ -1,0 +1,11 @@
+{
+    "alternateId": "5",
+    "name": "O2PPM",
+    "properties": [
+        {
+            "dataType": "float",
+            "name": "O2PPM",
+            "unitOfMeasure": "ppm"
+        }
+    ]
+}

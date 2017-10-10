@@ -1,0 +1,10 @@
+{
+    "alternateId": "StringValue",
+    "name": "StringValue",
+    "properties": [
+        {
+            "dataType": "string",
+            "name": "StringValue"
+        }
+    ]
+}

@@ -1,0 +1,26 @@
+{
+    "alternateId": "50",
+    "name": "RegisterDevice",
+    "properties": [
+        {
+            "dataType": "string",
+            "name": "deviceTypeId"
+        },
+        {
+            "dataType": "string",
+            "name": "prefix"
+        },
+        {
+            "dataType": "string",
+            "name": "productCertificate"
+        },
+        {
+            "dataType": "string",
+            "name": "id"
+        },
+        {
+            "dataType": "string",
+            "name": "pac"
+        }
+    ]
+}

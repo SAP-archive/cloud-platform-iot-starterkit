@@ -1,0 +1,14 @@
+{
+    "alternateId": "21",
+    "name": "Heart Rate",
+    "properties": [
+        {
+            "dataType": "integer",
+            "formatter": {
+                "swap": true
+            },
+            "name": "Heart Rate",
+            "unitOfMeasure": "beats/minute"
+        }
+    ]
+}

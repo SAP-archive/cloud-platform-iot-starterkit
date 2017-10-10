@@ -1,0 +1,14 @@
+{
+    "alternateId": "5",
+    "name": "Battery Percentage",
+    "properties": [
+        {
+            "dataType": "integer",
+            "formatter": {
+                "swap": true
+            },
+            "name": "Battery Percentage",
+            "unitOfMeasure": "%"
+        }
+    ]
+}

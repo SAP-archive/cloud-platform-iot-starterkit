@@ -1,0 +1,10 @@
+{
+    "alternateId": "15",
+    "name": "Notify Device",
+    "properties": [
+        {
+            "dataType": "string",
+            "name": "NotificationText"
+        }
+    ]
+}

@@ -1,0 +1,10 @@
+{
+    "alternateId": "3",
+    "name": "EndOfBatch",
+    "properties": [
+        {
+            "dataType": "string",
+            "name": "EndOfBatch"
+        }
+    ]
+}

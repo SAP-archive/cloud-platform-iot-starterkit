@@ -1,0 +1,14 @@
+{
+    "alternateId": "23",
+    "name": "Steps",
+    "properties": [
+        {
+            "dataType": "integer",
+            "formatter": {
+                "swap": true
+            },
+            "name": "Steps",
+            "unitOfMeasure": "steps/minute"
+        }
+    ]
+}

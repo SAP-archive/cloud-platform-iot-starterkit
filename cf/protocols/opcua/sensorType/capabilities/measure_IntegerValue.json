@@ -1,0 +1,10 @@
+{
+    "alternateId": "IntegerValue",
+    "name": "IntegerValue",
+    "properties": [
+        {
+            "dataType": "integer",
+            "name": "IntegerValue"
+        }
+    ]
+}

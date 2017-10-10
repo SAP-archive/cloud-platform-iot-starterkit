@@ -1,0 +1,11 @@
+{
+    "alternateId": "30",
+    "name": "CPU load",
+    "properties": [
+        {
+            "dataType": "integer",
+            "name": "CPU load",
+            "unitOfMeasure": "%"
+        }
+    ]
+}

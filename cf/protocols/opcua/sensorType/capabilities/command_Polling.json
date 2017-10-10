@@ -1,0 +1,10 @@
+{
+    "alternateId": "Polling",
+    "name": "Polling",
+    "properties": [
+        {
+            "dataType": "integer",
+            "name": "pollingInterval"
+        }
+    ]
+}

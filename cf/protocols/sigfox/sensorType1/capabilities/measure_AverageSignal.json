@@ -1,0 +1,13 @@
+{
+    "alternateId": "3",
+    "name": "AverageSignal",
+    "properties": [
+        {
+            "dataType": "float",
+            "formatter": {
+                "swap": true
+            },
+            "name": "AverageSignal"
+        }
+    ]
+}

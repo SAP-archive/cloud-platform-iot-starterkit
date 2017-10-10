@@ -1,0 +1,10 @@
+{
+    "alternateId": "2",
+    "name": "StartOfBatch",
+    "properties": [
+        {
+            "dataType": "string",
+            "name": "StartOfBatch"
+        }
+    ]
+}
