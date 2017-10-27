@@ -7,7 +7,7 @@
             "formatter": {
                 "swap": true
             },
-            "name": "Position",
+            "name": "PositionX",
             "unitOfMeasure": "[x]"
         },
         {
@@ -15,7 +15,7 @@
             "formatter": {
                 "swap": true
             },
-            "name": "Position",
+            "name": "PositionY",
             "unitOfMeasure": "[y]"
         },
         {
@@ -23,7 +23,7 @@
             "formatter": {
                 "swap": true
             },
-            "name": "Position",
+            "name": "PositionZ",
             "unitOfMeasure": "[z]"
         }
     ]
