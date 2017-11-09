@@ -16,6 +16,7 @@ import java.security.PrivateKey;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 import java.security.spec.KeySpec;
+import java.util.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.EncryptedPrivateKeyInfo;
@@ -27,8 +28,8 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import javax.xml.bind.DatatypeConverter;
 
+import commons.connectivity.AbstractClient;
 import commons.model.Authentication;
 import commons.model.Device;
 
@@ -76,7 +77,7 @@ public class SecurityUtil {
 		PrivateKey privateKey = decryptPrivateKey(encryptedPrivateKey, secret);
 
 		ByteArrayInputStream is = new ByteArrayInputStream(
-			DatatypeConverter.parseBase64Binary(pem));
+			Base64.getMimeDecoder().decode(pem.getBytes(AbstractClient.ENCODING)));
 
 		Certificate certificate;
 		try {
@@ -133,7 +134,8 @@ public class SecurityUtil {
 	private static PrivateKey decryptPrivateKey(String encryptedPrivateKey, String secret)
 	throws GeneralSecurityException, IOException {
 
-		byte[] encodedPrivateKey = DatatypeConverter.parseBase64Binary(encryptedPrivateKey);
+		byte[] encodedPrivateKey = Base64.getMimeDecoder()
+			.decode(encryptedPrivateKey.getBytes(AbstractClient.ENCODING));
 
 		EncryptedPrivateKeyInfo encryptPKInfo = new EncryptedPrivateKeyInfo(encodedPrivateKey);
 		Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
