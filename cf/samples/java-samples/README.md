@@ -2,6 +2,11 @@
 
 Contains various Java samples which illustrate the API usage across different use cases.
 
+### Prerequisites
+
+* Maven
+* JDK 1.8 or higher
+
 >IMPORTANT: After the very first import from GitHub, ensure to run `mvn clean install` for the current reactor project in order to build [commons](./commons) - a Maven module containing generic logic which is used by the provided samples.
 
 ## Upstream. Sending measures from the device.
