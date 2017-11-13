@@ -1,5 +1,5 @@
 # SAP Internet of Things for the Cloud Foundry Environment
-A sample Java application which is capable to send Display Text commands to the Device connected over MQTT and listen to them at the same time. 
+A sample Java application which is capable to send Switch commands to the Device connected over MQTT and listen to them at the same time. 
 
 ## Import project
 This sample application is provided as Maven project and could be imported to IDE with the help of respective plug-in or Maven command line interface.
@@ -27,7 +27,7 @@ The following steps are being performed during execution:
 1. Get online MQTT gateway.
     ```
     Authorization: Basic <base64-encoded credentials>
-    GET https://%iot.host%:443/iot/core/api/v1/gateways
+    GET https://%iot.host%:443/iot/core/api/v1/gateways?filter=protocolId eq 'mqtt' and status eq 'online'
     ```
 2. Get online device by its identifier.
     ```
@@ -40,80 +40,121 @@ The following steps are being performed during execution:
 	    POST https://%iot.host%:443/iot/core/api/v1/devices  
 	    {
 		    "gatewayId" : "%gateway.id%",
-		    "name" : "%random.device.name%"
+		    "name" : "SampleDevice"
 	    }
 	    ```
-3. Check if custom "Display_Text" capability exists.
+3. Check if custom "Switch" capability exists.
     ```
     Authorization: Basic <base64-encoded credentials>
     GET https://%iot.host%:443/iot/core/api/v1/capabilities
     ```
-	1. Create "Display_Text" capability if not found.
+	1. Create "Switch" capability if not found.
 	    ```
 	    Authorization: Basic <base64-encoded credentials>
 	    POST https://%iot.host%:443/iot/core/api/v1/capabilities  
 	    {
-		    "name" : "Display_Text",
+	    	"alternateId" : "switchSample",
+		    "name" : "Switch",
 		    "properties" : [
 			    {
-				    "name" : "Text",
+				    "name" : "text",
 				    "dataType" : "string"
+			    },
+			    {
+				    "name" : "LED",
+				    "dataType" : "boolean"
 			    }
 		    ]
 	    }
 	    ```
-4. Check if custom "Display_Sensors" sensor type exists.
+4. Check if custom "Ambient" capability exists.
+    ```
+    Authorization: Basic <base64-encoded credentials>
+    GET https://%iot.host%:443/iot/core/api/v1/capabilities
+    ```
+	1. Create "Ambient" capability if not found.
+	    ```
+	    Authorization: Basic <base64-encoded credentials>
+	    POST https://%iot.host%:443/iot/core/api/v1/capabilities  
+	    {
+		    "alternateId" : "ambientSample",
+		    "name" : "Ambient",
+		    "properties" : [
+			    {
+				    "name" : "humidity",
+				    "dataType" : "integer",
+				    "unitOfMeasure" : "%"
+			    },
+			    {
+				    "name" : "temperature",
+				    "dataType" : "float",
+				    "unitOfMeasure" : "°C"
+			    },
+			    {
+				    "name" : "light",
+				    "dataType" : "integer",
+				    "unitOfMeasure" : "Lux"
+			    }
+		    ]
+	    }
+	    ```
+5. Check if custom "SensorTypeSample" sensor type exists.
     ```
     Authorization: Basic <base64-encoded credentials>
     GET https://%iot.host%:443/iot/core/api/v1/sensorTypes
     ```
-	1. Create "Display_Sensors" sensor type if not found.
+	1. Create "SensorTypeSample" sensor type if not found.
 	    ```
 	    Authorization: Basic <base64-encoded credentials>
 	    POST https://%iot.host%:443/iot/core/api/v1/sensorTypes  
 	    {
-		    "name" : "Display_Sensors",
+		    "name" : "SensorTypeSample",
 		    "capabilities" : [
 			    {
-				    "id" : "%display.text.capability.id%",
+				    "id" : "%ambient.capability.id%",
+				    "type" : "measure"
+			    },
+			    {
+				    "id" : "%switch.capability.id%",
 				    "type" : "command"
 			    }
 		    ]
 	    }
 	    ```
-5. Get device sensor by its identifier which is assigned to the device.
+6. Get device sensor by its identifier which is assigned to the device.
 	1. Create a new sensor and assign it to the device if no sensor is assigned to the device or a sensor has no reference to the default sensor type.
 	    ```
 	    Authorization: Basic <base64-encoded credentials>
 	    POST https://%iot.host%:443/iot/core/api/v1/sensors  
 	    {
 		    "deviceId" : "%device.id%",
-		    "sensorTypeId" : "0",
-		    "name" : "%random.sensor.name%"
+		    "sensorTypeId" : "%sensor.type.id%",
+		    "name" : "SampleSensor"
 	    }
 	    ```
-	    >Note: A new sensor will be mapped to the custom "Display_Sensors" Sensor Type.
-6. Get device PEM-certificate.
+	    >Note: A new sensor will be mapped to the custom "SensorTypeSample" Sensor Type.
+7. Get device PEM-certificate.
     ```
     Authorization: Basic <base64-encoded credentials>
     GET https://%iot.host%:443/iot/core/api/v1/devices/%device.id%/authentications/clientCertificate/pem
     ```
-7. Create Java SSL context based on the PEM certificate.
-8. As a device, subscribe for incoming commands over MQTT.
+8. Create Java SSL context based on the PEM certificate.
+9. As a device, subscribe for incoming commands over MQTT.
     ```
     SUBSCRIBE ssl://%iot.host%:8883 on topic 'commands/%device.alternate.id%'  
     ```
     >Note: A subscription is going to be terminated automatically after 20 seconds.
 
-9. Send Display Text commands containing "Hello IoT" text to the the device.
+10. Send Switch commands to the device.
     ```
     Authorization: Basic <base64-encoded credentials>
     POST https://%iot.host%:443/iot/core/api/v1/devices/%device.id%/commands
     {
-	    "capabilityId" : "%display.text.capability.id%",
+	    "capabilityId" : "%switch.capability.id%",
 	    "sensorId" : "%sensor.id%",
         "command" : {
-	       "Text" : "Hello IoT"
+	       "text" : "%random.text%",
+	       "LED" : "true | false"
 	    }
     }
     ```

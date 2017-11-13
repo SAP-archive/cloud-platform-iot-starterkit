@@ -207,7 +207,7 @@ extends AbstractClient {
 		int code = connection.getResponseCode();
 
 		InputStream stream;
-		if (code < HttpURLConnection.HTTP_OK || code >= HttpURLConnection.HTTP_MOVED_PERM) {
+		if (code < HttpURLConnection.HTTP_OK || code >= HttpURLConnection.HTTP_MULT_CHOICE) {
 			stream = connection.getErrorStream();
 		}
 		else {

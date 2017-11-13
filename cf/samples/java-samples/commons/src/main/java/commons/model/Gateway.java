@@ -32,4 +32,10 @@ public class Gateway {
 		return creationTimestamp;
 	}
 
+	@Override
+	public String toString() {
+		return "Gateway [id=" + id + ", name=" + name + ", protocolId=" + protocolId + ", status=" +
+			status + ", creationTimestamp=" + creationTimestamp + "]";
+	}
+
 }

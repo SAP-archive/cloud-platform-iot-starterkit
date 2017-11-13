@@ -15,13 +15,11 @@ import commons.api.GatewayCloudHttp;
 import commons.api.GatewayCloudMqtt;
 import commons.model.Authentication;
 import commons.model.Capability;
-import commons.model.CapabilityType;
 import commons.model.Device;
 import commons.model.Gateway;
 import commons.model.GatewayProtocol;
 import commons.model.Sensor;
 import commons.model.SensorType;
-import commons.model.SensorTypeCapability;
 import commons.model.gateway.Measure;
 import commons.utils.EntityFactory;
 import commons.utils.SecurityUtil;
@@ -33,7 +31,7 @@ extends AbstractCoreServiceSample {
 
 	@Override
 	protected String getDescription() {
-		return "Send humidity measures on behalf of the sensor attached to the device" +
+		return "Send ambient measures on behalf of the sensor attached to the device" +
 			" and consume them later on via the API";
 	}
 
@@ -42,12 +40,13 @@ extends AbstractCoreServiceSample {
 	throws SampleException {
 		String deviceId = properties.getProperty(DEVICE_ID);
 		String sensorId = properties.getProperty(SENSOR_ID);
-		GatewayProtocol gatewayType = GatewayProtocol.fromValue(properties.getProperty(GATEWAY_PROTOCOL_ID));
+		GatewayProtocol gatewayProtocol = GatewayProtocol
+			.fromValue(properties.getProperty(GATEWAY_PROTOCOL_ID));
 
 		try {
 			printSeparator();
 
-			Gateway gateway = coreService.getOnlineGateway(gatewayType);
+			Gateway gateway = coreService.getOnlineCloudGateway(gatewayProtocol);
 
 			printSeparator();
 
@@ -55,11 +54,17 @@ extends AbstractCoreServiceSample {
 
 			printSeparator();
 
-			Capability capability = getOrAddHumidityCapability();
+			Capability measureCapability = getOrAddCapability(
+				EntityFactory.buildAmbientCapability());
 
 			printSeparator();
 
-			SensorType sensorType = getOrAddHumiditySensorType(capability);
+			Capability commandCapability = getOrAddCapability(
+				EntityFactory.buildSwitchCapability());
+
+			printSeparator();
+
+			SensorType sensorType = getOrAddSensorType(measureCapability, commandCapability);
 
 			Sensor sensor = getOrAddSensor(sensorId, device, sensorType);
 
@@ -69,70 +74,22 @@ extends AbstractCoreServiceSample {
 
 			SSLSocketFactory sslSocketFactory = SecurityUtil.getSSLSocketFactory(device,
 				authentication);
-			gatewayCloud = GatewayProtocol.REST.equals(gatewayType)
+			gatewayCloud = GatewayProtocol.REST.equals(gatewayProtocol)
 				? new GatewayCloudHttp(device, sslSocketFactory)
 				: new GatewayCloudMqtt(device, sslSocketFactory);
 
 			printSeparator();
 
-			sendMeasures(sensor, capability);
+			sendAmbientMeasures(sensor, measureCapability);
 
-			receiveMeasures(device, capability);
+			receiveMeasures(device, measureCapability, 25);
 		}
 		catch (IOException | GeneralSecurityException | IllegalStateException e) {
 			throw new SampleException(e.getMessage());
 		}
 	}
 
-	private Capability getOrAddHumidityCapability()
-	throws IOException {
-		Capability[] capabilities = coreService.getCapabilities();
-		for (Capability nextCapability : capabilities) {
-			if (EntityFactory.ROOM_HUMIDITY.equals(nextCapability.getName())) {
-				return nextCapability;
-			}
-		}
-
-		printWarning(String.format("No '%1$s' Capability found", EntityFactory.ROOM_HUMIDITY));
-
-		printSeparator();
-
-		Capability templateCapability = EntityFactory.buildHumidityCapability();
-		Capability capability = coreService.addCapability(templateCapability);
-
-		printNewLine();
-		printProperty(CAPABILITY_ID, capability.getId());
-
-		return capability;
-	}
-
-	private SensorType getOrAddHumiditySensorType(Capability capability)
-	throws IOException {
-		SensorType[] sensorTypes = coreService.getSensorTypes();
-		for (SensorType nextSensorType : sensorTypes) {
-			if (EntityFactory.HUMIDITY_SENSORS.equals(nextSensorType.getName())) {
-				return nextSensorType;
-			}
-		}
-
-		printWarning(String.format("No '%1$s' Sensor Type found", EntityFactory.HUMIDITY_SENSORS));
-
-		printSeparator();
-
-		SensorTypeCapability sensorTypeCapability = new SensorTypeCapability();
-		sensorTypeCapability.setId(capability.getId());
-		sensorTypeCapability.setType(CapabilityType.MEASURE);
-
-		SensorType templateSensorType = EntityFactory.buildHumiditySensorType(sensorTypeCapability);
-		SensorType sensorType = coreService.addSensorType(templateSensorType);
-
-		printNewLine();
-		printProperty(SENSOR_TYPE_ID, capability.getId());
-
-		return sensorType;
-	}
-
-	private void sendMeasures(final Sensor sensor, final Capability capability)
+	private void sendAmbientMeasures(final Sensor sensor, final Capability capability)
 	throws IOException {
 		String host = properties.getProperty(IOT_HOST);
 
@@ -148,7 +105,7 @@ extends AbstractCoreServiceSample {
 
 			@Override
 			public void run() {
-				Measure measure = EntityFactory.buildHumidityMeasure(sensor, capability);
+				Measure measure = EntityFactory.buildAmbientMeasure(sensor, capability);
 
 				try {
 					gatewayCloud.send(measure, Measure.class);
