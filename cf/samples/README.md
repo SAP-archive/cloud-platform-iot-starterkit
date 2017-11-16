@@ -4,3 +4,4 @@ This directory holds samples that can be used with the SAP Cloud Platform Intern
 
 * [Java](./java-samples)
 * [curl](./curl-samples)
+* [Python](./python-samples)
