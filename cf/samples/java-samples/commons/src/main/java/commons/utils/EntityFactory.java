@@ -22,18 +22,18 @@ public class EntityFactory {
 	private static final String SAMPLE_SENSOR_NAME = "SampleSensor";
 	private static final String SAMPLE_DEVICE_NAME = "SampleDevice";
 
-	private static final String SAMPLE_SENSOR_TYPE_NAME = "SensorTypeSample";
+	private static final String CONTROL_UNIT_SENSOR_TYPE_NAME = "ControlUnit";
 
-	private static final String AMBIENT_CAPABILITY_ALTERNATE_ID = "ambientSample";
-	private static final String SWITCH_CAPABILITY_ALTERNATE_ID = "switchSample";
+	private static final String AMBIENT_CAPABILITY_ALTERNATE_ID = "ambient";
+	private static final String SWITCH_CAPABILITY_ALTERNATE_ID = "switch";
 
 	private static final String AMBIENT_CAPABILITY_NAME = "Ambient";
 	private static final String SWITCH_CAPABILITY_NAME = "Switch";
 
-	private static final String HUMIDITY_PROPERTY_NAME = "humidity";
-	private static final String TEMPERATURE_PROPERTY_NAME = "temperature";
-	private static final String LIGHT_PROPERTY_NAME = "light";
-	private static final String TEXT_PROPERTY_NAME = "text";
+	private static final String HUMIDITY_PROPERTY_NAME = "Humidity";
+	private static final String TEMPERATURE_PROPERTY_NAME = "Temperature";
+	private static final String LIGHT_PROPERTY_NAME = "Light";
+	private static final String TEXT_PROPERTY_NAME = "Text";
 	private static final String LED_PROPERTY_NAME = "LED";
 
 	private static final String HUMIDITY_PROPERTY_UOM = "%";
@@ -90,7 +90,7 @@ public class EntityFactory {
 		Capability commandCapability) {
 		SensorType sensorType = new SensorType();
 
-		sensorType.setName(SAMPLE_SENSOR_TYPE_NAME);
+		sensorType.setName(CONTROL_UNIT_SENSOR_TYPE_NAME);
 
 		SensorTypeCapability measure = new SensorTypeCapability();
 		measure.setId(measureCapability.getId());

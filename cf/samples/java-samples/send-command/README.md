@@ -53,11 +53,11 @@ The following steps are being performed during execution:
 	    Authorization: Basic <base64-encoded credentials>
 	    POST https://%iot.host%:443/iot/core/api/v1/capabilities  
 	    {
-	    	"alternateId" : "switchSample",
+		    "alternateId" : "switch",
 		    "name" : "Switch",
 		    "properties" : [
 			    {
-				    "name" : "text",
+				    "name" : "Text",
 				    "dataType" : "string"
 			    },
 			    {
@@ -77,38 +77,38 @@ The following steps are being performed during execution:
 	    Authorization: Basic <base64-encoded credentials>
 	    POST https://%iot.host%:443/iot/core/api/v1/capabilities  
 	    {
-		    "alternateId" : "ambientSample",
+		    "alternateId" : "ambient",
 		    "name" : "Ambient",
 		    "properties" : [
 			    {
-				    "name" : "humidity",
+				    "name" : "Humidity",
 				    "dataType" : "integer",
 				    "unitOfMeasure" : "%"
 			    },
 			    {
-				    "name" : "temperature",
+				    "name" : "Temperature",
 				    "dataType" : "float",
 				    "unitOfMeasure" : "°C"
 			    },
 			    {
-				    "name" : "light",
+				    "name" : "Light",
 				    "dataType" : "integer",
 				    "unitOfMeasure" : "Lux"
 			    }
 		    ]
 	    }
 	    ```
-5. Check if custom "SensorTypeSample" sensor type exists.
+5. Check if custom "ControlUnit" sensor type exists.
     ```
     Authorization: Basic <base64-encoded credentials>
     GET https://%iot.host%:443/iot/core/api/v1/sensorTypes
     ```
-	1. Create "SensorTypeSample" sensor type if not found.
+	1. Create "ControlUnit" sensor type if not found.
 	    ```
 	    Authorization: Basic <base64-encoded credentials>
 	    POST https://%iot.host%:443/iot/core/api/v1/sensorTypes  
 	    {
-		    "name" : "SensorTypeSample",
+		    "name" : "ControlUnit",
 		    "capabilities" : [
 			    {
 				    "id" : "%ambient.capability.id%",
@@ -122,7 +122,7 @@ The following steps are being performed during execution:
 	    }
 	    ```
 6. Get device sensor by its identifier which is assigned to the device.
-	1. Create a new sensor and assign it to the device if no sensor is assigned to the device or a sensor has no reference to the default sensor type.
+	1. Create a new sensor and assign it to the device if no sensor is assigned to the device or a sensor has no reference to the "ControlUnit" sensor type.
 	    ```
 	    Authorization: Basic <base64-encoded credentials>
 	    POST https://%iot.host%:443/iot/core/api/v1/sensors  
@@ -132,7 +132,7 @@ The following steps are being performed during execution:
 		    "name" : "SampleSensor"
 	    }
 	    ```
-	    >Note: A new sensor will be mapped to the custom "SensorTypeSample" Sensor Type.
+	    >Note: A new sensor will be mapped to the custom "ControlUnit" Sensor Type.
 7. Get device PEM-certificate.
     ```
     Authorization: Basic <base64-encoded credentials>
@@ -153,7 +153,7 @@ The following steps are being performed during execution:
 	    "capabilityId" : "%switch.capability.id%",
 	    "sensorId" : "%sensor.id%",
         "command" : {
-	       "text" : "%random.text%",
+	       "Text" : "%random.text%",
 	       "LED" : "true | false"
 	    }
     }
