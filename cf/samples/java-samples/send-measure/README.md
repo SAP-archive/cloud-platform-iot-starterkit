@@ -84,7 +84,7 @@ The following steps are being performed during execution:
 	    Authorization: Basic <base64-encoded credentials>
 	    POST https://%iot.host%:443/iot/core/api/v1/capabilities  
 	    {
-	    	"alternateId" : "switch",
+		    "alternateId" : "switch",
 		    "name" : "Switch",
 		    "properties" : [
 			    {
