@@ -11,8 +11,8 @@ Contains various Java samples which illustrate the API usage across different us
 
 ## Upstream. Sending measures from the device.
 
-* [Model "Humidity" measure and send its values either through HTTP or MQTT to the Gateway as well as consume them later on via the API](./send-measure)
+* [Model "Ambient" measure and send its values either through HTTP or MQTT to the Gateway as well as consume them later on via the API](./send-measure)
 
 ## Downstream. Sending commands to the device.
 
-* [Model "Display Text" command and send it to the device as well as listen to incoming commands on the device side](./send-command)
+* [Model "Switch" command and send it to the device as well as listen to incoming commands on the device side](./send-command)

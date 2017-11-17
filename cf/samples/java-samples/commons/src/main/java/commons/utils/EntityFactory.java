@@ -1,11 +1,12 @@
 package commons.utils;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
 import commons.model.Capability;
+import commons.model.CapabilityType;
 import commons.model.Command;
 import commons.model.Device;
 import commons.model.Gateway;
@@ -18,131 +19,159 @@ import commons.model.gateway.Measure;
 
 public class EntityFactory {
 
-	public static final String HUMIDITY = "Humidity";
+	private static final String SAMPLE_SENSOR_NAME = "SampleSensor";
+	private static final String SAMPLE_DEVICE_NAME = "SampleDevice";
 
-	public static final String ROOM_HUMIDITY = "Room_Humidity";
+	private static final String CONTROL_UNIT_SENSOR_TYPE_NAME = "ControlUnit";
 
-	public static final String HUMIDITY_SENSORS = "Humidity_Sensors";
+	private static final String AMBIENT_CAPABILITY_ALTERNATE_ID = "ambient";
+	private static final String SWITCH_CAPABILITY_ALTERNATE_ID = "switch";
 
-	public static final String TEXT = "Text";
+	private static final String AMBIENT_CAPABILITY_NAME = "Ambient";
+	private static final String SWITCH_CAPABILITY_NAME = "Switch";
 
-	public static final String DISPLAY_TEXT = "Display_Text";
+	private static final String HUMIDITY_PROPERTY_NAME = "Humidity";
+	private static final String TEMPERATURE_PROPERTY_NAME = "Temperature";
+	private static final String LIGHT_PROPERTY_NAME = "Light";
+	private static final String TEXT_PROPERTY_NAME = "Text";
+	private static final String LED_PROPERTY_NAME = "LED";
 
-	public static final String DISPLAY_SENSORS = "Display_Sensors";
+	private static final String HUMIDITY_PROPERTY_UOM = "%";
+	private static final String TEMPERATURE_PROPERTY_UOM = "°C";
+	private static final String LIGHT_PROPERTY_UOM = "Lux";
 
-	public static Device buildDevice(Gateway gateway) {
-		Device device = new Device();
+	public static Measure buildAmbientMeasure(Sensor sensor, Capability capability) {
+		Measure measure = new Measure();
 
-		device.setGatewayId(gateway.getId());
-		device.setName("device-".concat(buildString()));
+		measure.setCapabilityAlternateId(capability.getAlternateId());
+		measure.setSensorAlternateId(sensor.getAlternateId());
+		measure.setMeasures(new String[][] { { String.valueOf(buildHumidityPercentage()),
+			String.format("%.1f", buildDegreesCelsius()),
+			String.valueOf(buildLightIlluminance()) } });
 
-		return device;
+		return measure;
 	}
 
-	public static Sensor buildSensor(Device device, SensorType sensorType) {
+	public static Command buildSwitchCommand(Sensor sensor, Capability capability) {
+		Command command = new Command();
+
+		command.setCapabilityId(capability.getId());
+		command.setSensorId(sensor.getId());
+
+		Map<String, Object> properties = new LinkedHashMap<>();
+		properties.put(TEXT_PROPERTY_NAME, buildTextValue());
+		properties.put(LED_PROPERTY_NAME, buildLEDValue());
+
+		command.setProperties(properties);
+
+		return command;
+	}
+
+	public static Sensor buildSampleSensor(Device device, SensorType sensorType) {
 		Sensor sensor = new Sensor();
 
 		sensor.setDeviceId(device.getId());
 		sensor.setSensorTypeId(sensorType.getId());
-		sensor.setName("sensor-".concat(buildString()));
+		sensor.setName(SAMPLE_SENSOR_NAME);
 
 		return sensor;
 	}
 
-	public static SensorType buildHumiditySensorType(SensorTypeCapability sensorTypeCapability) {
+	public static Device buildSampleDevice(Gateway gateway) {
+		Device device = new Device();
+
+		device.setGatewayId(gateway.getId());
+		device.setName(SAMPLE_DEVICE_NAME);
+
+		return device;
+	}
+
+	public static SensorType buildSampleSensorType(Capability measureCapability,
+		Capability commandCapability) {
 		SensorType sensorType = new SensorType();
 
-		sensorType.setName(HUMIDITY_SENSORS);
-		sensorType.setCapabilities(new SensorTypeCapability[] { sensorTypeCapability });
+		sensorType.setName(CONTROL_UNIT_SENSOR_TYPE_NAME);
+
+		SensorTypeCapability measure = new SensorTypeCapability();
+		measure.setId(measureCapability.getId());
+		measure.setType(CapabilityType.MEASURE);
+
+		SensorTypeCapability command = new SensorTypeCapability();
+		command.setId(commandCapability.getId());
+		command.setType(CapabilityType.COMMAND);
+
+		sensorType.setCapabilities(new SensorTypeCapability[] { measure, command });
 
 		return sensorType;
 	}
 
-	public static SensorType buildDisplayTextSensorType(SensorTypeCapability sensorTypeCapability) {
-		SensorType sensorType = new SensorType();
-
-		sensorType.setName(DISPLAY_SENSORS);
-		sensorType.setCapabilities(new SensorTypeCapability[] { sensorTypeCapability });
-
-		return sensorType;
-	}
-
-	public static Measure buildTemperatureMeasure(Sensor sensor, Capability capability) {
-		Measure measure = new Measure();
-
-		measure.setCapabilityAlternateId(capability.getAlternateId());
-		measure.setMeasures(new String[] { String.format("%.1f", buildDegreesCelsius()) });
-		measure.setSensorAlternateId(sensor.getAlternateId());
-
-		return measure;
-	}
-
-	public static Measure buildHumidityMeasure(Sensor sensor, Capability capability) {
-		Measure measure = new Measure();
-
-		measure.setCapabilityAlternateId(capability.getAlternateId());
-		measure.setMeasures(new String[] { String.valueOf(buildHumidityPercentage()) });
-		measure.setSensorAlternateId(sensor.getAlternateId());
-
-		return measure;
-	}
-
-	public static Capability buildHumidityCapability() {
+	public static Capability buildAmbientCapability() {
 		Capability capability = new Capability();
 
-		Property property = new Property();
-		property.setName(HUMIDITY);
-		property.setDataType(PropertyType.INTEGER);
-		property.setUnitOfMeasure("%");
-
-		capability.setName(ROOM_HUMIDITY);
-		capability.setProperties(new Property[] { property });
+		capability.setAlternateId(AMBIENT_CAPABILITY_ALTERNATE_ID);
+		capability.setName(AMBIENT_CAPABILITY_NAME);
+		capability.setProperties(new Property[] { buildHumidityProperty(),
+			buildTemperatureProperty(), buildLightProperty() });
 
 		return capability;
 	}
 
-	public static Capability buildDisplayTextCapability() {
+	public static Capability buildSwitchCapability() {
 		Capability capability = new Capability();
 
+		capability.setAlternateId(SWITCH_CAPABILITY_ALTERNATE_ID);
+		capability.setName(SWITCH_CAPABILITY_NAME);
+		capability.setProperties(new Property[] { buildTextProperty(), buildLEDProperty() });
+
+		return capability;
+	}
+
+	private static Property buildHumidityProperty() {
 		Property property = new Property();
-		property.setName(TEXT);
+
+		property.setName(HUMIDITY_PROPERTY_NAME);
+		property.setDataType(PropertyType.INTEGER);
+		property.setUnitOfMeasure(HUMIDITY_PROPERTY_UOM);
+
+		return property;
+	}
+
+	private static Property buildTemperatureProperty() {
+		Property property = new Property();
+
+		property.setName(TEMPERATURE_PROPERTY_NAME);
+		property.setDataType(PropertyType.FLOAT);
+		property.setUnitOfMeasure(TEMPERATURE_PROPERTY_UOM);
+
+		return property;
+	}
+
+	private static Property buildLightProperty() {
+		Property property = new Property();
+
+		property.setName(LIGHT_PROPERTY_NAME);
+		property.setDataType(PropertyType.INTEGER);
+		property.setUnitOfMeasure(LIGHT_PROPERTY_UOM);
+
+		return property;
+	}
+
+	private static Property buildTextProperty() {
+		Property property = new Property();
+
+		property.setName(TEXT_PROPERTY_NAME);
 		property.setDataType(PropertyType.STRING);
 
-		capability.setName(DISPLAY_TEXT);
-		capability.setProperties(new Property[] { property });
-
-		return capability;
+		return property;
 	}
 
-	public static Command buildToggleValveCommand(Sensor sensor, Capability capability) {
-		Command command = new Command();
+	private static Property buildLEDProperty() {
+		Property property = new Property();
 
-		command.setCapabilityId(capability.getId());
-		Map<String, Object> properties = new HashMap<>();
-		properties.put("val", new Random().nextBoolean() ? "1" : "0");
-		command.setProperties(properties);
-		command.setSensorId(sensor.getId());
+		property.setName(LED_PROPERTY_NAME);
+		property.setDataType(PropertyType.BOOLEAN);
 
-		return command;
-	}
-
-	public static Command buildDispalyTextCommand(Sensor sensor, Capability capability) {
-		Command command = new Command();
-
-		command.setCapabilityId(capability.getId());
-		Map<String, Object> properties = new HashMap<>();
-		properties.put(TEXT, "Hello IoT");
-		command.setProperties(properties);
-		command.setSensorId(sensor.getId());
-
-		return command;
-	}
-
-	private static float buildDegreesCelsius() {
-		float min = -100.0f;
-		float max = 100.0f;
-
-		return new Random().nextFloat() * (max - min) + min;
+		return property;
 	}
 
 	private static int buildHumidityPercentage() {
@@ -152,8 +181,26 @@ public class EntityFactory {
 		return new Random().nextInt(max - min + 1) + min;
 	}
 
-	private static String buildString() {
-		return UUID.randomUUID().toString();
+	private static float buildDegreesCelsius() {
+		float min = -100.0f;
+		float max = 100.0f;
+
+		return new Random().nextFloat() * (max - min) + min;
+	}
+
+	private static int buildLightIlluminance() {
+		int min = 0;
+		int max = 1000;
+
+		return new Random().nextInt(max - min + 1) + min;
+	}
+
+	private static boolean buildLEDValue() {
+		return new Random().nextBoolean();
+	}
+
+	private static String buildTextValue() {
+		return UUID.randomUUID().toString().replaceAll("-", "");
 	}
 
 }

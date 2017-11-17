@@ -4,7 +4,7 @@ public class Measure {
 
 	private String capabilityAlternateId;
 
-	private String[] measures;
+	private String[][] measures;
 
 	private String sensorAlternateId;
 
@@ -16,11 +16,11 @@ public class Measure {
 		this.capabilityAlternateId = capabilityAlternateId;
 	}
 
-	public String[] getMeasures() {
+	public String[][] getMeasures() {
 		return measures;
 	}
 
-	public void setMeasures(String[] measures) {
+	public void setMeasures(String[][] measures) {
 		this.measures = measures;
 	}
 

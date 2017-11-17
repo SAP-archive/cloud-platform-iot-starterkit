@@ -25,9 +25,11 @@ public class CoreService {
 		httpClient = new HttpClient(user, password);
 	}
 
-	public Gateway getOnlineGateway(GatewayProtocol protocolId)
+	public Gateway getOnlineCloudGateway(GatewayProtocol protocolId)
 	throws IOException {
-		String destination = String.format("%1$s/iot/core/api/v1/gateways", host);
+		String destination = String.format(
+			"%1$s/iot/core/api/v1/gateways?filter=protocolId eq '%2$s' and status eq 'online'",
+			host, protocolId);
 
 		Gateway[] gateways = null;
 		try {
@@ -38,17 +40,24 @@ public class CoreService {
 			httpClient.disconnect();
 		}
 
-		for (Gateway gateway : gateways) {
-			GatewayProtocol gatewayProtocolId = gateway.getProtocolId();
-			GatewayStatus gatewayStatus = gateway.getStatus();
-			if (protocolId.equals(gatewayProtocolId) &&
-				GatewayStatus.ONLINE.equals(gatewayStatus)) {
-				return gateway;
-			}
+		if (gateways == null || gateways.length == 0) {
+			throw new IllegalStateException(
+				String.format("No online Gateways with protocol ID '%1$s' found", protocolId));
 		}
 
-		throw new IllegalStateException(
-			String.format("No online Gateway with protocol ID '%1$s' found", protocolId));
+		if (gateways.length > 1) {
+			throw new IllegalStateException(String
+				.format("Multiple online Gateways with protocol ID '%1$s' found", protocolId));
+		}
+
+		Gateway gateway = gateways[0];
+		if (!protocolId.equals(gateway.getProtocolId()) ||
+			!GatewayStatus.ONLINE.equals(gateway.getStatus())) {
+			throw new IllegalStateException(
+				String.format("Unexpected Gateway returned '%1$s'", gateway));
+		}
+
+		return gateway;
 	}
 
 	public Device getOnlineDevice(String id, Gateway gateway)

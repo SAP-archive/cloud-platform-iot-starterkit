@@ -1,9 +1,12 @@
 package commons;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import commons.api.CoreService;
 import commons.model.Capability;
@@ -39,7 +42,7 @@ extends AbstractSample {
 
 			printSeparator();
 
-			Device deviceTemplate = EntityFactory.buildDevice(gateway);
+			Device deviceTemplate = EntityFactory.buildSampleDevice(gateway);
 			device = coreService.addDevice(deviceTemplate);
 
 			printNewLine();
@@ -78,7 +81,7 @@ extends AbstractSample {
 
 		printSeparator();
 
-		Sensor sensorTemplate = EntityFactory.buildSensor(device, sensorType);
+		Sensor sensorTemplate = EntityFactory.buildSampleSensor(device, sensorType);
 		sensor = coreService.addSensor(sensorTemplate);
 
 		printNewLine();
@@ -87,7 +90,57 @@ extends AbstractSample {
 		return sensor;
 	}
 
-	protected void receiveMeasures(final Device device, final Capability capability)
+	protected SensorType getOrAddSensorType(Capability measureCapability,
+		Capability commandCapability)
+	throws IOException {
+		SensorType sensorTypeTemplate = EntityFactory.buildSampleSensorType(measureCapability,
+			commandCapability);
+
+		SensorType[] existingSensorTypes = coreService.getSensorTypes();
+
+		List<SensorType> filteredSensorTypes = Arrays.stream(existingSensorTypes)
+			.filter(st -> st.equals(sensorTypeTemplate)).distinct().collect(Collectors.toList());
+
+		if (filteredSensorTypes.size() == 1) {
+			return filteredSensorTypes.get(0);
+		}
+
+		printWarning(String.format("No '%1$s' Sensor Type found", sensorTypeTemplate.getName()));
+
+		printSeparator();
+
+		SensorType sensorType = coreService.addSensorType(sensorTypeTemplate);
+
+		printNewLine();
+		printProperty(SENSOR_TYPE_ID, sensorType.getId());
+
+		return sensorType;
+	}
+
+	protected Capability getOrAddCapability(Capability capabilityTemplate)
+	throws IOException {
+		Capability[] existingCapabilities = coreService.getCapabilities();
+
+		List<Capability> filteredCapabilities = Arrays.stream(existingCapabilities).distinct()
+			.filter(c -> c.equals(capabilityTemplate)).collect(Collectors.toList());
+
+		if (filteredCapabilities.size() == 1) {
+			return filteredCapabilities.get(0);
+		}
+
+		printWarning(String.format("No '%1$s' Capability found", capabilityTemplate.getName()));
+
+		printSeparator();
+
+		Capability capability = coreService.addCapability(capabilityTemplate);
+
+		printNewLine();
+		printProperty(CAPABILITY_ID, capability.getId());
+
+		return capability;
+	}
+
+	protected void receiveMeasures(final Device device, final Capability capability, int top)
 	throws IOException {
 		ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 		executor.schedule(new Runnable() {
@@ -95,7 +148,7 @@ extends AbstractSample {
 			@Override
 			public void run() {
 				try {
-					coreService.getLatestMeasures(device, capability, 5);
+					coreService.getLatestMeasures(device, capability, top);
 				}
 				catch (IOException e) {
 					printError(e.getMessage());

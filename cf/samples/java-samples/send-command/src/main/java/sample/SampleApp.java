@@ -14,14 +14,12 @@ import commons.connectivity.MqttClient;
 import commons.connectivity.MqttMessageListener;
 import commons.model.Authentication;
 import commons.model.Capability;
-import commons.model.CapabilityType;
 import commons.model.Command;
 import commons.model.Device;
 import commons.model.Gateway;
 import commons.model.GatewayProtocol;
 import commons.model.Sensor;
 import commons.model.SensorType;
-import commons.model.SensorTypeCapability;
 import commons.utils.Console;
 import commons.utils.EntityFactory;
 import commons.utils.SecurityUtil;
@@ -33,7 +31,7 @@ extends AbstractCoreServiceSample {
 
 	@Override
 	protected String getDescription() {
-		return "Send display text commands to the device and listen to them on the device side";
+		return "Send switch commands to the device and listen to them on the device side";
 	}
 
 	@Override
@@ -70,12 +68,13 @@ extends AbstractCoreServiceSample {
 	throws SampleException {
 		String deviceId = properties.getProperty(DEVICE_ID);
 		String sensorId = properties.getProperty(SENSOR_ID);
-		GatewayProtocol gatewayType = GatewayProtocol.fromValue(properties.getProperty(GATEWAY_PROTOCOL_ID));
+		GatewayProtocol gatewayProtocol = GatewayProtocol
+			.fromValue(properties.getProperty(GATEWAY_PROTOCOL_ID));
 
 		try {
 			printSeparator();
 
-			Gateway gateway = coreService.getOnlineGateway(gatewayType);
+			Gateway gateway = coreService.getOnlineCloudGateway(gatewayProtocol);
 
 			printSeparator();
 
@@ -83,11 +82,17 @@ extends AbstractCoreServiceSample {
 
 			printSeparator();
 
-			Capability capability = getOrAddDisplayTextCapability();
+			Capability measureCapability = getOrAddCapability(
+				EntityFactory.buildAmbientCapability());
 
 			printSeparator();
 
-			SensorType sensorType = getOrAddDisplayTextSensorType(capability);
+			Capability commandCapability = getOrAddCapability(
+				EntityFactory.buildSwitchCapability());
+
+			printSeparator();
+
+			SensorType sensorType = getOrAddSensorType(measureCapability, commandCapability);
 
 			Sensor sensor = getOrAddSensor(sensorId, device, sensorType);
 
@@ -104,60 +109,11 @@ extends AbstractCoreServiceSample {
 
 			listenCommands(device);
 
-			sendCommands(device, sensor, capability);
+			sendCommands(device, sensor, commandCapability);
 		}
 		catch (IOException | GeneralSecurityException | IllegalStateException e) {
 			throw new SampleException(e.getMessage());
 		}
-	}
-
-	private Capability getOrAddDisplayTextCapability()
-	throws IOException {
-		Capability[] capabilities = coreService.getCapabilities();
-		for (Capability nextCapability : capabilities) {
-			if (EntityFactory.DISPLAY_TEXT.equals(nextCapability.getName())) {
-				return nextCapability;
-			}
-		}
-
-		printWarning(String.format("No '%1$s' Capability found", EntityFactory.DISPLAY_TEXT));
-
-		printSeparator();
-
-		Capability templateCapability = EntityFactory.buildDisplayTextCapability();
-		Capability capability = coreService.addCapability(templateCapability);
-
-		printNewLine();
-		printProperty(CAPABILITY_ID, capability.getId());
-
-		return capability;
-	}
-
-	private SensorType getOrAddDisplayTextSensorType(Capability capability)
-	throws IOException {
-		SensorType[] sensorTypes = coreService.getSensorTypes();
-		for (SensorType nextSensorType : sensorTypes) {
-			if (EntityFactory.DISPLAY_SENSORS.equals(nextSensorType.getName())) {
-				return nextSensorType;
-			}
-		}
-
-		printWarning(String.format("No '%1$s' Sensor Type found", EntityFactory.DISPLAY_SENSORS));
-
-		printSeparator();
-
-		SensorTypeCapability sensorTypeCapability = new SensorTypeCapability();
-		sensorTypeCapability.setId(capability.getId());
-		sensorTypeCapability.setType(CapabilityType.COMMAND);
-
-		SensorType templateSensorType = EntityFactory
-			.buildDisplayTextSensorType(sensorTypeCapability);
-		SensorType sensorType = coreService.addSensorType(templateSensorType);
-
-		printNewLine();
-		printProperty(SENSOR_TYPE_ID, capability.getId());
-
-		return sensorType;
 	}
 
 	private void listenCommands(Device device)
@@ -195,7 +151,7 @@ extends AbstractCoreServiceSample {
 
 			@Override
 			public void run() {
-				Command command = EntityFactory.buildDispalyTextCommand(sensor, capability);
+				Command command = EntityFactory.buildSwitchCommand(sensor, capability);
 
 				try {
 					coreService.sendCommand(command, device);
