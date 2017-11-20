@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
+import commons.connectivity.AbstractClient;
 import commons.model.Capability;
 import commons.model.CapabilityType;
 import commons.model.Command;
@@ -46,7 +47,7 @@ public class EntityFactory {
 		measure.setCapabilityAlternateId(capability.getAlternateId());
 		measure.setSensorAlternateId(sensor.getAlternateId());
 		measure.setMeasures(new String[][] { { String.valueOf(buildHumidityPercentage()),
-			String.format("%.1f", buildDegreesCelsius()),
+			String.format(AbstractClient.LOCALE, "%.1f", buildDegreesCelsius()),
 			String.valueOf(buildLightIlluminance()) } });
 
 		return measure;
