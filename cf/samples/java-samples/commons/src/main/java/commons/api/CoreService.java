@@ -38,7 +38,7 @@ public class CoreService {
 		Gateway[] gateways = null;
 		try {
 			httpClient.connect(destination);
-			gateways = httpClient.doGetJson(Gateway[].class);
+			gateways = httpClient.doGet(Gateway[].class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -71,7 +71,7 @@ public class CoreService {
 		Device device = null;
 		try {
 			httpClient.connect(destination);
-			device = httpClient.doGetJson(Device.class);
+			device = httpClient.doGet(Device.class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -92,7 +92,7 @@ public class CoreService {
 
 		try {
 			httpClient.connect(destination);
-			return httpClient.doPostJson(device, Device.class);
+			return httpClient.doPost(device, Device.class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -105,7 +105,7 @@ public class CoreService {
 
 		try {
 			httpClient.connect(destination);
-			return httpClient.doPostJson(sensor, Sensor.class);
+			return httpClient.doPost(sensor, Sensor.class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -119,7 +119,7 @@ public class CoreService {
 
 		try {
 			httpClient.connect(destination);
-			return httpClient.doGetJson(Authentication.class);
+			return httpClient.doGet(Authentication.class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -134,7 +134,7 @@ public class CoreService {
 
 		try {
 			httpClient.connect(destination);
-			return httpClient.doGetJson(Measure[].class);
+			return httpClient.doGet(Measure[].class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -160,7 +160,7 @@ public class CoreService {
 
 		try {
 			httpClient.connect(destination);
-			return httpClient.doGetJson(Capability[].class);
+			return httpClient.doGet(Capability[].class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -173,7 +173,7 @@ public class CoreService {
 
 		try {
 			httpClient.connect(destination);
-			return httpClient.doGetJson(Capability.class);
+			return httpClient.doGet(Capability.class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -186,7 +186,7 @@ public class CoreService {
 
 		try {
 			httpClient.connect(destination);
-			return httpClient.doPostJson(capability, Capability.class);
+			return httpClient.doPost(capability, Capability.class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -199,7 +199,7 @@ public class CoreService {
 
 		try {
 			httpClient.connect(destination);
-			return httpClient.doGetJson(SensorType[].class);
+			return httpClient.doGet(SensorType[].class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -212,7 +212,7 @@ public class CoreService {
 
 		try {
 			httpClient.connect(destination);
-			return httpClient.doGetJson(SensorType.class);
+			return httpClient.doGet(SensorType.class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -225,7 +225,7 @@ public class CoreService {
 
 		try {
 			httpClient.connect(destination);
-			return httpClient.doPostJson(sensorType, SensorType.class);
+			return httpClient.doPost(sensorType, SensorType.class);
 		}
 		finally {
 			httpClient.disconnect();

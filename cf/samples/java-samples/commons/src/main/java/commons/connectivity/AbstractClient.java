@@ -15,7 +15,7 @@ public abstract class AbstractClient {
 		jsonParser = new Gson();
 	}
 
-	public abstract void connect(String destination)
+	public abstract void connect(String serverUri)
 	throws IOException;
 
 	public abstract void disconnect();

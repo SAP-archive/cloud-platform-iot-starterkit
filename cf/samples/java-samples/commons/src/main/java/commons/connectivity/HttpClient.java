@@ -15,6 +15,7 @@ import javax.net.ssl.SSLSocketFactory;
 
 import com.google.gson.JsonSyntaxException;
 
+import commons.utils.Console;
 import commons.utils.Constants;
 import commons.utils.FileUtil;
 
@@ -29,7 +30,7 @@ extends AbstractClient {
 
 	private SSLSocketFactory sslSocketFactory;
 
-	private String destination;
+	private String serverUri;
 
 	private HttpClient() {
 		super();
@@ -48,11 +49,11 @@ extends AbstractClient {
 		this.sslSocketFactory = sslSocketFactory;
 	}
 
-	public void connect(String destination)
+	public void connect(String serverUri)
 	throws IOException {
+		this.serverUri = serverUri;
 
-		this.destination = destination;
-		connection = openConnection(destination);
+		connection = openConnection(serverUri);
 
 		if (user != null && password != null) {
 			byte[] encodedBytes = Base64.getMimeEncoder()
@@ -75,25 +76,36 @@ extends AbstractClient {
 		}
 	}
 
-	public String getDestination() {
-		return destination;
+	public String getServerUri() {
+		return serverUri;
 	}
 
-	public <T> T doGetJson(Class<T> clazz)
+	public <T> T doGet(Class<T> clazz)
 	throws IOException {
 		try {
-			return jsonParser.fromJson(doGetString(), clazz);
+			return jsonParser.fromJson(doGetAsString(), clazz);
 		}
 		catch (JsonSyntaxException e) {
 			throw new IOException("Unexpected JSON format returned", e);
 		}
 	}
 
-	public String doGetString()
+	public <T> T doPost(T payload, Class<T> clazz)
+	throws IOException {
+		try {
+			String request = jsonParser.toJson(payload, clazz);
+			return jsonParser.fromJson(doPostAsString(request), clazz);
+		}
+		catch (JsonSyntaxException e) {
+			throw new IOException("Unexpected JSON format returned", e);
+		}
+	}
+
+	private String doGetAsString()
 	throws IOException {
 
 		if (connection == null) {
-			connect(destination);
+			connect(serverUri);
 		}
 
 		connection.setRequestMethod("GET");
@@ -106,7 +118,7 @@ extends AbstractClient {
 			Response response = connect(connection);
 			String body = response.getBody();
 
-			System.out.println(String.format("Response [%1$d] %2$s", response.getCode(), body));
+			Console.printText(String.format("Response [%1$d] %2$s", response.getCode(), body));
 
 			return body;
 		}
@@ -115,27 +127,11 @@ extends AbstractClient {
 		}
 	}
 
-	public <T> T doPostJson(T payload, Class<T> clazz)
-	throws IOException {
-		String response = doPost(jsonParser.toJson(payload));
-		try {
-			return jsonParser.fromJson(response, clazz);
-		}
-		catch (JsonSyntaxException e) {
-			throw new IOException("Unexpected JSON format returned", e);
-		}
-	}
-
-	public <T> void doPost(T payload, Class<T> clazz)
-	throws IOException {
-		doPost(jsonParser.toJson(payload));
-	}
-
-	public String doPost(String request)
+	private <T> String doPostAsString(String request)
 	throws IOException {
 
 		if (connection == null) {
-			connect(destination);
+			connect(serverUri);
 		}
 
 		connection.setRequestMethod("POST");
@@ -144,8 +140,8 @@ extends AbstractClient {
 		connection.setUseCaches(false);
 		connection.setRequestProperty("Content-Type", "application/json");
 
-		System.out.println(String.format("Request %1$s", request));
-		System.out.println();
+		Console.printText(String.format("Request %1$s", request));
+		Console.printNewLine();
 
 		byte[] bytes = request.getBytes(Constants.DEFAULT_ENCODING);
 
@@ -161,7 +157,7 @@ extends AbstractClient {
 			Response response = connect(connection);
 			String body = response.getBody();
 
-			System.out.println(String.format("Response [%1$d] %2$s", response.getCode(), body));
+			Console.printText(String.format("Response [%1$d] %2$s", response.getCode(), body));
 
 			return body;
 		}
@@ -175,8 +171,8 @@ extends AbstractClient {
 
 		disconnect();
 
-		System.out.println(String.format("Connect to %1$s", destination));
-		System.out.println();
+		Console.printText(String.format("Connect to %1$s", destination));
+		Console.printNewLine();
 
 		URI uri = null;
 		try {

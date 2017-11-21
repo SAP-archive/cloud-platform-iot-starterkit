@@ -9,6 +9,7 @@ import javax.net.ssl.SSLSocketFactory;
 
 import commons.connectivity.HttpClient;
 import commons.model.Device;
+import commons.model.gateway.Command;
 import commons.model.gateway.Measure;
 import commons.utils.Console;
 
@@ -17,17 +18,17 @@ implements GatewayCloud {
 
 	private HttpClient httpClient;
 
-	private String upstreamEndpoint;
+	private String upstreamServerUri;
 
-	private String downstreamEndpoint;
+	private String downstreamServerUri;
 
 	private ScheduledExecutorService executor;
 
 	public GatewayCloudHttp(Device device, SSLSocketFactory sslSocketFactory) {
 		String deviceAlternateId = device.getAlternateId();
 
-		upstreamEndpoint = String.format("/iot/gateway/rest/measures/%1$s", deviceAlternateId);
-		downstreamEndpoint = String.format("/iot/gateway/rest/commands/%1$s", deviceAlternateId);
+		upstreamServerUri = String.format("/iot/gateway/rest/measures/%1$s", deviceAlternateId);
+		downstreamServerUri = String.format("/iot/gateway/rest/commands/%1$s", deviceAlternateId);
 
 		httpClient = new HttpClient(sslSocketFactory);
 	}
@@ -37,8 +38,8 @@ implements GatewayCloud {
 	throws IOException {
 		host = String.format("https://%1$s:443", host);
 
-		upstreamEndpoint = host.concat(upstreamEndpoint);
-		downstreamEndpoint = host.concat(downstreamEndpoint);
+		upstreamServerUri = host.concat(upstreamServerUri);
+		downstreamServerUri = host.concat(downstreamServerUri);
 	}
 
 	@Override
@@ -52,18 +53,18 @@ implements GatewayCloud {
 	@Override
 	public void sendMeasure(Measure measure)
 	throws IOException {
-		if (!upstreamEndpoint.equalsIgnoreCase(httpClient.getDestination())) {
-			httpClient.connect(upstreamEndpoint);
+		if (!upstreamServerUri.equalsIgnoreCase(httpClient.getServerUri())) {
+			httpClient.connect(upstreamServerUri);
 		}
 
-		httpClient.doPostJson(measure, Measure.class);
+		httpClient.doPost(measure, Measure.class);
 	}
 
 	@Override
 	public void listenCommands()
 	throws IOException {
-		if (!downstreamEndpoint.equalsIgnoreCase(httpClient.getDestination())) {
-			httpClient.connect(downstreamEndpoint);
+		if (!downstreamServerUri.equalsIgnoreCase(httpClient.getServerUri())) {
+			httpClient.connect(downstreamServerUri);
 		}
 
 		executor = Executors.newSingleThreadScheduledExecutor();
@@ -72,7 +73,7 @@ implements GatewayCloud {
 			@Override
 			public void run() {
 				try {
-					httpClient.doGetString();
+					httpClient.doGet(Command[].class);
 				}
 				catch (IOException e) {
 					Console.printError(e.getMessage());

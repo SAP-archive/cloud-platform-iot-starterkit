@@ -10,6 +10,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
+import commons.utils.Console;
 import commons.utils.Constants;
 
 public class MqttClient
@@ -44,23 +45,28 @@ extends AbstractClient {
 	}
 
 	@Override
-	public void connect(String destination)
+	public void connect(String serverUri)
 	throws IOException {
 		if (client != null && client.isConnected()) {
 			disconnect();
 		}
 
-		System.out.println(String.format("Connect to %1$s", destination));
-		System.out.println();
+		Console.printText((String.format("Connect to %1$s", serverUri)));
+		Console.printNewLine();
 
 		try {
-			client = new org.eclipse.paho.client.mqttv3.MqttClient(destination, clientId,
+			client = new org.eclipse.paho.client.mqttv3.MqttClient(serverUri, clientId,
 				new MemoryPersistence());
+
 			client.connect(connectOptions);
 		}
 		catch (MqttException e) {
-			String errorMessage = String.format("Unable to establish a MQTT connection - ",
-				e.getCause().getMessage());
+			String cause = e.getMessage();
+			if (e.getCause() != null) {
+				cause.concat(" : ").concat(e.getCause().getMessage());
+			}
+			String errorMessage = String.format("Unable to establish an MQTT connection - %1$s",
+				cause);
 			throw new IOException(errorMessage, e);
 		}
 	}
@@ -79,11 +85,11 @@ extends AbstractClient {
 
 	public <T> void publish(String topic, T payload, Class<T> clazz)
 	throws IOException {
-		String request = jsonParser.toJson(payload);
+		String request = jsonParser.toJson(payload, clazz);
 
-		System.out.println(String.format("Publish on topic '%1$s'", topic));
-		System.out.println();
-		System.out.println(String.format("Message %1$s", request));
+		Console.printText(String.format("Publish on topic '%1$s'", topic));
+		Console.printNewLine();
+		Console.printText(String.format("Message %1$s", request));
 
 		MqttMessage mqttMessage = new MqttMessage(request.getBytes(Constants.DEFAULT_ENCODING));
 		mqttMessage.setQos(1);
@@ -112,7 +118,6 @@ extends AbstractClient {
 			});
 		}
 		catch (MqttException e) {
-			e.printStackTrace();
 			String errorMessage = String.format("Unable to subscribe for the MQTT topic '%1$s'",
 				topic);
 			throw new IOException(errorMessage, e);
