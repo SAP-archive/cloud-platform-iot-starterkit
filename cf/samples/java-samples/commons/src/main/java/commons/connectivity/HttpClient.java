@@ -3,6 +3,7 @@ package commons.connectivity;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -198,7 +199,13 @@ extends AbstractClient {
 	private Response connect(HttpURLConnection connection)
 	throws IOException {
 
-		connection.connect();
+		try {
+			connection.connect();
+		}
+		catch (ConnectException e) {
+			String errorMessage = "Unable to connect. Please check your Internet connection and proxy settings.";
+			throw new IOException(errorMessage, e);
+		}
 
 		int code = connection.getResponseCode();
 
