@@ -60,4 +60,32 @@ public class Console {
 		}
 	}
 
+	public static void printSeparator() {
+		for (int i = 0; i < 80; i++) {
+			System.out.print("-");
+		}
+		printNewLine();
+	}
+
+	public static void printText(String message) {
+		System.out.println(message);
+	}
+
+	public static void printError(String message) {
+		System.out.println(String.format("[ERROR] %1$s", message));
+	}
+
+	public static void printWarning(String message) {
+		printNewLine();
+		System.out.println(String.format("[WARN] %1$s", message));
+	}
+
+	public static void printNewLine() {
+		System.out.println();
+	}
+
+	public static void printProperty(Object key, Object value) {
+		System.out.printf("\t%-25s : %s %n", key, value);
+	}
+
 }

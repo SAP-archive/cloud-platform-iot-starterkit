@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import commons.connectivity.ProxySelector;
 import commons.model.GatewayProtocol;
 import commons.utils.Console;
 import commons.utils.FileUtil;
@@ -32,79 +33,24 @@ public abstract class AbstractSample {
 	protected Properties properties;
 
 	public AbstractSample() {
-		printNewLine();
-		System.out.println(PRODUCT_TITLE);
-		System.out.println(getDescription());
-		printNewLine();
+		Console.printNewLine();
+		Console.printText(PRODUCT_TITLE);
+		Console.printText(getDescription());
+		Console.printNewLine();
 
 		init();
 	}
 
 	/**
-	 * Reads the configuration properties from the file located in the same directory to JAR
-	 * archive. Sticks to the empty properties collection if the configuration file does not exist.
+	 * Gets a description of the sample application.
 	 */
-	protected void init() {
-		File jar = new File(
-			AbstractSample.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-		File config = new File(
-			jar.getParentFile().getAbsolutePath().concat("/").concat(CONFIGURATIONS_FILE_NAME));
-
-		properties = new Properties();
-
-		try {
-			if (config.exists()) {
-				properties = FileUtil.readProperties(new FileInputStream(config));
-			}
-		}
-		catch (IOException e) {
-			// do nothing
-		}
-		finally {
-			promptProperties();
-			printProperties();
-		}
-	}
+	protected abstract String getDescription();
 
 	/**
-	 * Prints out the resulting configuration properties to the console. Skips user password and
-	 * properties having empty values.
+	 * Runs the logic of the sample application.
 	 */
-	protected void printProperties() {
-		printNewLine();
-		System.out.println("Properties:");
-		for (Object key : properties.keySet()) {
-			if (IOT_PASSWORD.equals(key) || properties.get(key).toString().trim().isEmpty()) {
-				continue;
-			}
-			printProperty(key, properties.get(key));
-		}
-		printNewLine();
-	}
-
-	protected void printSeparator() {
-		for (int i = 0; i < 80; i++) {
-			System.out.print("-");
-		}
-		printNewLine();
-	}
-
-	protected void printError(String message) {
-		System.out.println(String.format("[ERROR] %1$s", message));
-	}
-
-	protected void printWarning(String message) {
-		printNewLine();
-		System.out.println(String.format("[WARN] %1$s", message));
-	}
-
-	protected void printProperty(Object key, Object value) {
-		System.out.printf("\t%-25s : %s %n", key, value);
-	}
-
-	protected void printNewLine() {
-		System.out.println();
-	}
+	protected abstract void run()
+	throws SampleException;
 
 	/**
 	 * Prompts the user for missing configuration properties.
@@ -134,6 +80,18 @@ public abstract class AbstractSample {
 		sensorId = console.awaitNextLine(sensorId, "Sensor ID (e.g. '100'): ");
 		properties.setProperty(SENSOR_ID, sensorId);
 
+		String proxyHost = properties.getProperty(PROXY_HOST);
+		if (proxyHost == null) {
+			proxyHost = console.nextLine("Proxy Host (e.g. 'proxy' or leave empty): ");
+			properties.setProperty(PROXY_HOST, proxyHost);
+		}
+
+		String proxyPort = properties.getProperty(PROXY_PORT);
+		if (proxyPort == null) {
+			proxyPort = console.nextLine("Proxy Port (e.g. '8080' or leave empty): ");
+			properties.setProperty(PROXY_PORT, proxyPort);
+		}
+
 		String password = properties.getProperty(IOT_PASSWORD);
 		password = console.nextPassword("Password for your user: ");
 		properties.setProperty(IOT_PASSWORD, password);
@@ -142,14 +100,54 @@ public abstract class AbstractSample {
 	};
 
 	/**
-	 * Gets a description of the sample application.
+	 * Reads the configuration properties from the file located in the same directory to JAR
+	 * archive. Sticks to the empty properties collection if the configuration file does not exist.
 	 */
-	protected abstract String getDescription();
+	private void init() {
+		File jar = new File(
+			AbstractSample.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+		File config = new File(
+			jar.getParentFile().getAbsolutePath().concat("/").concat(CONFIGURATIONS_FILE_NAME));
+
+		properties = new Properties();
+
+		try {
+			if (config.exists()) {
+				properties = FileUtil.readProperties(new FileInputStream(config));
+			}
+		}
+		catch (IOException e) {
+			// do nothing
+		}
+		finally {
+			promptProperties();
+			printProperties();
+		}
+
+		setProxy();
+	}
 
 	/**
-	 * Runs the logic of the sample application.
+	 * Prints out the resulting configuration properties to the console. Skips user password and
+	 * properties having empty values.
 	 */
-	protected abstract void run()
-	throws SampleException;
+	private void printProperties() {
+		Console.printNewLine();
+		Console.printText("Properties:");
+		for (Object key : properties.keySet()) {
+			if (IOT_PASSWORD.equals(key) || properties.get(key).toString().trim().isEmpty()) {
+				continue;
+			}
+			Console.printProperty(key, properties.get(key));
+		}
+		Console.printNewLine();
+	}
+
+	private void setProxy() {
+		String proxyHost = properties.getProperty(PROXY_HOST);
+		String proxyPort = properties.getProperty(PROXY_PORT);
+
+		ProxySelector.setProxy(proxyHost, proxyPort);
+	}
 
 }

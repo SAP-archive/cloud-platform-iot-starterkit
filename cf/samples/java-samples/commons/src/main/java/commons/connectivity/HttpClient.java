@@ -15,6 +15,7 @@ import javax.net.ssl.SSLSocketFactory;
 
 import com.google.gson.JsonSyntaxException;
 
+import commons.utils.Constants;
 import commons.utils.FileUtil;
 
 public class HttpClient
@@ -55,8 +56,8 @@ extends AbstractClient {
 
 		if (user != null && password != null) {
 			byte[] encodedBytes = Base64.getMimeEncoder()
-				.encode((user + ":" + password).getBytes(ENCODING));
-			String base64 = new String(encodedBytes, ENCODING);
+				.encode((user + ":" + password).getBytes(Constants.DEFAULT_ENCODING));
+			String base64 = new String(encodedBytes, Constants.DEFAULT_ENCODING);
 			connection.setRequestProperty("Authorization", "Basic " + base64);
 		}
 		else if (sslSocketFactory != null && connection instanceof HttpsURLConnection) {
@@ -74,9 +75,8 @@ extends AbstractClient {
 		}
 	}
 
-	public <T> void send(T payload, Class<T> clazz)
-	throws IOException {
-		doPostJson(payload, clazz);
+	public String getDestination() {
+		return destination;
 	}
 
 	public <T> T doGetJson(Class<T> clazz)
@@ -147,7 +147,7 @@ extends AbstractClient {
 		System.out.println(String.format("Request %1$s", request));
 		System.out.println();
 
-		byte[] bytes = request.getBytes(ENCODING);
+		byte[] bytes = request.getBytes(Constants.DEFAULT_ENCODING);
 
 		OutputStream os = connection.getOutputStream();
 		try {

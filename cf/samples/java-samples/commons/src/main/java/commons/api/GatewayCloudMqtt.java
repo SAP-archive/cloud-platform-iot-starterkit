@@ -1,23 +1,36 @@
 package commons.api;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.net.ssl.SSLSocketFactory;
 
 import commons.connectivity.MqttClient;
+import commons.connectivity.MqttMessageListener;
 import commons.model.Device;
+import commons.model.gateway.Measure;
+import commons.utils.Console;
 
 public class GatewayCloudMqtt
 implements GatewayCloud {
 
 	private MqttClient mqttClient;
 
-	public GatewayCloudMqtt(Device device, SSLSocketFactory sslSocketFactory) {
-		String physicalAddress = device.getAlternateId();
-		String clientId = physicalAddress;
-		String topic = String.format("measures/%1$s", physicalAddress);
+	private String upstreamTopic;
 
-		mqttClient = new MqttClient(clientId, topic, sslSocketFactory);
+	private String downstreamTopic;
+
+	private ExecutorService executor;
+
+	public GatewayCloudMqtt(Device device, SSLSocketFactory sslSocketFactory) {
+		String deviceAlternateId = device.getAlternateId();
+		String clientId = deviceAlternateId;
+
+		upstreamTopic = String.format("measures/%1$s", deviceAlternateId);
+		downstreamTopic = String.format("commands/%1$s", deviceAlternateId);
+
+		mqttClient = new MqttClient(clientId, sslSocketFactory);
 	}
 
 	@Override
@@ -30,13 +43,45 @@ implements GatewayCloud {
 
 	@Override
 	public void disconnect() {
+		if (executor != null) {
+			executor.shutdown();
+		}
 		mqttClient.disconnect();
 	}
 
 	@Override
-	public <T> void send(T payload, Class<T> clazz)
+	public void sendMeasure(Measure measure)
 	throws IOException {
-		mqttClient.send(payload, clazz);
+		mqttClient.publish(upstreamTopic, measure, Measure.class);
+	}
+
+	@Override
+	public void listenCommands()
+	throws IOException {
+		executor = Executors.newSingleThreadExecutor();
+		executor.execute(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					mqttClient.subscribe(downstreamTopic, new MqttMessageListener() {
+
+						@Override
+						public void onMessage(String topic, String message) {
+							Console.printText(String.format("Message on topic '%1$s'", topic));
+							Console.printNewLine();
+							Console.printText(String.format("Message %1$s", message));
+							Console.printSeparator();
+						}
+
+					});
+				}
+				catch (IOException e) {
+					Console.printError(e.getMessage());
+				}
+			}
+
+		});
 	}
 
 }

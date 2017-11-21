@@ -8,7 +8,7 @@ public class Measure {
 
 	private String sensorAlternateId;
 
-	public String getMeasureIds() {
+	public String getCapabilityAlternateId() {
 		return capabilityAlternateId;
 	}
 

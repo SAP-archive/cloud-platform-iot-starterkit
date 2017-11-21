@@ -21,6 +21,7 @@ import commons.model.GatewayProtocol;
 import commons.model.Sensor;
 import commons.model.SensorType;
 import commons.model.gateway.Measure;
+import commons.utils.Console;
 import commons.utils.EntityFactory;
 import commons.utils.SecurityUtil;
 
@@ -31,7 +32,7 @@ extends AbstractCoreServiceSample {
 
 	@Override
 	protected String getDescription() {
-		return "Send ambient measures on behalf of the sensor attached to the device" +
+		return "Send ambient measures on behalf of the device sensor" +
 			" and consume them later on via the API";
 	}
 
@@ -44,45 +45,52 @@ extends AbstractCoreServiceSample {
 			.fromValue(properties.getProperty(GATEWAY_PROTOCOL_ID));
 
 		try {
-			printSeparator();
+			Console.printSeparator();
 
 			Gateway gateway = coreService.getOnlineCloudGateway(gatewayProtocol);
 
-			printSeparator();
+			Console.printSeparator();
 
 			Device device = getOrAddDevice(deviceId, gateway);
 
-			printSeparator();
+			Console.printSeparator();
 
 			Capability measureCapability = getOrAddCapability(
 				EntityFactory.buildAmbientCapability());
 
-			printSeparator();
+			Console.printSeparator();
 
 			Capability commandCapability = getOrAddCapability(
 				EntityFactory.buildSwitchCapability());
 
-			printSeparator();
+			Console.printSeparator();
 
 			SensorType sensorType = getOrAddSensorType(measureCapability, commandCapability);
 
 			Sensor sensor = getOrAddSensor(sensorId, device, sensorType);
 
-			printSeparator();
+			Console.printSeparator();
 
 			Authentication authentication = coreService.getAuthentication(device);
 
 			SSLSocketFactory sslSocketFactory = SecurityUtil.getSSLSocketFactory(device,
 				authentication);
-			gatewayCloud = GatewayProtocol.REST.equals(gatewayProtocol)
-				? new GatewayCloudHttp(device, sslSocketFactory)
-				: new GatewayCloudMqtt(device, sslSocketFactory);
 
-			printSeparator();
+			switch (gatewayProtocol) {
+			case MQTT:
+				gatewayCloud = new GatewayCloudMqtt(device, sslSocketFactory);
+				break;
+			case REST:
+			default:
+				gatewayCloud = new GatewayCloudHttp(device, sslSocketFactory);
+				break;
+			}
+
+			Console.printSeparator();
 
 			sendAmbientMeasures(sensor, measureCapability);
 
-			receiveMeasures(device, measureCapability, 25);
+			receiveAmbientMeasures(device, measureCapability);
 		}
 		catch (IOException | GeneralSecurityException | IllegalStateException e) {
 			throw new SampleException(e.getMessage());
@@ -108,13 +116,13 @@ extends AbstractCoreServiceSample {
 				Measure measure = EntityFactory.buildAmbientMeasure(sensor, capability);
 
 				try {
-					gatewayCloud.send(measure, Measure.class);
+					gatewayCloud.sendMeasure(measure);
 				}
 				catch (IOException e) {
-					// do nothing
+					Console.printError(e.getMessage());
 				}
 				finally {
-					printSeparator();
+					Console.printSeparator();
 				}
 			}
 
@@ -129,6 +137,38 @@ extends AbstractCoreServiceSample {
 		finally {
 			executor.shutdown();
 			gatewayCloud.disconnect();
+		}
+	}
+
+	private void receiveAmbientMeasures(final Device device, final Capability capability)
+	throws IOException {
+		ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+		executor.schedule(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					coreService.getLatestMeasures(device, capability, 25);
+				}
+				catch (IOException e) {
+					Console.printError(e.getMessage());
+				}
+				finally {
+					Console.printSeparator();
+				}
+			}
+
+		}, 5000, TimeUnit.MILLISECONDS);
+
+		try {
+			executor.awaitTermination(1000, TimeUnit.MILLISECONDS);
+		}
+		catch (InterruptedException e) {
+			throw new IOException("Interrupted exception", e);
+		}
+		finally {
+			executor.shutdown();
+			coreService.shutdown();
 		}
 	}
 
