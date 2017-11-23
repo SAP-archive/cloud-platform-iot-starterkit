@@ -139,7 +139,7 @@ The following steps are being performed during execution:
     GET https://%iot.host%:443/iot/core/api/v1/devices/%device.id%/authentications/clientCertificate/pem
     ```
 8. Create Java SSL context based on the PEM certificate.
-9. As a device, subscribe for incoming commands over MQTT.
+9. As a device, listen for incoming commands.
     ```
     Authorization: <device-certificate>
     REST: GET https://%iot.host%:443/iot/gateway/rest/commands/%device.alternate.id%
