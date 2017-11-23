@@ -83,7 +83,7 @@ implements GatewayCloud {
 				}
 			}
 
-		}, 0, 2000, TimeUnit.MILLISECONDS);
+		}, 0, 5000, TimeUnit.MILLISECONDS);
 	}
 
 }

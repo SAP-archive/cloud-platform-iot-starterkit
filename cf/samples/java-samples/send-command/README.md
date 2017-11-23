@@ -1,5 +1,5 @@
 # SAP Internet of Things for the Cloud Foundry Environment
-A sample Java application which is capable to send Switch commands to the Device connected over MQTT and listen to them at the same time. 
+A sample Java application which is capable to send Switch commands to the Device and listen to them on behalf of the device (direct delivery over MQTT or polling via RESTful interface).
 
 ## Import project
 This sample application is provided as Maven project and could be imported to IDE with the help of respective plug-in or Maven command line interface.
@@ -24,10 +24,10 @@ It is possible to build an executable JAR with Maven. Simply run `mvn clean inst
 ## Execution Steps
 The following steps are being performed during execution:
 
-1. Get online MQTT gateway.
+1. Get online gateway (either REST or MQTT) based on the user input.
     ```
     Authorization: Basic <base64-encoded credentials>
-    GET https://%iot.host%:443/iot/core/api/v1/gateways?filter=protocolId eq 'mqtt' and status eq 'online'
+    GET https://%iot.host%:443/iot/core/api/v1/gateways?filter=protocolId eq '%protocol%' and status eq 'online' and type eq 'cloud'
     ```
 2. Get online device by its identifier.
     ```
@@ -38,10 +38,10 @@ The following steps are being performed during execution:
 	    ```
 	    Authorization: Basic <base64-encoded credentials>
 	    POST https://%iot.host%:443/iot/core/api/v1/devices  
-	    {
-		    "gatewayId" : "%gateway.id%",
-		    "name" : "SampleDevice"
-	    }
+		{  
+		   "gatewayId":"%gateway.id%",
+		   "name":"SampleDevice"
+		}
 	    ```
 3. Check if custom "Switch" capability exists.
     ```
@@ -52,20 +52,20 @@ The following steps are being performed during execution:
 	    ```
 	    Authorization: Basic <base64-encoded credentials>
 	    POST https://%iot.host%:443/iot/core/api/v1/capabilities  
-	    {
-		    "alternateId" : "switch",
-		    "name" : "Switch",
-		    "properties" : [
-			    {
-				    "name" : "Text",
-				    "dataType" : "string"
-			    },
-			    {
-				    "name" : "LED",
-				    "dataType" : "boolean"
-			    }
-		    ]
-	    }
+		{  
+		   "alternateId":"switch",
+		   "name":"Switch",
+		   "properties":[  
+		      {  
+		         "name":"Text",
+		         "dataType":"string"
+		      },
+		      {  
+		         "name":"LED",
+		         "dataType":"boolean"
+		      }
+		   ]
+		}
 	    ```
 4. Check if custom "Ambient" capability exists.
     ```
@@ -76,27 +76,27 @@ The following steps are being performed during execution:
 	    ```
 	    Authorization: Basic <base64-encoded credentials>
 	    POST https://%iot.host%:443/iot/core/api/v1/capabilities  
-	    {
-		    "alternateId" : "ambient",
-		    "name" : "Ambient",
-		    "properties" : [
-			    {
-				    "name" : "Humidity",
-				    "dataType" : "integer",
-				    "unitOfMeasure" : "%"
-			    },
-			    {
-				    "name" : "Temperature",
-				    "dataType" : "float",
-				    "unitOfMeasure" : "°C"
-			    },
-			    {
-				    "name" : "Light",
-				    "dataType" : "integer",
-				    "unitOfMeasure" : "Lux"
-			    }
-		    ]
-	    }
+		{  
+		   "alternateId":"ambient",
+		   "name":"Ambient",
+		   "properties":[  
+		      {  
+		         "name":"Humidity",
+		         "dataType":"integer",
+		         "unitOfMeasure":"%"
+		      },
+		      {  
+		         "name":"Temperature",
+		         "dataType":"float",
+		         "unitOfMeasure":"°C"
+		      },
+		      {  
+		         "name":"Light",
+		         "dataType":"integer",
+		         "unitOfMeasure":"Lux"
+		      }
+		   ]
+		}
 	    ```
 5. Check if custom "ControlUnit" sensor type exists.
     ```
@@ -107,30 +107,30 @@ The following steps are being performed during execution:
 	    ```
 	    Authorization: Basic <base64-encoded credentials>
 	    POST https://%iot.host%:443/iot/core/api/v1/sensorTypes  
-	    {
-		    "name" : "ControlUnit",
-		    "capabilities" : [
-			    {
-				    "id" : "%ambient.capability.id%",
-				    "type" : "measure"
-			    },
-			    {
-				    "id" : "%switch.capability.id%",
-				    "type" : "command"
-			    }
-		    ]
-	    }
+		{  
+		   "name":"ControlUnit",
+		   "capabilities":[  
+		      {  
+		         "id":"%ambient.capability.id%",
+		         "type":"measure"
+		      },
+		      {  
+		         "id":"%switch.capability.id%",
+		         "type":"command"
+		      }
+		   ]
+		}
 	    ```
-6. Get device sensor by its identifier which is assigned to the device.
+6. Get device sensor which is assigned to the device.
 	1. Create a new sensor and assign it to the device if no sensor is assigned to the device or a sensor has no reference to the "ControlUnit" sensor type.
 	    ```
 	    Authorization: Basic <base64-encoded credentials>
 	    POST https://%iot.host%:443/iot/core/api/v1/sensors  
-	    {
-		    "deviceId" : "%device.id%",
-		    "sensorTypeId" : "%sensor.type.id%",
-		    "name" : "SampleSensor"
-	    }
+		{  
+		   "deviceId":"%device.id%",
+		   "sensorTypeId":"%sensor.type.id%",
+		   "name":"SampleSensor"
+		}
 	    ```
 	    >Note: A new sensor will be mapped to the custom "ControlUnit" Sensor Type.
 7. Get device PEM-certificate.
@@ -141,21 +141,23 @@ The following steps are being performed during execution:
 8. Create Java SSL context based on the PEM certificate.
 9. As a device, subscribe for incoming commands over MQTT.
     ```
-    SUBSCRIBE ssl://%iot.host%:8883 on topic 'commands/%device.alternate.id%'  
+    Authorization: <device-certificate>
+    REST: GET https://%iot.host%:443/iot/gateway/rest/commands/%device.alternate.id%
+    MQTT: SUBSCRIBE ssl://%iot.host%:8883 on topic 'commands/%device.alternate.id%'  
     ```
-    >Note: A subscription is going to be terminated automatically after 20 seconds.
+    >Note: The listening is going to be terminated automatically after 20 seconds.
 
 10. Send Switch commands to the device.
     ```
     Authorization: Basic <base64-encoded credentials>
     POST https://%iot.host%:443/iot/core/api/v1/devices/%device.id%/commands
-    {
-	    "capabilityId" : "%switch.capability.id%",
-	    "sensorId" : "%sensor.id%",
-        "command" : {
-	       "Text" : "%random.text%",
-	       "LED" : "true | false"
-	    }
-    }
+	{  
+	   "capabilityId":"%switch.capability.id%",
+	   "sensorId":"%sensor.id%",
+	   "command":{  
+	      "Text":"%random.text%",
+	      "LED":"true | false"
+	   }
+	}
     ```
     >Note: The sending rate is one command per second. Duration is 5 seconds.
