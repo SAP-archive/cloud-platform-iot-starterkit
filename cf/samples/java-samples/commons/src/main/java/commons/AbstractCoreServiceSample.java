@@ -3,9 +3,6 @@ package commons;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import commons.api.CoreService;
@@ -14,6 +11,7 @@ import commons.model.Device;
 import commons.model.Gateway;
 import commons.model.Sensor;
 import commons.model.SensorType;
+import commons.utils.Console;
 import commons.utils.EntityFactory;
 
 public abstract class AbstractCoreServiceSample
@@ -38,15 +36,15 @@ extends AbstractSample {
 			device = coreService.getOnlineDevice(deviceId, gateway);
 		}
 		catch (IOException | IllegalStateException e) {
-			printWarning(e.getMessage());
+			Console.printWarning(e.getMessage());
 
-			printSeparator();
+			Console.printSeparator();
 
 			Device deviceTemplate = EntityFactory.buildSampleDevice(gateway);
 			device = coreService.addDevice(deviceTemplate);
 
-			printNewLine();
-			printProperty(DEVICE_ID, device.getId());
+			Console.printNewLine();
+			Console.printProperty(DEVICE_ID, device.getId());
 		}
 
 		return device;
@@ -70,22 +68,23 @@ extends AbstractSample {
 				return sensor;
 			}
 			else {
-				printWarning(String.format("A Sensor '%1$s' has no reference to Sensor Type '%2$s'",
-					sensorId, sensorType.getId()));
+				Console.printWarning(
+					String.format("A Sensor '%1$s' has no reference to Sensor Type '%2$s'",
+						sensorId, sensorType.getId()));
 			}
 		}
 		else {
-			printWarning(String.format("No Sensor '%1$s' is attached to the Device '%2$s'",
+			Console.printWarning(String.format("No Sensor '%1$s' is attached to the Device '%2$s'",
 				sensorId, device.getId()));
 		}
 
-		printSeparator();
+		Console.printSeparator();
 
 		Sensor sensorTemplate = EntityFactory.buildSampleSensor(device, sensorType);
 		sensor = coreService.addSensor(sensorTemplate);
 
-		printNewLine();
-		printProperty(SENSOR_ID, sensor.getId());
+		Console.printNewLine();
+		Console.printProperty(SENSOR_ID, sensor.getId());
 
 		return sensor;
 	}
@@ -105,14 +104,15 @@ extends AbstractSample {
 			return filteredSensorTypes.get(0);
 		}
 
-		printWarning(String.format("No '%1$s' Sensor Type found", sensorTypeTemplate.getName()));
+		Console.printWarning(
+			String.format("No '%1$s' Sensor Type found", sensorTypeTemplate.getName()));
 
-		printSeparator();
+		Console.printSeparator();
 
 		SensorType sensorType = coreService.addSensorType(sensorTypeTemplate);
 
-		printNewLine();
-		printProperty(SENSOR_TYPE_ID, sensorType.getId());
+		Console.printNewLine();
+		Console.printProperty(SENSOR_TYPE_ID, sensorType.getId());
 
 		return sensorType;
 	}
@@ -128,47 +128,17 @@ extends AbstractSample {
 			return filteredCapabilities.get(0);
 		}
 
-		printWarning(String.format("No '%1$s' Capability found", capabilityTemplate.getName()));
+		Console.printWarning(
+			String.format("No '%1$s' Capability found", capabilityTemplate.getName()));
 
-		printSeparator();
+		Console.printSeparator();
 
 		Capability capability = coreService.addCapability(capabilityTemplate);
 
-		printNewLine();
-		printProperty(CAPABILITY_ID, capability.getId());
+		Console.printNewLine();
+		Console.printProperty(CAPABILITY_ID, capability.getId());
 
 		return capability;
-	}
-
-	protected void receiveMeasures(final Device device, final Capability capability, int top)
-	throws IOException {
-		ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-		executor.schedule(new Runnable() {
-
-			@Override
-			public void run() {
-				try {
-					coreService.getLatestMeasures(device, capability, top);
-				}
-				catch (IOException e) {
-					printError(e.getMessage());
-				}
-				finally {
-					printSeparator();
-				}
-			}
-
-		}, 5000, TimeUnit.MILLISECONDS);
-
-		try {
-			executor.awaitTermination(1000, TimeUnit.MILLISECONDS);
-		}
-		catch (InterruptedException e) {
-			throw new IOException("Interrupted exception", e);
-		}
-		finally {
-			executor.shutdown();
-		}
 	}
 
 }

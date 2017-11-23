@@ -9,6 +9,8 @@ import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 
+import commons.utils.Console;
+
 public class ProxySelector {
 
 	private static final java.net.ProxySelector DEFAULT_SELECTOR = java.net.ProxySelector
@@ -32,7 +34,7 @@ public class ProxySelector {
 				proxyPortInteger = Integer.parseInt(proxyPort);
 			}
 			catch (NumberFormatException e) {
-				System.err.println(String.format("[WARN] Invalid proxy port: %1$s", proxyPort));
+				Console.printWarning(String.format("Invalid proxy port: %1$s", proxyPort));
 				return;
 			}
 

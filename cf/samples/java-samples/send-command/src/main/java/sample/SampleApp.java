@@ -10,8 +10,9 @@ import javax.net.ssl.SSLSocketFactory;
 
 import commons.AbstractCoreServiceSample;
 import commons.SampleException;
-import commons.connectivity.MqttClient;
-import commons.connectivity.MqttMessageListener;
+import commons.api.GatewayCloud;
+import commons.api.GatewayCloudHttp;
+import commons.api.GatewayCloudMqtt;
 import commons.model.Authentication;
 import commons.model.Capability;
 import commons.model.Command;
@@ -27,40 +28,11 @@ import commons.utils.SecurityUtil;
 public class SampleApp
 extends AbstractCoreServiceSample {
 
-	private MqttClient mqttClient;
+	private GatewayCloud gatewayCloud;
 
 	@Override
 	protected String getDescription() {
-		return "Send switch commands to the device and listen to them on the device side";
-	}
-
-	@Override
-	protected void promptProperties() {
-		Console console = Console.getInstance();
-
-		String host = properties.getProperty(IOT_HOST);
-		host = console.awaitNextLine(host, "Hostname (e.g. 'test.cp.iot.sap'): ");
-		properties.setProperty(IOT_HOST, host);
-
-		String user = properties.getProperty(IOT_USER);
-		user = console.awaitNextLine(user, "Username (e.g. 'root'): ");
-		properties.setProperty(IOT_USER, user);
-
-		properties.setProperty(GATEWAY_PROTOCOL_ID, GatewayProtocol.MQTT.getValue());
-
-		String deviceId = properties.getProperty(DEVICE_ID);
-		deviceId = console.awaitNextLine(deviceId, "Device ID (e.g. '100'): ");
-		properties.setProperty(DEVICE_ID, deviceId);
-
-		String sensorId = properties.getProperty(SENSOR_ID);
-		sensorId = console.awaitNextLine(sensorId, "Sensor ID (e.g. '100'): ");
-		properties.setProperty(SENSOR_ID, sensorId);
-
-		String password = properties.getProperty(IOT_PASSWORD);
-		password = console.nextPassword("Password for your user: ");
-		properties.setProperty(IOT_PASSWORD, password);
-
-		console.close();
+		return "Send switch commands to the device and listen to them on behalf of the device";
 	}
 
 	@Override
@@ -72,79 +44,60 @@ extends AbstractCoreServiceSample {
 			.fromValue(properties.getProperty(GATEWAY_PROTOCOL_ID));
 
 		try {
-			printSeparator();
+			Console.printSeparator();
 
 			Gateway gateway = coreService.getOnlineCloudGateway(gatewayProtocol);
 
-			printSeparator();
+			Console.printSeparator();
 
 			Device device = getOrAddDevice(deviceId, gateway);
 
-			printSeparator();
+			Console.printSeparator();
 
 			Capability measureCapability = getOrAddCapability(
 				EntityFactory.buildAmbientCapability());
 
-			printSeparator();
+			Console.printSeparator();
 
 			Capability commandCapability = getOrAddCapability(
 				EntityFactory.buildSwitchCapability());
 
-			printSeparator();
+			Console.printSeparator();
 
 			SensorType sensorType = getOrAddSensorType(measureCapability, commandCapability);
 
 			Sensor sensor = getOrAddSensor(sensorId, device, sensorType);
 
-			printSeparator();
+			Console.printSeparator();
 
 			Authentication authentication = coreService.getAuthentication(device);
 
 			SSLSocketFactory sslSocketFactory = SecurityUtil.getSSLSocketFactory(device,
 				authentication);
-			String clientId = device.getAlternateId();
-			mqttClient = new MqttClient(clientId, sslSocketFactory);
 
-			printSeparator();
+			switch (gatewayProtocol) {
+			case MQTT:
+				gatewayCloud = new GatewayCloudMqtt(device, sslSocketFactory);
+				break;
+			case REST:
+			default:
+				gatewayCloud = new GatewayCloudHttp(device, sslSocketFactory);
+				break;
+			}
 
-			listenCommands(device);
+			Console.printSeparator();
 
-			sendCommands(device, sensor, commandCapability);
+			listenSwitchCommands(device);
+
+			sendSwitchCommands(device, sensor, commandCapability);
 		}
 		catch (IOException | GeneralSecurityException | IllegalStateException e) {
 			throw new SampleException(e.getMessage());
 		}
 	}
 
-	private void listenCommands(Device device)
-	throws IOException {
-		String host = properties.getProperty(IOT_HOST);
-		String topic = String.format("commands/%1$s", device.getAlternateId());
-		String destination = String.format("ssl://%1$s:8883", host);
-
-		try {
-			mqttClient.connect(destination);
-			printSeparator();
-			mqttClient.subscribe(topic, new MqttMessageListener() {
-
-				@Override
-				public void onMessage(String topic, String message) {
-					System.out.println(String.format("Message on topic '%1$s'", topic));
-					printNewLine();
-					System.out.println(String.format("Message %1$s", message));
-					printSeparator();
-				}
-
-			});
-		}
-		catch (IOException e) {
-			throw new IOException("Unable to subscribe over MQTT", e);
-		}
-
-		disconnect();
-	}
-
-	private void sendCommands(final Device device, final Sensor sensor, final Capability capability)
+	private void sendSwitchCommands(final Device device, final Sensor sensor,
+		final Capability capability)
 	throws IOException {
 		ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 		executor.scheduleAtFixedRate(new Runnable() {
@@ -157,10 +110,10 @@ extends AbstractCoreServiceSample {
 					coreService.sendCommand(command, device);
 				}
 				catch (IOException e) {
-					// do nothing
+					Console.printError(e.getMessage());
 				}
 				finally {
-					printSeparator();
+					Console.printSeparator();
 				}
 			}
 
@@ -174,17 +127,29 @@ extends AbstractCoreServiceSample {
 		}
 		finally {
 			executor.shutdown();
+			coreService.shutdown();
 		}
 	}
 
-	private void disconnect()
+	private void listenSwitchCommands(Device device)
 	throws IOException {
+		String host = properties.getProperty(IOT_HOST);
+
+		try {
+			gatewayCloud.connect(host);
+		}
+		catch (IOException e) {
+			throw new IOException("Unable to connect to the Gateway Cloud", e);
+		}
+
+		gatewayCloud.listenCommands();
+
 		ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 		executor.schedule(new Runnable() {
 
 			@Override
 			public void run() {
-				mqttClient.disconnect();
+				gatewayCloud.disconnect();
 			}
 
 		}, 20000, TimeUnit.MILLISECONDS);

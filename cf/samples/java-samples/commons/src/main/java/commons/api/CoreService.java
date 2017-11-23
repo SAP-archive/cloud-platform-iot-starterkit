@@ -18,23 +18,27 @@ public class CoreService {
 
 	private HttpClient httpClient;
 
-	private String host;
+	private String baseUri;
 
 	public CoreService(String host, String user, String password) {
-		this.host = String.format("https://%1$s:443", host);
+		baseUri = String.format("https://%1$s/iot/core/api/v1", host);
 		httpClient = new HttpClient(user, password);
+	}
+
+	public void shutdown() {
+		httpClient.disconnect();
 	}
 
 	public Gateway getOnlineCloudGateway(GatewayProtocol protocolId)
 	throws IOException {
 		String destination = String.format(
-			"%1$s/iot/core/api/v1/gateways?filter=protocolId eq '%2$s' and status eq 'online'",
-			host, protocolId);
+			"%1$s/gateways?filter=protocolId eq '%2$s' and status eq 'online' and type eq 'cloud'",
+			baseUri, protocolId);
 
 		Gateway[] gateways = null;
 		try {
 			httpClient.connect(destination);
-			gateways = httpClient.doGetJson(Gateway[].class);
+			gateways = httpClient.doGet(Gateway[].class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -62,12 +66,12 @@ public class CoreService {
 
 	public Device getOnlineDevice(String id, Gateway gateway)
 	throws IOException {
-		String destination = String.format("%1$s/iot/core/api/v1/devices/%2$s", host, id);
+		String destination = String.format("%1$s/devices/%2$s", baseUri, id);
 
 		Device device = null;
 		try {
 			httpClient.connect(destination);
-			device = httpClient.doGetJson(Device.class);
+			device = httpClient.doGet(Device.class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -84,11 +88,11 @@ public class CoreService {
 
 	public Device addDevice(Device device)
 	throws IOException {
-		String destination = String.format("%1$s/iot/core/api/v1/devices", host);
+		String destination = String.format("%1$s/devices", baseUri);
 
 		try {
 			httpClient.connect(destination);
-			return httpClient.doPostJson(device, Device.class);
+			return httpClient.doPost(device, Device.class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -97,11 +101,11 @@ public class CoreService {
 
 	public Sensor addSensor(Sensor sensor)
 	throws IOException {
-		String destination = String.format("%1$s/iot/core/api/v1/sensors", host);
+		String destination = String.format("%1$s/sensors", baseUri);
 
 		try {
 			httpClient.connect(destination);
-			return httpClient.doPostJson(sensor, Sensor.class);
+			return httpClient.doPost(sensor, Sensor.class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -111,12 +115,11 @@ public class CoreService {
 	public Authentication getAuthentication(Device device)
 	throws IOException {
 		String destination = String.format(
-			"%1$s/iot/core/api/v1/devices/%2$s/authentications/clientCertificate/pem", host,
-			device.getId());
+			"%1$s/devices/%2$s/authentications/clientCertificate/pem", baseUri, device.getId());
 
 		try {
 			httpClient.connect(destination);
-			return httpClient.doGetJson(Authentication.class);
+			return httpClient.doGet(Authentication.class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -126,12 +129,12 @@ public class CoreService {
 	public Measure[] getLatestMeasures(Device device, Capability capability, int top)
 	throws IOException {
 		String destination = String.format(
-			"%1$s/iot/core/api/v1/devices/%2$s/measures?orderby=timestamp desc&filter=capabilityId eq '%3$s'&top=%4$d",
-			host, device.getId(), capability.getId(), top);
+			"%1$s/devices/%2$s/measures?orderby=timestamp desc&filter=capabilityId eq '%3$s'&top=%4$d",
+			baseUri, device.getId(), capability.getId(), top);
 
 		try {
 			httpClient.connect(destination);
-			return httpClient.doGetJson(Measure[].class);
+			return httpClient.doGet(Measure[].class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -140,8 +143,7 @@ public class CoreService {
 
 	public void sendCommand(Command command, Device device)
 	throws IOException {
-		String destination = String.format("%1$s/iot/core/api/v1/devices/%2$s/commands", host,
-			device.getId());
+		String destination = String.format("%1$s/devices/%2$s/commands", baseUri, device.getId());
 
 		try {
 			httpClient.connect(destination);
@@ -154,11 +156,11 @@ public class CoreService {
 
 	public Capability[] getCapabilities()
 	throws IOException {
-		String destination = String.format("%1$s/iot/core/api/v1/capabilities", host);
+		String destination = String.format("%1$s/capabilities", baseUri);
 
 		try {
 			httpClient.connect(destination);
-			return httpClient.doGetJson(Capability[].class);
+			return httpClient.doGet(Capability[].class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -167,11 +169,11 @@ public class CoreService {
 
 	public Capability getCapability(String id)
 	throws IOException {
-		String destination = String.format("%1$s/iot/core/api/v1/capabilities/%2$s", host, id);
+		String destination = String.format("%1$s/capabilities/%2$s", baseUri, id);
 
 		try {
 			httpClient.connect(destination);
-			return httpClient.doGetJson(Capability.class);
+			return httpClient.doGet(Capability.class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -180,11 +182,11 @@ public class CoreService {
 
 	public Capability addCapability(Capability capability)
 	throws IOException {
-		String destination = String.format("%1$s/iot/core/api/v1/capabilities", host);
+		String destination = String.format("%1$s/capabilities", baseUri);
 
 		try {
 			httpClient.connect(destination);
-			return httpClient.doPostJson(capability, Capability.class);
+			return httpClient.doPost(capability, Capability.class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -193,11 +195,11 @@ public class CoreService {
 
 	public SensorType[] getSensorTypes()
 	throws IOException {
-		String destination = String.format("%1$s/iot/core/api/v1/sensorTypes", host);
+		String destination = String.format("%1$s/sensorTypes", baseUri);
 
 		try {
 			httpClient.connect(destination);
-			return httpClient.doGetJson(SensorType[].class);
+			return httpClient.doGet(SensorType[].class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -206,11 +208,11 @@ public class CoreService {
 
 	public SensorType getSensorType(String id)
 	throws IOException {
-		String destination = String.format("%1$s/iot/core/api/v1/sensorTypes/%2$s", host, id);
+		String destination = String.format("%1$s/sensorTypes/%2$s", baseUri, id);
 
 		try {
 			httpClient.connect(destination);
-			return httpClient.doGetJson(SensorType.class);
+			return httpClient.doGet(SensorType.class);
 		}
 		finally {
 			httpClient.disconnect();
@@ -219,11 +221,11 @@ public class CoreService {
 
 	public SensorType addSensorType(SensorType sensorType)
 	throws IOException {
-		String destination = String.format("%1$s/iot/core/api/v1/sensorTypes", host);
+		String destination = String.format("%1$s/sensorTypes", baseUri);
 
 		try {
 			httpClient.connect(destination);
-			return httpClient.doPostJson(sensorType, SensorType.class);
+			return httpClient.doPost(sensorType, SensorType.class);
 		}
 		finally {
 			httpClient.disconnect();

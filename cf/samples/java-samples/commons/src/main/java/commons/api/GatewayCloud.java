@@ -2,6 +2,8 @@ package commons.api;
 
 import java.io.IOException;
 
+import commons.model.gateway.Measure;
+
 /**
  * An abstraction over Cloud Gateways.
  */
@@ -12,7 +14,10 @@ public interface GatewayCloud {
 
 	public void disconnect();
 
-	public <T> void send(T payload, Class<T> clazz)
+	public void sendMeasure(Measure measure)
+	throws IOException;
+
+	public void listenCommands()
 	throws IOException;
 
 }
