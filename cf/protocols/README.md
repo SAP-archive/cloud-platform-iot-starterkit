@@ -2,7 +2,7 @@
 
 To set up the Internet of Things Gateway Edge and publish data, you need to provide the data model required by the protocol. You can do so manually or by performing the following steps:
 
-1. Adjust the [protocol-config.sh](protocol-config.sh) file with your instance information, credentials, and the protocol information.
+1. Adjust the [protocol-config.sh](protocol-config.sh) file with your instance information, credentials, and the protocol type.
 2. Save the file.
 3. Execute the shell script [protocol-model.sh](protocol-model.sh) using the Bash Unix shell.
 

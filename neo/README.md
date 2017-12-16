@@ -1,6 +1,6 @@
 # Starter Kit for the SAP Cloud Platform Internet of Things
 
-A Starter Kit for working with the [SAP Cloud Platform Internet of Things](https://help.sap.com/viewer/product/SAP_CP_IOT_2.0/Cloud/en-US)
+A Starter Kit for working with the [SAP Cloud Platform Internet of Things for Neo Environment](https://help.sap.com/viewer/product/SAP_CP_IOT_NEO/Cloud/en-US)
 
 The document and the code snippets will provide a complete end to end example of how to use the SAP Cloud Platform Internet of Things. You will learn how to enable it for your account as
 well as how to send messages and how to receive push messages. Moreover, the samples for data consumption are provided. 
