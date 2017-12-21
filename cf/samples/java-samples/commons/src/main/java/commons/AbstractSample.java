@@ -3,11 +3,14 @@ package commons;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Properties;
 
 import commons.connectivity.ProxySelector;
 import commons.model.GatewayProtocol;
 import commons.utils.Console;
+import commons.utils.Constants;
 import commons.utils.FileUtil;
 
 /**
@@ -106,8 +109,15 @@ public abstract class AbstractSample {
 	private void init() {
 		File jar = new File(
 			AbstractSample.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-		File config = new File(
-			jar.getParentFile().getAbsolutePath().concat("/").concat(CONFIGURATIONS_FILE_NAME));
+		String path = jar.getParentFile().getAbsolutePath()
+			.concat(System.getProperty("file.separator")).concat(CONFIGURATIONS_FILE_NAME);
+		try {
+			path = URLDecoder.decode(path, Constants.DEFAULT_ENCODING.name());
+		}
+		catch (UnsupportedEncodingException e) {
+			Console.printWarning("Unable to decode config file path.");
+		}
+		File config = new File(path);
 
 		properties = new Properties();
 
