@@ -1,0 +1,10 @@
+{
+    "alternateId": "1",
+    "name": "BoardID",
+    "properties": [
+        {
+            "dataType": "string",
+            "name": "BoardID"
+        }
+    ]
+}
