@@ -2,6 +2,7 @@ package commons;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,6 +12,7 @@ import commons.model.Device;
 import commons.model.Gateway;
 import commons.model.Sensor;
 import commons.model.SensorType;
+import commons.model.SensorTypeCapability;
 import commons.utils.Console;
 import commons.utils.EntityFactory;
 
@@ -18,6 +20,8 @@ public abstract class AbstractCoreServiceSample
 extends AbstractSample {
 
 	protected CoreService coreService;
+
+	private Comparator<SensorTypeCapability> sensorTypeCapabilityComparator;
 
 	public AbstractCoreServiceSample() {
 		super();
@@ -27,6 +31,8 @@ extends AbstractSample {
 		String password = properties.getProperty(IOT_PASSWORD);
 
 		coreService = new CoreService(host, user, password);
+
+		sensorTypeCapabilityComparator = Comparator.comparing(SensorTypeCapability::getId);
 	}
 
 	protected Device getOrAddDevice(String deviceId, Gateway gateway)
@@ -34,8 +40,7 @@ extends AbstractSample {
 		Device device;
 		try {
 			device = coreService.getOnlineDevice(deviceId, gateway);
-		}
-		catch (IOException | IllegalStateException e) {
+		} catch (IOException | IllegalStateException e) {
 			Console.printWarning(e.getMessage());
 
 			Console.printSeparator();
@@ -66,16 +71,13 @@ extends AbstractSample {
 		if (sensor != null) {
 			if (sensor.getSensorTypeId().equals(sensorType.getId())) {
 				return sensor;
+			} else {
+				Console.printWarning(String.format("A Sensor '%1$s' has no reference to Sensor Type '%2$s'", sensorId,
+					sensorType.getId()));
 			}
-			else {
-				Console.printWarning(
-					String.format("A Sensor '%1$s' has no reference to Sensor Type '%2$s'",
-						sensorId, sensorType.getId()));
-			}
-		}
-		else {
-			Console.printWarning(String.format("No Sensor '%1$s' is attached to the Device '%2$s'",
-				sensorId, device.getId()));
+		} else {
+			Console.printWarning(
+				String.format("No Sensor '%1$s' is attached to the Device '%2$s'", sensorId, device.getId()));
 		}
 
 		Console.printSeparator();
@@ -89,23 +91,24 @@ extends AbstractSample {
 		return sensor;
 	}
 
-	protected SensorType getOrAddSensorType(Capability measureCapability,
-		Capability commandCapability)
+	protected SensorType getOrAddSensorType(Capability measureCapability, Capability commandCapability)
 	throws IOException {
-		SensorType sensorTypeTemplate = EntityFactory.buildSampleSensorType(measureCapability,
-			commandCapability);
+		SensorType sensorTypeTemplate = EntityFactory.buildSampleSensorType(measureCapability, commandCapability);
+
+		Arrays.asList(sensorTypeTemplate.getCapabilities()).sort(sensorTypeCapabilityComparator);
 
 		SensorType[] existingSensorTypes = coreService.getSensorTypes();
 
-		List<SensorType> filteredSensorTypes = Arrays.stream(existingSensorTypes)
-			.filter(st -> st.equals(sensorTypeTemplate)).distinct().collect(Collectors.toList());
+		List<SensorType> filteredSensorTypes = Arrays.stream(existingSensorTypes).filter(st -> {
+			Arrays.asList(st.getCapabilities()).sort(sensorTypeCapabilityComparator);
+			return st.equals(sensorTypeTemplate);
+		}).distinct().collect(Collectors.toList());
 
 		if (filteredSensorTypes.size() == 1) {
 			return filteredSensorTypes.get(0);
 		}
 
-		Console.printWarning(
-			String.format("No '%1$s' Sensor Type found", sensorTypeTemplate.getName()));
+		Console.printWarning(String.format("No '%1$s' Sensor Type found", sensorTypeTemplate.getName()));
 
 		Console.printSeparator();
 
@@ -128,8 +131,7 @@ extends AbstractSample {
 			return filteredCapabilities.get(0);
 		}
 
-		Console.printWarning(
-			String.format("No '%1$s' Capability found", capabilityTemplate.getName()));
+		Console.printWarning(String.format("No '%1$s' Capability found", capabilityTemplate.getName()));
 
 		Console.printSeparator();
 
