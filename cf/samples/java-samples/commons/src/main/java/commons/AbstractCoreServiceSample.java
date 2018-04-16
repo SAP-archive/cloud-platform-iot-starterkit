@@ -39,7 +39,7 @@ extends AbstractSample {
 	throws IOException {
 		Device device;
 		try {
-			device = coreService.getOnlineDevice(deviceId, gateway);
+			device = coreService.getDevice(deviceId, gateway);
 		} catch (IOException | IllegalStateException e) {
 			Console.printWarning(e.getMessage());
 
