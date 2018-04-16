@@ -32,15 +32,14 @@ public class CoreService {
 	public Gateway getOnlineCloudGateway(GatewayProtocol protocolId)
 	throws IOException {
 		String destination = String.format(
-			"%1$s/gateways?filter=protocolId eq '%2$s' and status eq 'online' and type eq 'cloud'",
-			baseUri, protocolId);
+			"%1$s/gateways?filter=protocolId eq '%2$s' and status eq 'online' and type eq 'cloud'", baseUri,
+			protocolId);
 
 		Gateway[] gateways = null;
 		try {
 			httpClient.connect(destination);
 			gateways = httpClient.doGet(Gateway[].class);
-		}
-		finally {
+		} finally {
 			httpClient.disconnect();
 		}
 
@@ -50,21 +49,19 @@ public class CoreService {
 		}
 
 		if (gateways.length > 1) {
-			throw new IllegalStateException(String
-				.format("Multiple online Gateways with protocol ID '%1$s' found", protocolId));
+			throw new IllegalStateException(
+				String.format("Multiple online Gateways with protocol ID '%1$s' found", protocolId));
 		}
 
 		Gateway gateway = gateways[0];
-		if (!protocolId.equals(gateway.getProtocolId()) ||
-			!GatewayStatus.ONLINE.equals(gateway.getStatus())) {
-			throw new IllegalStateException(
-				String.format("Unexpected Gateway returned '%1$s'", gateway));
+		if (!protocolId.equals(gateway.getProtocolId()) || !GatewayStatus.ONLINE.equals(gateway.getStatus())) {
+			throw new IllegalStateException(String.format("Unexpected Gateway returned '%1$s'", gateway));
 		}
 
 		return gateway;
 	}
 
-	public Device getOnlineDevice(String id, Gateway gateway)
+	public Device getDevice(String id, Gateway gateway)
 	throws IOException {
 		String destination = String.format("%1$s/devices/%2$s", baseUri, id);
 
@@ -72,15 +69,13 @@ public class CoreService {
 		try {
 			httpClient.connect(destination);
 			device = httpClient.doGet(Device.class);
-		}
-		finally {
+		} finally {
 			httpClient.disconnect();
 		}
 
-		if (!device.isOnline() || !device.getGatewayId().equals(gateway.getId())) {
-			throw new IllegalStateException(
-				String.format("No online Device with ID '%1$s' found in the '%2$s' Gateway", id,
-					gateway.getProtocolId().getValue()));
+		if (!device.getGatewayId().equals(gateway.getId())) {
+			throw new IllegalStateException(String.format("No Device with ID '%1$s' found in the '%2$s' Gateway", id,
+				gateway.getProtocolId().getValue()));
 		}
 
 		return device;
@@ -93,8 +88,7 @@ public class CoreService {
 		try {
 			httpClient.connect(destination);
 			return httpClient.doPost(device, Device.class);
-		}
-		finally {
+		} finally {
 			httpClient.disconnect();
 		}
 	}
@@ -106,22 +100,20 @@ public class CoreService {
 		try {
 			httpClient.connect(destination);
 			return httpClient.doPost(sensor, Sensor.class);
-		}
-		finally {
+		} finally {
 			httpClient.disconnect();
 		}
 	}
 
 	public Authentication getAuthentication(Device device)
 	throws IOException {
-		String destination = String.format(
-			"%1$s/devices/%2$s/authentications/clientCertificate/pem", baseUri, device.getId());
+		String destination = String.format("%1$s/devices/%2$s/authentications/clientCertificate/pem", baseUri,
+			device.getId());
 
 		try {
 			httpClient.connect(destination);
 			return httpClient.doGet(Authentication.class);
-		}
-		finally {
+		} finally {
 			httpClient.disconnect();
 		}
 	}
@@ -129,14 +121,13 @@ public class CoreService {
 	public Measure[] getLatestMeasures(Device device, Capability capability, int top)
 	throws IOException {
 		String destination = String.format(
-			"%1$s/devices/%2$s/measures?orderby=timestamp desc&filter=capabilityId eq '%3$s'&top=%4$d",
-			baseUri, device.getId(), capability.getId(), top);
+			"%1$s/devices/%2$s/measures?orderby=timestamp desc&filter=capabilityId eq '%3$s'&top=%4$d", baseUri,
+			device.getId(), capability.getId(), top);
 
 		try {
 			httpClient.connect(destination);
 			return httpClient.doGet(Measure[].class);
-		}
-		finally {
+		} finally {
 			httpClient.disconnect();
 		}
 	}
@@ -148,8 +139,7 @@ public class CoreService {
 		try {
 			httpClient.connect(destination);
 			httpClient.doPost(command, Command.class);
-		}
-		finally {
+		} finally {
 			httpClient.disconnect();
 		}
 	}
@@ -161,8 +151,7 @@ public class CoreService {
 		try {
 			httpClient.connect(destination);
 			return httpClient.doGet(Capability[].class);
-		}
-		finally {
+		} finally {
 			httpClient.disconnect();
 		}
 	}
@@ -174,8 +163,7 @@ public class CoreService {
 		try {
 			httpClient.connect(destination);
 			return httpClient.doGet(Capability.class);
-		}
-		finally {
+		} finally {
 			httpClient.disconnect();
 		}
 	}
@@ -187,8 +175,7 @@ public class CoreService {
 		try {
 			httpClient.connect(destination);
 			return httpClient.doPost(capability, Capability.class);
-		}
-		finally {
+		} finally {
 			httpClient.disconnect();
 		}
 	}
@@ -200,8 +187,7 @@ public class CoreService {
 		try {
 			httpClient.connect(destination);
 			return httpClient.doGet(SensorType[].class);
-		}
-		finally {
+		} finally {
 			httpClient.disconnect();
 		}
 	}
@@ -213,8 +199,7 @@ public class CoreService {
 		try {
 			httpClient.connect(destination);
 			return httpClient.doGet(SensorType.class);
-		}
-		finally {
+		} finally {
 			httpClient.disconnect();
 		}
 	}
@@ -226,8 +211,7 @@ public class CoreService {
 		try {
 			httpClient.connect(destination);
 			return httpClient.doPost(sensorType, SensorType.class);
-		}
-		finally {
+		} finally {
 			httpClient.disconnect();
 		}
 	}
