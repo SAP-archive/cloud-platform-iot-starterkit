@@ -1,0 +1,10 @@
+{
+    "alternateId": "binary_file",
+    "name": "binary_file_data",
+    "properties": [
+        {
+            "dataType": "binary",
+            "name": "binary_file"
+        }
+    ]
+}
