@@ -73,7 +73,7 @@ public class CoreService {
 			httpClient.disconnect();
 		}
 
-		if (!device.getGatewayId().equals(gateway.getId())) {
+		if (!gateway.getId().equals(device.getGatewayId())) {
 			throw new IllegalStateException(String.format("No Device with ID '%1$s' found in the '%2$s' Gateway", id,
 				gateway.getProtocolId().getValue()));
 		}

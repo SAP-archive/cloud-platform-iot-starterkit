@@ -1,5 +1,6 @@
 package commons.utils;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
@@ -45,9 +46,8 @@ public class EntityFactory {
 
 		measure.setCapabilityAlternateId(capability.getAlternateId());
 		measure.setSensorAlternateId(sensor.getAlternateId());
-		measure.setMeasures(new String[][] { { String.valueOf(buildHumidityPercentage()),
-			String.format(Constants.DEFAULT_LOCALE, "%.1f", buildDegreesCelsius()),
-			String.valueOf(buildLightIlluminance()) } });
+		measure.setMeasures(
+			new Object[][] { { buildHumidityPercentage(), buildDegreesCelsius(), buildLightIlluminance() } });
 
 		return measure;
 	}
@@ -86,8 +86,7 @@ public class EntityFactory {
 		return device;
 	}
 
-	public static SensorType buildSampleSensorType(Capability measureCapability,
-		Capability commandCapability) {
+	public static SensorType buildSampleSensorType(Capability measureCapability, Capability commandCapability) {
 		SensorType sensorType = new SensorType();
 
 		sensorType.setName(CONTROL_UNIT_SENSOR_TYPE_NAME);
@@ -110,8 +109,8 @@ public class EntityFactory {
 
 		capability.setAlternateId(AMBIENT_CAPABILITY_ALTERNATE_ID);
 		capability.setName(AMBIENT_CAPABILITY_NAME);
-		capability.setProperties(new Property[] { buildHumidityProperty(),
-			buildTemperatureProperty(), buildLightProperty() });
+		capability.setProperties(
+			new Property[] { buildHumidityProperty(), buildTemperatureProperty(), buildLightProperty() });
 
 		return capability;
 	}
@@ -185,7 +184,9 @@ public class EntityFactory {
 		float min = -100.0f;
 		float max = 100.0f;
 
-		return new Random().nextFloat() * (max - min) + min;
+		float randomFloat = new Random().nextFloat() * (max - min) + min;
+
+		return BigDecimal.valueOf(randomFloat).setScale(1, BigDecimal.ROUND_HALF_EVEN).floatValue();
 	}
 
 	private static int buildLightIlluminance() {
