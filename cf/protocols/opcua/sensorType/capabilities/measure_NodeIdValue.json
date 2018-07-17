@@ -1,0 +1,10 @@
+{
+    "alternateId": "NodeIdValue",
+    "name": "NodeIdValue",
+    "properties": [
+        {
+            "dataType": "string",
+            "name": "NodeIdValue"
+        }
+    ]
+}
