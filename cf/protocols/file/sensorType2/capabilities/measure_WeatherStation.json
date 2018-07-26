@@ -1,0 +1,14 @@
+{
+	"alternateId": "weather_station_data",
+	"name": "weather_station_data",
+	"properties": [{
+		"name": "temperature",
+		"dataType": "float"
+	}, {
+		"name": "relative_humidity",
+		"dataType": "float"
+	}, {
+		"name": "air_pressure",
+		"dataType": "float"
+	}]
+}
