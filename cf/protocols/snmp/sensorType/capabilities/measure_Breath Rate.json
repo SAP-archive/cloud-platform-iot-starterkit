@@ -5,9 +5,10 @@
         {
             "dataType": "integer",
             "formatter": {
+            	"dataType": "integer",
                 "swap": true
             },
-            "name": "Breath Rate",
+            "name": "BreathRate",
             "unitOfMeasure": "breath/minute"
         }
     ]

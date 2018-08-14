@@ -5,6 +5,7 @@
         {
             "dataType": "double",
             "formatter": {
+            	"dataType": "double",
                 "swap": true
             },
             "name": "PositionX",
@@ -13,6 +14,7 @@
         {
             "dataType": "double",
             "formatter": {
+            	"dataType": "double",
                 "swap": true
             },
             "name": "PositionY",
@@ -21,6 +23,7 @@
         {
             "dataType": "double",
             "formatter": {
+            	"dataType": "double",
                 "swap": true
             },
             "name": "PositionZ",

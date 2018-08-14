@@ -4,9 +4,6 @@
     "properties": [
         {
             "dataType": "string",
-            "formatter": {
-                "swap": true
-            },
             "name": "ErrorSeverity"
         }
     ]

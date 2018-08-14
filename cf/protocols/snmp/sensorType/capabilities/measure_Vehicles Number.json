@@ -5,9 +5,10 @@
         {
             "dataType": "integer",
             "formatter": {
+            	"dataType": "integer",
                 "swap": true
             },
-            "name": "Vehicles Number"
+            "name": "VehiclesNumber"
         }
     ]
 }

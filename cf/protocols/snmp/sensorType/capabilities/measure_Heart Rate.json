@@ -5,9 +5,10 @@
         {
             "dataType": "integer",
             "formatter": {
+            	"dataType": "integer",
                 "swap": true
             },
-            "name": "Heart Rate",
+            "name": "HeartRate",
             "unitOfMeasure": "beats/minute"
         }
     ]

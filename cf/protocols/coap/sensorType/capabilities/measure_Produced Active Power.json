@@ -4,7 +4,7 @@
     "properties": [
         {
             "dataType": "float",
-            "name": "Produced Active Power",
+            "name": "ProducedActivePower",
             "unitOfMeasure": "KW"
         }
     ]
