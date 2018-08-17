@@ -1,22 +1,22 @@
-{
-    "alternateId": "52",
-    "name": "RegisterDevicesFromFile",
-    "properties": [
-        {
-            "dataType": "string",
-            "name": "deviceTypeId"
-        },
-        {
-            "dataType": "string",
-            "name": "prefix"
-        },
-        {
-            "dataType": "string",
-            "name": "productCertificate"
-        },
-        {
-            "dataType": "binary",
-            "name": "deviceFile"
-        }
-    ]
+{  
+   "alternateId":"52",
+   "name":"RegisterDevicesFromFile",
+   "properties":[  
+      {  
+         "dataType":"string",
+         "name":"deviceTypeId"
+      },
+      {  
+         "dataType":"string",
+         "name":"prefix"
+      },
+      {  
+         "dataType":"string",
+         "name":"productCertificate"
+      },
+      {  
+         "dataType":"binary",
+         "name":"deviceFile"
+      }
+   ]
 }

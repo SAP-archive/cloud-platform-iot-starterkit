@@ -1,11 +1,11 @@
-{
-    "alternateId": "8",
-    "name": "Speed",
-    "properties": [
-        {
-            "dataType": "float",
-            "name": "Speed",
-            "unitOfMeasure": "km/h"
-        }
-    ]
+{  
+   "alternateId":"8",
+   "name":"Speed",
+   "properties":[  
+      {  
+         "dataType":"float",
+         "name":"Speed",
+         "unitOfMeasure":"km/h"
+      }
+   ]
 }

@@ -1,10 +1,10 @@
-{
-    "alternateId": "people_count",
-    "name": "people_count",
-    "properties": [
-        {
-            "dataType": "integer",
-            "name": "people_count"
-        }
-    ]
+{  
+   "alternateId":"people_count",
+   "name":"people_count",
+   "properties":[  
+      {  
+         "dataType":"integer",
+         "name":"people_count"
+      }
+   ]
 }

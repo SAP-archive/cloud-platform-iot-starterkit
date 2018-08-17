@@ -1,10 +1,10 @@
-{
-    "alternateId": "WriteLocalizedText",
-    "name": "WriteLocalizedText",
-    "properties": [
-        {
-            "dataType": "string",
-            "name": "value"
-        }
-    ]
+{  
+   "alternateId":"WriteLocalizedText",
+   "name":"WriteLocalizedText",
+   "properties":[  
+      {  
+         "dataType":"string",
+         "name":"value"
+      }
+   ]
 }

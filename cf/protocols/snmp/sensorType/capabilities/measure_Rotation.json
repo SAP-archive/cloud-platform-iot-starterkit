@@ -1,21 +1,21 @@
-{
-    "alternateId": "19",
-    "name": "Rotation",
-    "properties": [
-        {
-            "dataType": "float",
-            "name": "roll",
-            "unitOfMeasure": "°"
-        },
-        {
-            "dataType": "float",
-            "name": "pitch",
-            "unitOfMeasure": "°"
-        },
-        {
-            "dataType": "float",
-            "name": "yaw",
-            "unitOfMeasure": "°"
-        }
-    ]
+{  
+   "alternateId":"19",
+   "name":"Rotation",
+   "properties":[  
+      {  
+         "dataType":"float",
+         "name":"roll",
+         "unitOfMeasure":"°"
+      },
+      {  
+         "dataType":"float",
+         "name":"pitch",
+         "unitOfMeasure":"°"
+      },
+      {  
+         "dataType":"float",
+         "name":"yaw",
+         "unitOfMeasure":"°"
+      }
+   ]
 }

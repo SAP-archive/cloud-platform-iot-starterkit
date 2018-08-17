@@ -1,26 +1,26 @@
-{
-    "alternateId": "AddNode",
-    "name": "AddNode",
-    "properties": [
-        {
-            "dataType": "string",
-            "name": "parentNodeId"
-        },
-        {
-            "dataType": "string",
-            "name": "referenceTypeId"
-        },
-        {
-            "dataType": "string",
-            "name": "newNodeId"
-        },
-        {
-            "dataType": "string",
-            "name": "nodeCLass"
-        },
-        {
-            "dataType": "string",
-            "name": "browseName"
-        }
-    ]
+{  
+   "alternateId":"AddNode",
+   "name":"AddNode",
+   "properties":[  
+      {  
+         "dataType":"string",
+         "name":"parentNodeId"
+      },
+      {  
+         "dataType":"string",
+         "name":"referenceTypeId"
+      },
+      {  
+         "dataType":"string",
+         "name":"newNodeId"
+      },
+      {  
+         "dataType":"string",
+         "name":"nodeCLass"
+      },
+      {  
+         "dataType":"string",
+         "name":"browseName"
+      }
+   ]
 }

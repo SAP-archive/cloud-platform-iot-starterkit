@@ -1,15 +1,15 @@
-{
-    "alternateId": "22",
-    "name": "Breath Rate",
-    "properties": [
-        {
-            "dataType": "integer",
-            "formatter": {
-            	"dataType": "integer",
-                "swap": true
-            },
-            "name": "BreathRate",
-            "unitOfMeasure": "breath/minute"
-        }
-    ]
+{  
+   "alternateId":"22",
+   "name":"Breath Rate",
+   "properties":[  
+      {  
+         "dataType":"integer",
+         "formatter":{  
+            "dataType":"integer",
+            "swap":true
+         },
+         "name":"BreathRate",
+         "unitOfMeasure":"breath/minute"
+      }
+   ]
 }

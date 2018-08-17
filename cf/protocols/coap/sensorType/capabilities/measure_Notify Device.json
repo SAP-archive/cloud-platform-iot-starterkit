@@ -1,10 +1,10 @@
-{
-    "alternateId": "15",
-    "name": "Notify Device",
-    "properties": [
-        {
-            "dataType": "string",
-            "name": "NotifyDevice"
-        }
-    ]
+{  
+   "alternateId":"15",
+   "name":"Notify Device",
+   "properties":[  
+      {  
+         "dataType":"string",
+         "name":"NotifyDevice"
+      }
+   ]
 }

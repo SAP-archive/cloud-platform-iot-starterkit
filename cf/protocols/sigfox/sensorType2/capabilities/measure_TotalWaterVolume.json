@@ -1,11 +1,11 @@
-{
-    "alternateId": "32",
-    "name": "TotalWaterVolume",
-    "properties": [
-        {
-            "dataType": "long",
-            "name": "TotalWaterVolume",
-            "unitOfMeasure": "dm3"
-        }
-    ]
+{  
+   "alternateId":"32",
+   "name":"TotalWaterVolume",
+   "properties":[  
+      {  
+         "dataType":"long",
+         "name":"TotalWaterVolume",
+         "unitOfMeasure":"dm3"
+      }
+   ]
 }

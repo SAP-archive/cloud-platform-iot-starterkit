@@ -1,11 +1,11 @@
-{
-    "alternateId": "7",
-    "name": "Remaining Km",
-    "properties": [
-        {
-            "dataType": "float",
-            "name": "RemainingKm",
-            "unitOfMeasure": "km"
-        }
-    ]
+{  
+   "alternateId":"7",
+   "name":"Remaining Km",
+   "properties":[  
+      {  
+         "dataType":"float",
+         "name":"RemainingKm",
+         "unitOfMeasure":"km"
+      }
+   ]
 }

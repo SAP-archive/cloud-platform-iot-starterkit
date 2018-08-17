@@ -1,10 +1,10 @@
-{
-    "alternateId": "18",
-    "name": "Vehicles Status",
-    "properties": [
-        {
-            "dataType": "float",
-            "name": "VehiclesStatus"
-        }
-    ]
+{  
+   "alternateId":"18",
+   "name":"Vehicles Status",
+   "properties":[  
+      {  
+         "dataType":"float",
+         "name":"VehiclesStatus"
+      }
+   ]
 }

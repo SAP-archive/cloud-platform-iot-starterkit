@@ -1,10 +1,10 @@
-{
-    "alternateId": "WriteInteger",
-    "name": "WriteInteger",
-    "properties": [
-        {
-            "dataType": "integer",
-            "name": "value"
-        }
-    ]
+{  
+   "alternateId":"WriteInteger",
+   "name":"WriteInteger",
+   "properties":[  
+      {  
+         "dataType":"integer",
+         "name":"value"
+      }
+   ]
 }

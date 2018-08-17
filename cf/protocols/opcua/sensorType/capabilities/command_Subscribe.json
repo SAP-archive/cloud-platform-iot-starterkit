@@ -1,14 +1,14 @@
-{
-    "alternateId": "Subscribe",
-    "name": "Subscribe",
-    "properties": [
-        {
-            "dataType": "double",
-            "name": "publishingInterval"
-        },
-        {
-            "dataType": "double",
-            "name": "samplingInterval"
-        }
-    ]
+{  
+   "alternateId":"Subscribe",
+   "name":"Subscribe",
+   "properties":[  
+      {  
+         "dataType":"double",
+         "name":"publishingInterval"
+      },
+      {  
+         "dataType":"double",
+         "name":"samplingInterval"
+      }
+   ]
 }

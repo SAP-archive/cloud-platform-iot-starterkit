@@ -1,14 +1,14 @@
-{
-    "alternateId": "60",
-    "name": "CheckDeviceRegistration",
-    "properties": [
-        {
-            "dataType": "string",
-            "name": "deviceTypeId"
-        },
-        {
-            "dataType": "string",
-            "name": "jobId"
-        }
-    ]
+{  
+   "alternateId":"60",
+   "name":"CheckDeviceRegistration",
+   "properties":[  
+      {  
+         "dataType":"string",
+         "name":"deviceTypeId"
+      },
+      {  
+         "dataType":"string",
+         "name":"jobId"
+      }
+   ]
 }

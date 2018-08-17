@@ -1,10 +1,10 @@
-{
-    "alternateId": "0_3",
-    "name": "Valve",
-    "properties": [
-        {
-            "dataType": "integer",
-            "name": "val"
-        }
-    ]
+{  
+   "alternateId":"0_3",
+   "name":"Valve",
+   "properties":[  
+      {  
+         "dataType":"integer",
+         "name":"val"
+      }
+   ]
 }

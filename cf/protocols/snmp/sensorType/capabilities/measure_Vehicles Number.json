@@ -1,14 +1,14 @@
-{
-    "alternateId": "14",
-    "name": "Vehicles Number",
-    "properties": [
-        {
-            "dataType": "integer",
-            "formatter": {
-            	"dataType": "integer",
-                "swap": true
-            },
-            "name": "VehiclesNumber"
-        }
-    ]
+{  
+   "alternateId":"14",
+   "name":"Vehicles Number",
+   "properties":[  
+      {  
+         "dataType":"integer",
+         "formatter":{  
+            "dataType":"integer",
+            "swap":true
+         },
+         "name":"VehiclesNumber"
+      }
+   ]
 }

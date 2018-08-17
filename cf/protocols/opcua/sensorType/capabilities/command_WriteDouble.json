@@ -1,10 +1,10 @@
-{
-    "alternateId": "WriteDouble",
-    "name": "WriteDouble",
-    "properties": [
-        {
-            "dataType": "double",
-            "name": "value"
-        }
-    ]
+{  
+   "alternateId":"WriteDouble",
+   "name":"WriteDouble",
+   "properties":[  
+      {  
+         "dataType":"double",
+         "name":"value"
+      }
+   ]
 }

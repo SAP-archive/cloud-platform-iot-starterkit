@@ -1,10 +1,10 @@
-{
-    "alternateId": "5",
-    "name": "ErrorInfo",
-    "properties": [
-        {
-            "dataType": "string",
-            "name": "ErrorInfo"
-        }
-    ]
+{  
+   "alternateId":"5",
+   "name":"ErrorInfo",
+   "properties":[  
+      {  
+         "dataType":"string",
+         "name":"ErrorInfo"
+      }
+   ]
 }

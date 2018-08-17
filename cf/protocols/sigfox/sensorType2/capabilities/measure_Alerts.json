@@ -1,10 +1,10 @@
-{
-    "alternateId": "31",
-    "name": "Alerts",
-    "properties": [
-        {
-            "dataType": "long",
-            "name": "Alerts"
-        }
-    ]
+{  
+   "alternateId":"31",
+   "name":"Alerts",
+   "properties":[  
+      {  
+         "dataType":"long",
+         "name":"Alerts"
+      }
+   ]
 }

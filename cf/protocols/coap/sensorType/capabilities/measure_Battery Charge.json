@@ -1,11 +1,11 @@
-{
-    "alternateId": "6",
-    "name": "Battery Charge",
-    "properties": [
-        {
-            "dataType": "float",
-            "name": "BatteryCharge",
-            "unitOfMeasure": "ah"
-        }
-    ]
+{  
+   "alternateId":"6",
+   "name":"Battery Charge",
+   "properties":[  
+      {  
+         "dataType":"float",
+         "name":"BatteryCharge",
+         "unitOfMeasure":"ah"
+      }
+   ]
 }

@@ -1,11 +1,11 @@
-{
-    "alternateId": "11",
-    "name": "TransmitPeriod",
-    "properties": [
-        {
-            "dataType": "integer",
-            "name": "TransmitPeriod",
-            "unitOfMeasure": "s"
-        }
-    ]
+{  
+   "alternateId":"11",
+   "name":"TransmitPeriod",
+   "properties":[  
+      {  
+         "dataType":"integer",
+         "name":"TransmitPeriod",
+         "unitOfMeasure":"s"
+      }
+   ]
 }
