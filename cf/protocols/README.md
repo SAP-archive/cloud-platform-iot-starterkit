@@ -8,4 +8,6 @@ To set up the Internet of Things Gateway Edge and publish data, you need to prov
 
 Bash is the default shell on macOS and available for installation on Windows, for example, via Git for Windows.
 
+>Note: A recommended version of the Bash tool to be used on Windows machines is 4.3.46
+
 >Note: The created capabilities are not unique across protocols. If you already created a protocol-specific data model, you must remove the created sensorTypes and capabilities before executing the script. This can best be done in the Internet of Things Service Cockpit.

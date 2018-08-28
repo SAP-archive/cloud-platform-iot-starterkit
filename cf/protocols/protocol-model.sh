@@ -1,12 +1,7 @@
 . ./protocol-config.sh
 
-if [ -z "$TENANT" ]; then
-	URL_CAPABILITIES=https://${INSTANCE}/iot/core/api/v1/capabilities
-	URL_SENSOR_TYPES=https://${INSTANCE}/iot/core/api/v1/sensorTypes
-else
-	URL_CAPABILITIES=https://${INSTANCE}/iot/core/api/v1/tenant/${TENANT}/capabilities
-	URL_SENSOR_TYPES=https://${INSTANCE}/iot/core/api/v1/tenant/${TENANT}/sensorTypes
-fi
+URL_CAPABILITIES=https://${INSTANCE}/iot/core/api/v1/tenant/${TENANT}/capabilities
+URL_SENSOR_TYPES=https://${INSTANCE}/iot/core/api/v1/tenant/${TENANT}/sensorTypes
 
 for DIRECTORY in "$PROTOCOL"/*
 do
