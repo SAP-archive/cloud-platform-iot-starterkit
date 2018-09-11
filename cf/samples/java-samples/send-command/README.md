@@ -27,17 +27,17 @@ The following steps are being performed during execution:
 1. Get online gateway (either REST or MQTT) based on the user input.
     ```
     Authorization: Basic <base64-encoded credentials>
-    GET https://%iot.host%:443/iot/core/api/v1/gateways?filter=protocolId eq '%protocol%' and status eq 'online' and type eq 'cloud'
+    GET https://%iot.host%:443/%instance.id%/iot/core/api/v1/tenant/%tenant.id%/gateways?filter=protocolId eq '%gateway.protocol.id%' and status eq 'online' and type eq 'cloud'
     ```
 2. Get online device by its identifier.
     ```
     Authorization: Basic <base64-encoded credentials>
-    GET https://%iot.host%:443/iot/core/api/v1/devices/%device.id%
+    GET https://%iot.host%:443/%instance.id%/iot/core/api/v1/tenant/%tenant.id%/devices/%device.id%
     ```
 	1. Create a new device if it does not exist or no online device with the specified identifier was found in the MQTT gateway.
 	    ```
 	    Authorization: Basic <base64-encoded credentials>
-	    POST https://%iot.host%:443/iot/core/api/v1/devices  
+	    POST https://%iot.host%:443/%instance.id%/iot/core/api/v1/tenant/%tenant.id%/devices  
 		{  
 		   "gatewayId":"%gateway.id%",
 		   "name":"SampleDevice"
@@ -46,12 +46,12 @@ The following steps are being performed during execution:
 3. Check if custom "Switch" capability exists.
     ```
     Authorization: Basic <base64-encoded credentials>
-    GET https://%iot.host%:443/iot/core/api/v1/capabilities
+    GET https://%iot.host%:443/%instance.id%/iot/core/api/v1/tenant/%tenant.id%/capabilities
     ```
 	1. Create "Switch" capability if not found.
 	    ```
 	    Authorization: Basic <base64-encoded credentials>
-	    POST https://%iot.host%:443/iot/core/api/v1/capabilities  
+	    POST https://%iot.host%:443/%instance.id%/iot/core/api/v1/tenant/%tenant.id%/capabilities  
 		{  
 		   "alternateId":"switch",
 		   "name":"Switch",
@@ -70,12 +70,12 @@ The following steps are being performed during execution:
 4. Check if custom "Ambient" capability exists.
     ```
     Authorization: Basic <base64-encoded credentials>
-    GET https://%iot.host%:443/iot/core/api/v1/capabilities
+    GET https://%iot.host%:443/%instance.id%/iot/core/api/v1/tenant/%tenant.id%/capabilities
     ```
 	1. Create "Ambient" capability if not found.
 	    ```
 	    Authorization: Basic <base64-encoded credentials>
-	    POST https://%iot.host%:443/iot/core/api/v1/capabilities  
+	    POST https://%iot.host%:443/%instance.id%/iot/core/api/v1/tenant/%tenant.id%/capabilities  
 		{  
 		   "alternateId":"ambient",
 		   "name":"Ambient",
@@ -101,12 +101,12 @@ The following steps are being performed during execution:
 5. Check if custom "ControlUnit" sensor type exists.
     ```
     Authorization: Basic <base64-encoded credentials>
-    GET https://%iot.host%:443/iot/core/api/v1/sensorTypes
+    GET https://%iot.host%:443/%instance.id%/iot/core/api/v1/tenant/%tenant.id%/sensorTypes
     ```
 	1. Create "ControlUnit" sensor type if not found.
 	    ```
 	    Authorization: Basic <base64-encoded credentials>
-	    POST https://%iot.host%:443/iot/core/api/v1/sensorTypes  
+	    POST https://%iot.host%:443/%instance.id%/iot/core/api/v1/tenant/%tenant.id%/sensorTypes  
 		{  
 		   "name":"ControlUnit",
 		   "capabilities":[  
@@ -125,7 +125,7 @@ The following steps are being performed during execution:
 	1. Create a new sensor and assign it to the device if no sensor is assigned to the device or a sensor has no reference to the "ControlUnit" sensor type.
 	    ```
 	    Authorization: Basic <base64-encoded credentials>
-	    POST https://%iot.host%:443/iot/core/api/v1/sensors  
+	    POST https://%iot.host%:443/%instance.id%/iot/core/api/v1/tenant/%tenant.id%/sensors  
 		{  
 		   "deviceId":"%device.id%",
 		   "sensorTypeId":"%sensor.type.id%",
@@ -136,7 +136,7 @@ The following steps are being performed during execution:
 7. Get device PEM-certificate.
     ```
     Authorization: Basic <base64-encoded credentials>
-    GET https://%iot.host%:443/iot/core/api/v1/devices/%device.id%/authentications/clientCertificate/pem
+    GET https://%iot.host%:443/%instance.id%/iot/core/api/v1/tenant/%tenant.id%/devices/%device.id%/authentications/clientCertificate/pem
     ```
 8. Create Java SSL context based on the PEM certificate.
 9. As a device, listen for incoming commands.
@@ -150,7 +150,7 @@ The following steps are being performed during execution:
 10. Send Switch commands to the device.
     ```
     Authorization: Basic <base64-encoded credentials>
-    POST https://%iot.host%:443/iot/core/api/v1/devices/%device.id%/commands
+    POST https://%iot.host%:443/%instance.id%/iot/core/api/v1/tenant/%tenant.id%/devices/%device.id%/commands
 	{  
 	   "capabilityId":"%switch.capability.id%",
 	   "sensorId":"%sensor.id%",

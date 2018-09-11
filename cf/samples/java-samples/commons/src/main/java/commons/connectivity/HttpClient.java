@@ -50,6 +50,7 @@ extends AbstractClient {
 		this.sslSocketFactory = sslSocketFactory;
 	}
 
+	@Override
 	public void connect(String serverUri)
 	throws IOException {
 		this.serverUri = serverUri;
@@ -61,15 +62,14 @@ extends AbstractClient {
 				.encode((user + ":" + password).getBytes(Constants.DEFAULT_ENCODING));
 			String base64 = new String(encodedBytes, Constants.DEFAULT_ENCODING);
 			connection.setRequestProperty("Authorization", "Basic " + base64);
-		}
-		else if (sslSocketFactory != null && connection instanceof HttpsURLConnection) {
+		} else if (sslSocketFactory != null && connection instanceof HttpsURLConnection) {
 			((HttpsURLConnection) connection).setSSLSocketFactory(sslSocketFactory);
-		}
-		else {
+		} else {
 			throw new IOException("No authorization details provided");
 		}
 	}
 
+	@Override
 	public void disconnect() {
 		if (connection != null) {
 			connection.disconnect();
@@ -85,19 +85,22 @@ extends AbstractClient {
 	throws IOException {
 		try {
 			return jsonParser.fromJson(doGetAsString(), clazz);
-		}
-		catch (JsonSyntaxException e) {
+		} catch (JsonSyntaxException e) {
 			throw new IOException("Unexpected JSON format returned", e);
 		}
 	}
 
 	public <T> T doPost(T payload, Class<T> clazz)
 	throws IOException {
+		return doPost(payload, clazz, clazz);
+	}
+
+	public <T, Y> Y doPost(T payload, Class<T> payloadClass, Class<Y> responseClass)
+	throws IOException {
 		try {
-			String request = jsonParser.toJson(payload, clazz);
-			return jsonParser.fromJson(doPostAsString(request), clazz);
-		}
-		catch (JsonSyntaxException e) {
+			String request = jsonParser.toJson(payload, payloadClass);
+			return jsonParser.fromJson(doPostAsString(request), responseClass);
+		} catch (JsonSyntaxException e) {
 			throw new IOException("Unexpected JSON format returned", e);
 		}
 	}
@@ -122,8 +125,7 @@ extends AbstractClient {
 			Console.printText(String.format("Response [%1$d] %2$s", response.getCode(), body));
 
 			return body;
-		}
-		finally {
+		} finally {
 			disconnect();
 		}
 	}
@@ -149,8 +151,7 @@ extends AbstractClient {
 		OutputStream os = connection.getOutputStream();
 		try {
 			os.write(bytes);
-		}
-		finally {
+		} finally {
 			FileUtil.closeStream(os);
 		}
 
@@ -161,8 +162,7 @@ extends AbstractClient {
 			Console.printText(String.format("Response [%1$d] %2$s", response.getCode(), body));
 
 			return body;
-		}
-		finally {
+		} finally {
 			disconnect();
 		}
 	}
@@ -178,18 +178,16 @@ extends AbstractClient {
 		URI uri = null;
 		try {
 			URL url = new URL(destination);
-			uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(),
-				url.getPath(), url.getQuery(), null);
-		}
-		catch (MalformedURLException | URISyntaxException e) {
+			uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(),
+				url.getQuery(), null);
+		} catch (MalformedURLException | URISyntaxException e) {
 			throw new IOException("Invalid HTTPS connection URL specified", e);
 		}
 
 		HttpURLConnection connection = null;
 		try {
 			connection = (HttpsURLConnection) uri.toURL().openConnection();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			throw new IOException("Unable to open a HTTP connection", e);
 		}
 
@@ -201,8 +199,7 @@ extends AbstractClient {
 
 		try {
 			connection.connect();
-		}
-		catch (ConnectException e) {
+		} catch (ConnectException e) {
 			String errorMessage = "Unable to connect. Please check your Internet connection and proxy settings.";
 			throw new IOException(errorMessage, e);
 		}
@@ -212,8 +209,7 @@ extends AbstractClient {
 		InputStream stream;
 		if (code < HttpURLConnection.HTTP_OK || code >= HttpURLConnection.HTTP_MULT_CHOICE) {
 			stream = connection.getErrorStream();
-		}
-		else {
+		} else {
 			stream = connection.getInputStream();
 		}
 
@@ -221,12 +217,10 @@ extends AbstractClient {
 		try {
 			if (stream == null) {
 				body = connection.getResponseMessage();
-			}
-			else {
+			} else {
 				body = readString(stream);
 			}
-		}
-		finally {
+		} finally {
 			FileUtil.closeStream(stream);
 		}
 
@@ -247,11 +241,9 @@ extends AbstractClient {
 			while ((next = stream.read()) != -1) {
 				sb.append((char) next);
 			}
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			throw new IOException("Unable to read from the input stream", e);
-		}
-		finally {
+		} finally {
 			FileUtil.closeStream(stream);
 		}
 

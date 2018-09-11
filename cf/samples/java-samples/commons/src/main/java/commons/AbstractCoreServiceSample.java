@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import commons.api.CoreService;
+import commons.api.ProcessingService;
 import commons.model.Capability;
 import commons.model.Device;
 import commons.model.Gateway;
@@ -20,6 +21,7 @@ public abstract class AbstractCoreServiceSample
 extends AbstractSample {
 
 	protected CoreService coreService;
+	protected ProcessingService processingService;
 
 	private Comparator<SensorTypeCapability> sensorTypeCapabilityComparator;
 
@@ -27,10 +29,13 @@ extends AbstractSample {
 		super();
 
 		String host = properties.getProperty(IOT_HOST);
+		String instance = properties.getProperty(INSTANCE_ID);
+		String tenant = properties.getProperty(TENANT_ID);
 		String user = properties.getProperty(IOT_USER);
 		String password = properties.getProperty(IOT_PASSWORD);
 
-		coreService = new CoreService(host, user, password);
+		coreService = new CoreService(host, instance, tenant, user, password);
+		processingService = new ProcessingService(host, tenant, user, password);
 
 		sensorTypeCapabilityComparator = Comparator.comparing(SensorTypeCapability::getId);
 	}

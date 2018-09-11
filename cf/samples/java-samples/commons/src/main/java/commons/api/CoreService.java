@@ -10,7 +10,6 @@ import commons.model.Device;
 import commons.model.Gateway;
 import commons.model.GatewayProtocol;
 import commons.model.GatewayStatus;
-import commons.model.Measure;
 import commons.model.Sensor;
 import commons.model.SensorType;
 
@@ -20,8 +19,8 @@ public class CoreService {
 
 	private String baseUri;
 
-	public CoreService(String host, String user, String password) {
-		baseUri = String.format("https://%1$s/iot/core/api/v1", host);
+	public CoreService(String host, String instance, String tenant, String user, String password) {
+		baseUri = String.format("https://%1$s/%2$s/iot/core/api/v1/tenant/%3$s", host, instance, tenant);
 		httpClient = new HttpClient(user, password);
 	}
 
@@ -113,20 +112,6 @@ public class CoreService {
 		try {
 			httpClient.connect(destination);
 			return httpClient.doGet(Authentication.class);
-		} finally {
-			httpClient.disconnect();
-		}
-	}
-
-	public Measure[] getLatestMeasures(Device device, Capability capability, int top)
-	throws IOException {
-		String destination = String.format(
-			"%1$s/devices/%2$s/measures?orderby=timestamp desc&filter=capabilityId eq '%3$s'&top=%4$d", baseUri,
-			device.getId(), capability.getId(), top);
-
-		try {
-			httpClient.connect(destination);
-			return httpClient.doGet(Measure[].class);
 		} finally {
 			httpClient.disconnect();
 		}

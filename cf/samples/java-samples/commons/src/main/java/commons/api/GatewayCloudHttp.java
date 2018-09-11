@@ -11,6 +11,7 @@ import commons.connectivity.HttpClient;
 import commons.model.Device;
 import commons.model.gateway.Command;
 import commons.model.gateway.Measure;
+import commons.model.gateway.Response;
 import commons.utils.Console;
 
 public class GatewayCloudHttp
@@ -57,7 +58,7 @@ implements GatewayCloud {
 			httpClient.connect(upstreamServerUri);
 		}
 
-		httpClient.doPost(measure, Measure.class);
+		httpClient.doPost(measure, Measure.class, Response[].class);
 	}
 
 	@Override
@@ -74,11 +75,9 @@ implements GatewayCloud {
 			public void run() {
 				try {
 					httpClient.doGet(Command[].class);
-				}
-				catch (IOException e) {
+				} catch (IOException e) {
 					Console.printError(e.getMessage());
-				}
-				finally {
+				} finally {
 					Console.printSeparator();
 				}
 			}
