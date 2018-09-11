@@ -2,7 +2,7 @@
 
 . ./config.sh
 
-export REQUEST_URL=https://${INSTANCE}/iot/core/api/v1/sensorTypes
+export REQUEST_URL=https://${HOST}/${INSTANCE}/iot/core/api/v1/tenant/${TENANT}/sensorTypes
 
 export PAYLOAD='{ "name" : "Starterkit Sensor Type 02", "capabilities" : [ { "id" : "'${MY_CAPABILITY}'", "type" : "measure" } ] }'
 

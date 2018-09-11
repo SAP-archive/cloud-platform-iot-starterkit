@@ -2,9 +2,9 @@
 
 . ./config.sh
 
-export REQUEST_URL=https://${INSTANCE}/iot/core/api/v1/capabilities
+export REQUEST_URL=https://${HOST}/${INSTANCE}/iot/core/api/v1/tenant/${TENANT}/capabilities
 
-export PAYLOAD='{ "name" : "Starterkit Capability 01", "properties" : [ { "name" : "Starterkit Property A", "dataType" : "string" }, { "name" : " Starterkit Property B", "dataType" : "string" } ] }'
+export PAYLOAD='{ "name" : "Starterkit Capability 01", "properties" : [ { "name" : "Starterkit_Property_A", "dataType" : "string" }, { "name" : "Starterkit_Property_B", "dataType" : "string" } ] }'
 
 # echo "Request URL is: ${REQUEST_URL}" 
 

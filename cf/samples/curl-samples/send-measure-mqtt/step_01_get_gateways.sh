@@ -2,7 +2,7 @@
 
 . ./config.sh
 
-export REQUEST_URL=https://${INSTANCE}/iot/core/api/v1/gateways
+export REQUEST_URL=https://${HOST}/${INSTANCE}/iot/core/api/v1/tenant/${TENANT}/gateways
 
 # echo "Request URL is: ${REQUEST_URL}"
 

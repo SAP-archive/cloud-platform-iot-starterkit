@@ -2,7 +2,7 @@
 
 . ./config.sh
 
-export REQUEST_URL=https://${INSTANCE}/iot/core/api/v1/devices
+export REQUEST_URL=https://${HOST}/${INSTANCE}/iot/core/api/v1/tenant/${TENANT}/devices
 
 export MY_DESIRED_ALTERNATE_ID_4_DEVICE=${ALTERNATE_ID_4_DEVICE}
 
