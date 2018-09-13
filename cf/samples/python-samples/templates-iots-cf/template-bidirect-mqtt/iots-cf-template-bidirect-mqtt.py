@@ -5,6 +5,7 @@
 # and to originate a downstream command
 
 config_instance='<IoTS CF instance>'
+config_tenant='<config tenant>'
 config_user='<user>'
 config_password='<password>'
 
@@ -40,7 +41,7 @@ my_sensor=''
 # ======================================================================== 
 
 print('listing gateways')
-request_url='https://' + config_instance + '/iot/core/api/v1/gateways'
+request_url='https://' + config_instance + '/iot/core/api/v1/tenant/' + config_tenant + '/gateways'
 headers={'Content-Type' : 'application/json'}
 response=requests.get(request_url, headers=headers, auth=(config_user, config_password))
 status_code=response.status_code
@@ -58,7 +59,7 @@ if (status_code == 200):
 # ===
 
 print('creating the device')
-request_url='https://' + config_instance + '/iot/core/api/v1/devices'
+request_url='https://' + config_instance + '/iot/core/api/v1/tenant/' + config_tenant + '/devices'
 headers={'Content-Type' : 'application/json'}
 payload='{ "gatewayId" : "' + gw_id_4_mqtt + '", "name" : "device_' + alternateId_4_device + '", "alternateId" : "' + alternateId_4_device + '" }'
 response=requests.post(request_url, headers=headers, auth=(config_user, config_password), data=payload)
@@ -76,7 +77,7 @@ else:
 # ===
 
 print('retrieving the certificate')
-request_url='https://' + config_instance + '/iot/core/api/v1/devices/' + my_device + '/authentications/clientCertificate/pem'
+request_url='https://' + config_instance + '/iot/core/api/v1/tenant/' + config_tenant + '/devices/' + my_device + '/authentications/clientCertificate/pem'
 headers={'Content-Type' : 'application/json'}
 response=requests.get(request_url, headers=headers, auth=(config_user, config_password))
 status_code=response.status_code
@@ -106,7 +107,7 @@ else:
 # ===
 
 print('creating the capability (up01)')
-request_url='https://' + config_instance + '/iot/core/api/v1/capabilities'
+request_url='https://' + config_instance + '/iot/core/api/v1/tenant/' + config_tenant + '/capabilities'
 headers={'Content-Type' : 'application/json'}
 payload='{ "name" : "capability_up01_' + alternateId_4_capability_up01 + '", "properties" : [ { "name" : "p01_up01", "dataType" : "string" }, { "name" : "p02_up01", "dataType" : "string" } ], "alternateId" : "' + alternateId_4_capability_up01 + '" }'
 print(payload)
@@ -125,7 +126,7 @@ else:
 # ===
 
 print('creating the capability (up02)')
-request_url='https://' + config_instance + '/iot/core/api/v1/capabilities'
+request_url='https://' + config_instance + '/iot/core/api/v1/tenant/' + config_tenant + '/capabilities'
 headers={'Content-Type' : 'application/json'}
 payload='{ "name" : "capability_up02_' + alternateId_4_capability_up02 + '", "properties" : [ { "name" : "p01_up02", "dataType" : "string" }, { "name" : "p02_up02", "dataType" : "string" } ], "alternateId" : "' + alternateId_4_capability_up02 + '" }'
 print(payload)
@@ -144,7 +145,7 @@ else:
 # ===
 
 print('creating the capability (down01)')
-request_url='https://' + config_instance + '/iot/core/api/v1/capabilities'
+request_url='https://' + config_instance + '/iot/core/api/v1/tenant/' + config_tenant + '/capabilities'
 headers={'Content-Type' : 'application/json'}
 payload='{ "name" : "capability_down01_' + alternateId_4_capability_down01 + '", "properties" : [ { "name" : "p01_down01", "dataType" : "string" }, { "name" : "p02_down01", "dataType" : "string" } ], "alternateId" : "' + alternateId_4_capability_down01 + '" }'
 print(payload)
@@ -162,7 +163,7 @@ else:
 	exit(0)
 # ===
 print('creating the capability (down02)')
-request_url='https://' + config_instance + '/iot/core/api/v1/capabilities'
+request_url='https://' + config_instance + '/iot/core/api/v1/tenant/' + config_tenant + '/capabilities'
 headers={'Content-Type' : 'application/json'}
 payload='{ "name" : "capability_down02_' + alternateId_4_capability_down02 + '", "properties" : [ { "name" : "p01_down02", "dataType" : "string" }, { "name" : "p02_down02", "dataType" : "string" } ], "alternateId" : "' + alternateId_4_capability_down02 + '" }'
 print(payload)
@@ -181,7 +182,7 @@ else:
 # ===
 
 print('creating the sensortype')
-request_url='https://' + config_instance + '/iot/core/api/v1/sensorTypes'
+request_url='https://' + config_instance + '/iot/core/api/v1/tenant/' + config_tenant + '/sensorTypes'
 headers={'Content-Type' : 'application/json'}
 payload='{ "name" : "sensortype_' + alternateId_4_sensortype + '", "capabilities" : [ { "id" : "' + my_capability_up01 + '", "type" : "measure" }, { "id" : "' + my_capability_up02 + '", "type" : "measure" }, { "id" : "' + my_capability_down01 + '", "type" : "command" }, { "id" : "' + my_capability_down02 + '", "type" : "command" } ] }'
 # so far the alternateId for a sensorType needs to be a positive integer - so the code below does not work
@@ -202,7 +203,7 @@ else:
 # ===
 
 print('creating the sensor')
-request_url='https://' + config_instance + '/iot/core/api/v1/sensors'
+request_url='https://' + config_instance + '/iot/core/api/v1/tenant/' + config_tenant + '/sensors'
 headers={'Content-Type' : 'application/json'}
 payload='{ "name": "sensor_' + alternateId_4_sensor + '", "deviceId" : "' + my_device + '", "sensorTypeId" : "' + my_sensortype + '", "alternateId" : "' + alternateId_4_sensor + '" }'
 response=requests.post(request_url, headers=headers, auth=(config_user, config_password), data=payload)
@@ -319,13 +320,15 @@ retrieve_script.write("import requests\n")
 retrieve_script.write("import json\n\n")
 
 retrieve_script.write("config_instance='" + config_instance + "'\n")
+command_script.write("config_tenant='" + config_tenant + "'\n")
 retrieve_script.write("config_user='" + config_user + "'\n")
 retrieve_script.write("config_password='" + config_password + "'\n\n")
 
 retrieve_script.write("config_my_device='" + my_device + "'\n")
+retrieve_script.write("config_my_capability_up01='" + my_capability_up01 + "'\n")
 
 retrieve_script.write('''
-request_url='https://' + config_instance + '/iot/core/api/v1/devices/' + config_my_device + '/measures?orderby=timestamp%20desc&skip=0&top=100'
+request_url='https://' + config_instance + '/iot/processing/api/v1/tenant/' + config_tenant + '/measures/capabilities/' + config_my_capability_up01 + '?orderby=timestamp%20desc&filter=deviceId%20eq%20%27' + config_my_device + '%27&skip=0&top=100'
 headers={'Content-Type' : 'application/json'}
 response=requests.get(request_url, headers=headers, auth=(config_user, config_password))
 status_code=response.status_code
@@ -348,6 +351,7 @@ command_script=open("originate-commands.py", "w")
 
 command_script.write("import requests\n\n")
 command_script.write("config_instance='" + config_instance + "'\n")
+command_script.write("config_tenant='" + config_tenant + "'\n")
 command_script.write("config_user='" + config_user + "'\n")
 command_script.write("config_password='" + config_password + "'\n\n")
 
@@ -356,7 +360,7 @@ command_script.write("config_my_capability_down01='" + my_capability_down01 + "'
 command_script.write("config_my_capability_down02='" + my_capability_down02 + "'\n")
 command_script.write("config_my_sensor='" + my_sensor + "'\n")
 
-command_script.write("request_url='https://' + config_instance + '/iot/core/api/v1/devices/' + config_my_device + '/commands'\n")
+command_script.write("request_url='https://' + config_instance + '/iot/core/api/v1/tenant/' + config_tenant + '/devices/' + config_my_device + '/commands'\n")
 
 command_script.write('''
 payload='{ "capabilityId" : "' + config_my_capability_down01 + '", "sensorId" : "' + config_my_sensor + '", "command" : { "p01_down01" : "value for p01_down01" , "p02_down01" : "value for p02_down01" } }'
