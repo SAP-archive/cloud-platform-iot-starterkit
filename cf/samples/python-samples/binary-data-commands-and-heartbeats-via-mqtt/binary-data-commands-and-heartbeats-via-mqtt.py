@@ -75,7 +75,7 @@ def on_message(client, obj, msg):
 # === main starts here ===================================================
 
 # read in configuration values from environment variables
-config_broker='<IoTS CF instance>'
+config_broker='<hostname>'
 
 config_credentials_key='./credentials.key'
 config_credentials_crt='./credentials.crt'

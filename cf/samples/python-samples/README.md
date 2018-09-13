@@ -9,6 +9,6 @@ templates and is assumed as a precondition for sample usage.
 
 * [Templates and program generators for device creation and usage](./templates-iots-cf)
 * [Downstream transfer of binary data (e.g. files) and commands combined with upstream heartbeats](./binary-data-commands-and-heartbeats-via-mqtt)
-* [Upstream transfer of data received via a Websocket link and keeping this link continously alive](./ws-interaction)
+* [Upstream transfer of data received via a Websocket link and keeping this link continuously alive](./ws-interaction)
 * [Integration with an ingesting (upstream) HTTP client or receiving (downstream) HTTP server](./integration-with-http-client-and-server)
 
