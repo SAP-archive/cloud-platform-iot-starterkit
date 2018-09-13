@@ -1,5 +1,5 @@
 We provide examples that cover the full process of creating and using devices.
-These program also generate code for the repective usage scenarios.
+These program also generate code for the respective usage scenarios.
 
 Usage:
 * modify according to your IoTS CF instance and their credentials
