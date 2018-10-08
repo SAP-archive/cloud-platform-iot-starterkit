@@ -1,7 +1,7 @@
 . ./protocol-config.sh
 
-URL_CAPABILITIES=https://${INSTANCE}/iot/core/api/v1/tenant/${TENANT}/capabilities
-URL_SENSOR_TYPES=https://${INSTANCE}/iot/core/api/v1/tenant/${TENANT}/sensorTypes
+URL_CAPABILITIES=https://${HOST}/${INSTANCE}/iot/core/api/v1/tenant/${TENANT}/capabilities
+URL_SENSOR_TYPES=https://${HOST}/${INSTANCE}/iot/core/api/v1/tenant/${TENANT}/sensorTypes
 
 for DIRECTORY in "$PROTOCOL"/*
 do
@@ -50,7 +50,7 @@ do
       # remove last added comma
       CAPABILITIES=$(sed 's/.$//' <<< ${CAPABILITIES})
 
-      sed 's/PLACEHOLDER/'${CAPABILITIES}'/g' "$DIRECTORY"/sensorTypeTemplate.json > "$DIRECTORY"/sensorType.json
+      sed "s/PLACEHOLDER/${CAPABILITIES}/g" "$DIRECTORY"/sensorTypeTemplate.json > "$DIRECTORY"/sensorType.json
 
       curl -L --header 'Content-Type: application/json' --basic --user "${USER}:${PASSWORD}" "${URL_SENSOR_TYPES}" --data @"$DIRECTORY"/sensorType.json
 

@@ -1,4 +1,7 @@
-# e.g. 'trial.eu10.cp.iot.sap/demo'
+# e.g. 'trial.eu10.cp.iot.sap'
+export HOST='<host>'
+
+# e.g. 'demo'
 export INSTANCE='<instance>'
 
 # e.g. '0123456789'
