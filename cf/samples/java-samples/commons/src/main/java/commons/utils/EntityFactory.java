@@ -6,6 +6,9 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import commons.model.Capability;
 import commons.model.CapabilityType;
 import commons.model.Command;
@@ -16,7 +19,8 @@ import commons.model.PropertyType;
 import commons.model.Sensor;
 import commons.model.SensorType;
 import commons.model.SensorTypeCapability;
-import commons.model.gateway.Measure;
+import commons.model.gateway.JSONMeasure;
+import commons.model.gateway.StringArrayMeasure;
 
 public class EntityFactory {
 
@@ -41,13 +45,29 @@ public class EntityFactory {
 	private static final String TEMPERATURE_PROPERTY_UOM = "°C";
 	private static final String LIGHT_PROPERTY_UOM = "Lux";
 
-	public static Measure buildAmbientMeasure(Sensor sensor, Capability capability) {
-		Measure measure = new Measure();
+	public static StringArrayMeasure buildAmbientMeasure(Sensor sensor, Capability capability) {
+		StringArrayMeasure measure = new StringArrayMeasure();
 
 		measure.setCapabilityAlternateId(capability.getAlternateId());
 		measure.setSensorAlternateId(sensor.getAlternateId());
 		measure.setMeasures(
 			new Object[][] { { buildHumidityPercentage(), buildDegreesCelsius(), buildLightIlluminance() } });
+
+		return measure;
+	}
+	
+	public static JSONMeasure buildAmbientMeasure_v2(Sensor sensor, Capability capability) {
+		JSONMeasure measure = new JSONMeasure();
+
+		measure.setCapabilityAlternateId(capability.getAlternateId());
+		measure.setSensorAlternateId(sensor.getAlternateId());
+		JsonArray measureArray = new JsonArray();
+		JsonObject measureObject = new JsonObject();
+		measureObject.addProperty(HUMIDITY_PROPERTY_NAME, buildHumidityPercentage());
+		measureObject.addProperty(TEMPERATURE_PROPERTY_NAME, buildDegreesCelsius());
+		measureObject.addProperty(LIGHT_PROPERTY_NAME, buildLightIlluminance());
+		measureArray.add(measureObject);
+		measure.setMeasures(measureArray);
 
 		return measure;
 	}
