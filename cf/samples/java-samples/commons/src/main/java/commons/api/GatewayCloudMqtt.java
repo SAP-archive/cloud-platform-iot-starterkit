@@ -9,7 +9,7 @@ import javax.net.ssl.SSLSocketFactory;
 import commons.connectivity.MqttClient;
 import commons.connectivity.MqttMessageListener;
 import commons.model.Device;
-import commons.model.gateway.Measure;
+import commons.model.Measure;
 import commons.utils.Console;
 
 public class GatewayCloudMqtt
@@ -49,6 +49,7 @@ implements GatewayCloud {
 		mqttClient.disconnect();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void sendMeasure(Measure measure)
 	throws IOException {

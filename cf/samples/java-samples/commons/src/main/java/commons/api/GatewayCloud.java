@@ -2,7 +2,7 @@ package commons.api;
 
 import java.io.IOException;
 
-import commons.model.gateway.Measure;
+import commons.model.Measure;
 
 /**
  * An abstraction over Cloud Gateways.
@@ -13,7 +13,8 @@ public interface GatewayCloud {
 	throws IOException;
 
 	public void disconnect();
-
+	
+	@SuppressWarnings("rawtypes")
 	public void sendMeasure(Measure measure)
 	throws IOException;
 

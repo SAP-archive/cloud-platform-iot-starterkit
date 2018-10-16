@@ -10,7 +10,7 @@ import javax.net.ssl.SSLSocketFactory;
 import commons.connectivity.HttpClient;
 import commons.model.Device;
 import commons.model.gateway.Command;
-import commons.model.gateway.Measure;
+import commons.model.Measure;
 import commons.utils.Console;
 
 public class GatewayCloudHttp
@@ -50,6 +50,7 @@ implements GatewayCloud {
 		httpClient.disconnect();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void sendMeasure(Measure measure)
 	throws IOException {

@@ -20,7 +20,8 @@ import commons.model.Gateway;
 import commons.model.GatewayProtocol;
 import commons.model.Sensor;
 import commons.model.SensorType;
-import commons.model.gateway.Measure;
+import commons.model.gateway.JSONMeasure;
+import commons.model.gateway.StringArrayMeasure;
 import commons.utils.Console;
 import commons.utils.EntityFactory;
 import commons.utils.SecurityUtil;
@@ -113,10 +114,12 @@ extends AbstractCoreServiceSample {
 
 			@Override
 			public void run() {
-				Measure measure = EntityFactory.buildAmbientMeasure(sensor, capability);
+				StringArrayMeasure measure = EntityFactory.buildAmbientMeasure(sensor, capability);
+				JSONMeasure measure_v2 = EntityFactory.buildAmbientMeasure_v2(sensor, capability);
 
 				try {
 					gatewayCloud.sendMeasure(measure);
+					gatewayCloud.sendMeasure(measure_v2);
 				}
 				catch (IOException e) {
 					Console.printError(e.getMessage());
