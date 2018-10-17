@@ -2,10 +2,10 @@
 export HOST='<host>'
 
 # e.g. 'demo'
-export INSTANCE='<instance>'
+export INSTANCE_ID='<instance_id>'
 
 # e.g. '0123456789'
-export TENANT='<tenant>'
+export TENANT_ID='<tenant_id>'
 
 # e.g. 'root'
 export USER='<user>'

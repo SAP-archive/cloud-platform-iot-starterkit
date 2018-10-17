@@ -1,7 +1,7 @@
 . ./protocol-config.sh
 
-URL_CAPABILITIES=https://${HOST}/${INSTANCE}/iot/core/api/v1/tenant/${TENANT}/capabilities
-URL_SENSOR_TYPES=https://${HOST}/${INSTANCE}/iot/core/api/v1/tenant/${TENANT}/sensorTypes
+URL_CAPABILITIES=https://${HOST}/${INSTANCE_ID}/iot/core/api/v1/tenant/${TENANT_ID}/capabilities
+URL_SENSOR_TYPES=https://${HOST}/${INSTANCE_ID}/iot/core/api/v1/tenant/${TENANT_ID}/sensorTypes
 
 for DIRECTORY in "$PROTOCOL"/*
 do
