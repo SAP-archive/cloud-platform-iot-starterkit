@@ -7,4 +7,4 @@ Starting from June 2017 we provide initial coverage for the SAP Cloud Platform I
 
 The document and the code snippets will provide a complete end to end [samples](samples) of how to use the SAP Cloud Platform Internet of Things for the Cloud Foundry Environment.
 
-The Internet of Things Gateway Edge requires pre-configured data models in order to publish data using specific protocol. All those data models including the automation script are collected under the [protocols](protocols) directory.
+The Internet of Things Edge Platform requires pre-configured data models in order to publish data using specific protocol. All those data models including the automation script are collected under the [protocols](protocols) directory.
