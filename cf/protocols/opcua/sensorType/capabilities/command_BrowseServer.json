@@ -1,0 +1,10 @@
+{
+    "alternateId": "BrowseServer",
+    "name": "BrowseServer",
+    "properties": [
+        {
+            "dataType": "string",
+            "name": "serverId"
+        }
+    ]
+}

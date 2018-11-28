@@ -1,0 +1,10 @@
+{
+    "alternateId": "OnboardNodes",
+    "name": "OnboardNodes",
+    "properties": [
+        {
+            "dataType": "string",
+            "name": "jsonNodesToOnboard"
+        }
+    ]
+}
