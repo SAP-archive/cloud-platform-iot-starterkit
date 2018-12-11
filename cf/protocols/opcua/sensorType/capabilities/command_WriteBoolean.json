@@ -3,6 +3,10 @@
     "name": "WriteBoolean",
     "properties": [
         {
+            "dataType": "string",
+            "name": "targetSensor"
+        },
+        {
             "dataType": "boolean",
             "name": "value"
         }

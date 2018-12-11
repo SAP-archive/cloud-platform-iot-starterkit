@@ -4,6 +4,10 @@
     "properties": [
         {
             "dataType": "string",
+            "name": "targetSensor"
+        },
+        {
+            "dataType": "string",
             "name": "value"
         }
     ]
