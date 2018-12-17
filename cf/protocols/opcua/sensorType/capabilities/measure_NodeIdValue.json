@@ -1,10 +1,10 @@
-{  
-   "alternateId":"NodeIdValue",
-   "name":"NodeIdValue",
-   "properties":[  
-      {  
-         "dataType":"string",
-         "name":"NodeIdValue"
-      }
-   ]
+{
+    "alternateId": "NodeIdValue",
+    "name": "NodeIdValue",
+    "properties": [
+        {
+            "dataType": "string",
+            "name": "NodeIdValue"
+        }
+    ]
 }

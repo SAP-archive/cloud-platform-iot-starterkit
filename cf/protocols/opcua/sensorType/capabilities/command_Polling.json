@@ -1,10 +1,18 @@
-{  
-   "alternateId":"Polling",
-   "name":"Polling",
-   "properties":[  
-      {  
-         "dataType":"integer",
-         "name":"pollingInterval"
-      }
-   ]
+{
+    "alternateId": "Polling",
+    "name": "Polling",
+    "properties": [
+        {
+            "dataType": "string",
+            "name": "targetSensor"
+        },
+        {
+            "dataType": "string",
+            "name": "targetCapability"
+        },
+        {
+            "dataType": "integer",
+            "name": "pollingInterval"
+        }
+    ]
 }

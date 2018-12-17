@@ -1,10 +1,14 @@
-{  
-   "alternateId":"WriteBoolean",
-   "name":"WriteBoolean",
-   "properties":[  
-      {  
-         "dataType":"boolean",
-         "name":"value"
-      }
-   ]
+{
+    "alternateId": "WriteBoolean",
+    "name": "WriteBoolean",
+    "properties": [
+        {
+            "dataType": "string",
+            "name": "targetSensor"
+        },
+        {
+            "dataType": "boolean",
+            "name": "value"
+        }
+    ]
 }
