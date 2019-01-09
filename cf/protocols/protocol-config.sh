@@ -1,7 +1,7 @@
 # e.g. 'trial.eu10.cp.iot.sap'
-export HOST='<host>'
+export HOST_NAME='<host_name>'
 
-# e.g. 'demo'
+# e.g. 'trial'
 export INSTANCE_ID='<instance_id>'
 
 # e.g. '0123456789'
