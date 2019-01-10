@@ -3,6 +3,14 @@
     "name": "Subscribe",
     "properties": [
         {
+            "dataType": "string",
+            "name": "targetSensor"
+        },
+        {
+            "dataType": "string",
+            "name": "targetCapability"
+        },
+        {
             "dataType": "double",
             "name": "publishingInterval"
         },

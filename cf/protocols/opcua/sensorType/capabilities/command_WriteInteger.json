@@ -3,6 +3,10 @@
     "name": "WriteInteger",
     "properties": [
         {
+            "dataType": "string",
+            "name": "targetSensor"
+        },
+        {
             "dataType": "integer",
             "name": "value"
         }

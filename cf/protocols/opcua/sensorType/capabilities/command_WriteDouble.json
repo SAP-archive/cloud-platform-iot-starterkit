@@ -3,6 +3,10 @@
     "name": "WriteDouble",
     "properties": [
         {
+            "dataType": "string",
+            "name": "targetSensor"
+        },
+        {
             "dataType": "double",
             "name": "value"
         }

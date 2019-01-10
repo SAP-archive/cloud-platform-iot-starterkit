@@ -3,6 +3,10 @@
     "name": "WriteDateTime",
     "properties": [
         {
+            "dataType": "string",
+            "name": "targetSensor"
+        },
+        {
             "dataType": "long",
             "name": "value"
         }
