@@ -1,11 +1,11 @@
-{
-    "alternateId": "17",
-    "name": "Odometer",
-    "properties": [
-        {
-            "dataType": "float",
-            "name": "Odometer",
-            "unitOfMeasure": "km"
-        }
-    ]
+{  
+   "alternateId":"17",
+   "name":"Odometer",
+   "properties":[  
+      {  
+         "dataType":"float",
+         "name":"Odometer",
+         "unitOfMeasure":"km"
+      }
+   ]
 }

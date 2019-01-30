@@ -2,7 +2,7 @@
 
 import os
 
-config_broker=os.environ['INSTANCE']
+config_broker=os.environ['HOST']
 config_credentials_key="./"+os.environ['CREDENTIALS_FILE']+".key"
 config_credentials_crt="./"+os.environ['CREDENTIALS_FILE']+".crt"
 config_crt_4_landscape="./"+os.environ['CRT_4_LANDSCAPE']

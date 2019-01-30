@@ -1,10 +1,10 @@
-{
-    "alternateId": "26",
-    "name": "AddCoAPResource",
-    "properties": [
-        {
-            "dataType": "string",
-            "name": "resourceName"
-        }
-    ]
+{  
+   "alternateId":"26",
+   "name":"AddCoAPResource",
+   "properties":[  
+      {  
+         "dataType":"string",
+         "name":"resourceName"
+      }
+   ]
 }

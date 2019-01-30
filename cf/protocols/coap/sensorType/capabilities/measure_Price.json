@@ -1,11 +1,11 @@
-{
-    "alternateId": "13",
-    "name": "Price",
-    "properties": [
-        {
-            "dataType": "float",
-            "name": "Price",
-            "unitOfMeasure": "EUR"
-        }
-    ]
+{  
+   "alternateId":"13",
+   "name":"Price",
+   "properties":[  
+      {  
+         "dataType":"float",
+         "name":"Price",
+         "unitOfMeasure":"EUR"
+      }
+   ]
 }

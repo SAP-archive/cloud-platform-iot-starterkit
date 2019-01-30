@@ -1,11 +1,11 @@
-{
-    "alternateId": "9",
-    "name": "Produced Active Power",
-    "properties": [
-        {
-            "dataType": "float",
-            "name": "Produced Active Power",
-            "unitOfMeasure": "KW"
-        }
-    ]
+{  
+   "alternateId":"9",
+   "name":"Produced Active Power",
+   "properties":[  
+      {  
+         "dataType":"float",
+         "name":"ProducedActivePower",
+         "unitOfMeasure":"KW"
+      }
+   ]
 }

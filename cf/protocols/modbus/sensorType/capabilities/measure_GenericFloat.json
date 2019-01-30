@@ -1,10 +1,10 @@
-{
-    "alternateId": "40",
-    "name": "GenericFloat",
-    "properties": [
-        {
-            "dataType": "float",
-            "name": "GenericFloat"
-        }
-    ]
+{  
+   "alternateId":"40",
+   "name":"GenericFloat",
+   "properties":[  
+      {  
+         "dataType":"float",
+         "name":"GenericFloat"
+      }
+   ]
 }

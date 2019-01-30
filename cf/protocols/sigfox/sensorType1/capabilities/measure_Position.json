@@ -1,30 +1,33 @@
-{
-    "alternateId": "10",
-    "name": "Position",
-    "properties": [
-        {
-            "dataType": "double",
-            "formatter": {
-                "swap": true
-            },
-            "name": "PositionX",
-            "unitOfMeasure": "[x]"
-        },
-        {
-            "dataType": "double",
-            "formatter": {
-                "swap": true
-            },
-            "name": "PositionY",
-            "unitOfMeasure": "[y]"
-        },
-        {
-            "dataType": "double",
-            "formatter": {
-                "swap": true
-            },
-            "name": "PositionZ",
-            "unitOfMeasure": "[z]"
-        }
-    ]
+{  
+   "alternateId":"10",
+   "name":"Position",
+   "properties":[  
+      {  
+         "dataType":"double",
+         "formatter":{  
+            "dataType":"double",
+            "swap":true
+         },
+         "name":"PositionX",
+         "unitOfMeasure":"[x]"
+      },
+      {  
+         "dataType":"double",
+         "formatter":{  
+            "dataType":"double",
+            "swap":true
+         },
+         "name":"PositionY",
+         "unitOfMeasure":"[y]"
+      },
+      {  
+         "dataType":"double",
+         "formatter":{  
+            "dataType":"double",
+            "swap":true
+         },
+         "name":"PositionZ",
+         "unitOfMeasure":"[z]"
+      }
+   ]
 }

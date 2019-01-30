@@ -1,9 +1,15 @@
 export CURL=/usr/bin/curl
 
-export INSTANCE='<your instance>.cp.iot.sap'
-export CRT_4_LANDSCAPE='<crt for the landsacpe you are in> e.g. eu10cpiotsap.crt'
+# Hostname (e.g. 'trial.eu10.cp.iot.sap')
+export HOST='<your hostname>'
+# Instance ID (e.g. 'demo')
+export INSTANCE='<your instance id>'
+# Tenant ID (e.g. '0123456789')
+export TENANT='<your tenant id>'
+# Landscape certificate (e.g. 'eu10cpiotsap.crt')
+export CRT_4_LANDSCAPE='<crt for the landsacpe you are in>'
 
-export USER='root'
+export USER='<your user>'
 export PASSWORD='<your password>'
 export USER_PASS="${USER}:${PASSWORD}"
 

@@ -1,11 +1,11 @@
-{
-    "alternateId": "21",
-    "name": "BatteryLevel",
-    "properties": [
-        {
-            "dataType": "float",
-            "name": "BatteryLevel",
-            "unitOfMeasure": "%"
-        }
-    ]
+{  
+   "alternateId":"21",
+   "name":"BatteryLevel",
+   "properties":[  
+      {  
+         "dataType":"float",
+         "name":"BatteryLevel",
+         "unitOfMeasure":"%"
+      }
+   ]
 }

@@ -9,12 +9,12 @@ from time import gmtime, strftime
 import sys
 import requests
 
-config_instance='<example IoTS CF instance>'
+config_host='<hostname>'
 config_alternate_id_4_device="<example_alternate_id>"
 
 def do_upstream_request(payload):
 	global config_do_upstream_request
-	global config_instance
+	global config_host
 	global alternate_id_4_device
 
 	print("Doing upstream request with payload: " + payload)
@@ -22,7 +22,7 @@ def do_upstream_request(payload):
 	alternate_id_4_capability=config_alternate_id_4_device
 	alternate_id_4_sensor=config_alternate_id_4_device
 	
-	request_url='https://' + config_instance + '/iot/gateway/rest/measures/' + config_alternate_id_4_device
+	request_url='https://' + config_host + '/iot/gateway/rest/measures/' + config_alternate_id_4_device
 	
 	headers={'Content-Type' : 'application/json'}
 	

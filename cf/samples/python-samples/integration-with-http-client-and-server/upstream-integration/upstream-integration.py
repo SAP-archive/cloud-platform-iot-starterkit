@@ -13,7 +13,7 @@ config_server_port=8090
 
 config_do_upstream_request=True
 # config_do_upstream_request=False
-config_instance='<IoTS CF instance>'
+config_host='<hostname>'
 config_alternate_id_4_device='<alternate id>'
 
 def do_upstream_request(payload):
@@ -26,7 +26,7 @@ def do_upstream_request(payload):
 	alternate_id_4_capability=config_alternate_id_4_device
 	alternate_id_4_sensor=config_alternate_id_4_device
 	
-	request_url='https://' + config_instance + '/iot/gateway/rest/measures/' + config_alternate_id_4_device
+	request_url='https://' + config_host + '/iot/gateway/rest/measures/' + config_alternate_id_4_device
 	
 	headers={'Content-Type' : 'application/json'}
 	

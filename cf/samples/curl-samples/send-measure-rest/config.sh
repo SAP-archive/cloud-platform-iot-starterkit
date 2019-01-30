@@ -1,8 +1,13 @@
 export CURL=/usr/bin/curl
 
-export INSTANCE='<your instance>.cp.iot.sap'
+# Hostname (e.g. 'trial.eu10.cp.iot.sap')
+export HOST='<your hostname>'
+# Instance ID (e.g. 'demo')
+export INSTANCE='<your instance id>'
+# Tenant ID (e.g. '0123456789')
+export TENANT='<your tenant id>'
 
-export USER='root'
+export USER='<your user>'
 export PASSWORD='<your password>'
 export USER_PASS="${USER}:${PASSWORD}"
 

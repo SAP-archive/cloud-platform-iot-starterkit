@@ -1,5 +1,5 @@
 This sample shows the upstream transfer of data received via a Websocket link
-and keeping this link continously alive. We indicate potential EXTENSION
+and keeping this link continuously alive. We indicate potential EXTENSION
 POINTS where the further enhancement for specific usage can be done.
 
 The IoT Service specific creation of device instances with their specifics

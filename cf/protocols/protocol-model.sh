@@ -1,7 +1,7 @@
 . ./protocol-config.sh
 
-URL_CAPABILITIES=https://${INSTANCE}/iot/core/api/v1/capabilities
-URL_SENSOR_TYPES=https://${INSTANCE}/iot/core/api/v1/sensorTypes
+URL_CAPABILITIES=https://${HOST_NAME}/${INSTANCE_ID}/iot/core/api/v1/tenant/${TENANT_ID}/capabilities
+URL_SENSOR_TYPES=https://${HOST_NAME}/${INSTANCE_ID}/iot/core/api/v1/tenant/${TENANT_ID}/sensorTypes
 
 for DIRECTORY in "$PROTOCOL"/*
 do
@@ -16,7 +16,7 @@ do
           IFS='_' SPLIT=($(basename "$FILE"))
           TYPE=${SPLIT[0]}
 
-          curl --silent --header 'Content-Type: application/json' --basic --user "${USER}:${PASSWORD}" "${URL_CAPABILITIES}" --data @"$FILE" --output "$FILE".response
+          curl -L --silent --header 'Content-Type: application/json' --basic --user "${USER}:${PASSWORD}" "${URL_CAPABILITIES}" --data @"$FILE" --output "$FILE".response
 
           sed 's/^{"id":"//' "$FILE".response | sed 's/","name".*//'  > "$FILE".id
 
@@ -50,9 +50,9 @@ do
       # remove last added comma
       CAPABILITIES=$(sed 's/.$//' <<< ${CAPABILITIES})
 
-      sed 's/PLACEHOLDER/'${CAPABILITIES}'/g' "$DIRECTORY"/sensorTypeTemplate.json > "$DIRECTORY"/sensorType.json
+      sed "s/PLACEHOLDER/${CAPABILITIES}/g" "$DIRECTORY"/sensorTypeTemplate.json > "$DIRECTORY"/sensorType.json
 
-      curl --header 'Content-Type: application/json' --basic --user "${USER}:${PASSWORD}" "${URL_SENSOR_TYPES}" --data @"$DIRECTORY"/sensorType.json
+      curl -L --header 'Content-Type: application/json' --basic --user "${USER}:${PASSWORD}" "${URL_SENSOR_TYPES}" --data @"$DIRECTORY"/sensorType.json
 
       rm -f "$DIRECTORY"/sensorType.json
 

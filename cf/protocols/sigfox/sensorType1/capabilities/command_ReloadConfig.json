@@ -1,10 +1,10 @@
-{
-    "alternateId": "30",
-    "name": "ReloadConfig",
-    "properties": [
-        {
-            "dataType": "boolean",
-            "name": "reloadCallbackServer"
-        }
-    ]
+{  
+   "alternateId":"30",
+   "name":"ReloadConfig",
+   "properties":[  
+      {  
+         "dataType":"boolean",
+         "name":"reloadCallbackServer"
+      }
+   ]
 }

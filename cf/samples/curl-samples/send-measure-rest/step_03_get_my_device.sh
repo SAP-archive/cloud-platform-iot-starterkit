@@ -4,7 +4,7 @@
 
 # last part of path = requested device - get this from step_02
 
-export REQUEST_URL=https://${INSTANCE}/iot/core/api/v1/devices/${MY_DEVICE}
+export REQUEST_URL=https://${HOST}/${INSTANCE}/iot/core/api/v1/tenant/${TENANT}/devices/${MY_DEVICE}
 
 # or list all
 # export REQUEST_URL=https://${INSTANCE}/iot/core/api/v1/devices

@@ -10,7 +10,7 @@ public class Device {
 
 	private String alternateId;
 
-	private boolean online;
+	private Boolean online;
 
 	private Sensor[] sensors;
 
@@ -46,11 +46,11 @@ public class Device {
 		this.alternateId = alternateId;
 	}
 
-	public boolean isOnline() {
+	public Boolean isOnline() {
 		return online;
 	}
 
-	public void setOnline(boolean online) {
+	public void setOnline(Boolean online) {
 		this.online = online;
 	}
 

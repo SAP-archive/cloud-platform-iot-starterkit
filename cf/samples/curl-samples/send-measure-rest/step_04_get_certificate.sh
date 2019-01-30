@@ -5,7 +5,7 @@
 
 . ./config.sh
 
-export REQUEST_URL=https://${INSTANCE}/iot/core/api/v1/devices/${MY_DEVICE}/authentications/clientCertificate/pem
+export REQUEST_URL=https://${HOST}/${INSTANCE}/iot/core/api/v1/tenant/${TENANT}/devices/${MY_DEVICE}/authentications/clientCertificate/pem
 
 # echo "Request URL is: ${REQUEST_URL}"
 
@@ -16,7 +16,8 @@ sed 's/","pem":".*$//' pw.raw > pw.txt
 
 sed 's/^.*pem":"//' ${CERT_FILE}.raw > ${CERT_FILE}.raw.1
 sed 's/"}]}$//' ${CERT_FILE}.raw.1 > ${CERT_FILE}.raw.2
-sed 's/\\n/\n/g' ${CERT_FILE}.raw.2 > ${CERT_FILE}.txt
+sed 's/\\n/\
+/g' ${CERT_FILE}.raw.2 > ${CERT_FILE}.txt
 
 rm -f ${CERT_FILE}.raw.*
 rm -f pw.raw

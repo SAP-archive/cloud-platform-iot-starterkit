@@ -1,14 +1,15 @@
-{
-    "alternateId": "2",
-    "name": "GasVolume",
-    "properties": [
-        {
-            "dataType": "integer",
-            "formatter": {
-                "swap": true
-            },
-            "name": "GasVolume",
-            "unitOfMeasure": "m3"
-        }
-    ]
+{  
+   "alternateId":"2",
+   "name":"GasVolume",
+   "properties":[  
+      {  
+         "dataType":"integer",
+         "formatter":{  
+            "dataType":"integer",
+            "swap":true
+         },
+         "name":"GasVolume",
+         "unitOfMeasure":"m3"
+      }
+   ]
 }

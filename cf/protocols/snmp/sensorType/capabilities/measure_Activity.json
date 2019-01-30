@@ -1,13 +1,14 @@
-{
-    "alternateId": "24",
-    "name": "Activity",
-    "properties": [
-        {
-            "dataType": "integer",
-            "formatter": {
-                "swap": true
-            },
-            "name": "Activity"
-        }
-    ]
+{  
+   "alternateId":"24",
+   "name":"Activity",
+   "properties":[  
+      {  
+         "dataType":"integer",
+         "formatter":{  
+            "dataType":"integer",
+            "swap":true
+         },
+         "name":"Activity"
+      }
+   ]
 }

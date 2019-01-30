@@ -1,10 +1,10 @@
-{
-    "alternateId": "28",
-    "name": "DownlinkMessageCounter",
-    "properties": [
-        {
-            "dataType": "long",
-            "name": "DownlinkMessageCounter"
-        }
-    ]
+{  
+   "alternateId":"28",
+   "name":"DownlinkMessageCounter",
+   "properties":[  
+      {  
+         "dataType":"long",
+         "name":"DownlinkMessageCounter"
+      }
+   ]
 }

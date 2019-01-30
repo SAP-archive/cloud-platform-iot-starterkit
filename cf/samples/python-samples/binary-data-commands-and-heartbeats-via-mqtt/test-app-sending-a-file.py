@@ -7,7 +7,9 @@ import requests
 
 # read in configuration values from environment variables
 
-config_instance='<IoTS CF instance>'
+config_host='<hostname>'
+config_instance='<instance id>'
+config_tenant='<tenant id>'
 config_user='<user>'
 config_password='<password>'
 
@@ -18,7 +20,7 @@ config_my_device='<device id>'
 config_my_capability='<capability id>'
 config_my_sensor='<sensor id>'
 
-request_url='https://' + config_instance + '/iot/core/api/v1/devices/' + config_my_device + '/commands'
+request_url='https://' + config_host + '/' + config_instance + '/iot/core/api/v1/tenant/' + config_tenant + '/devices/' + config_my_device + '/commands'
 
 filename='testfile.bin'
 infile=open(filename, "rb")

@@ -32,8 +32,7 @@ extends AbstractCoreServiceSample {
 
 	@Override
 	protected String getDescription() {
-		return "Send ambient measures on behalf of the device sensor" +
-			" and consume them later on via the API";
+		return "Send ambient measures on behalf of the device sensor" + " and consume them later on via the API";
 	}
 
 	@Override
@@ -41,8 +40,7 @@ extends AbstractCoreServiceSample {
 	throws SampleException {
 		String deviceId = properties.getProperty(DEVICE_ID);
 		String sensorId = properties.getProperty(SENSOR_ID);
-		GatewayProtocol gatewayProtocol = GatewayProtocol
-			.fromValue(properties.getProperty(GATEWAY_PROTOCOL_ID));
+		GatewayProtocol gatewayProtocol = GatewayProtocol.fromValue(properties.getProperty(GATEWAY_PROTOCOL_ID));
 
 		try {
 			Console.printSeparator();
@@ -55,13 +53,11 @@ extends AbstractCoreServiceSample {
 
 			Console.printSeparator();
 
-			Capability measureCapability = getOrAddCapability(
-				EntityFactory.buildAmbientCapability());
+			Capability measureCapability = getOrAddCapability(EntityFactory.buildAmbientCapability());
 
 			Console.printSeparator();
 
-			Capability commandCapability = getOrAddCapability(
-				EntityFactory.buildSwitchCapability());
+			Capability commandCapability = getOrAddCapability(EntityFactory.buildSwitchCapability());
 
 			Console.printSeparator();
 
@@ -73,8 +69,7 @@ extends AbstractCoreServiceSample {
 
 			Authentication authentication = coreService.getAuthentication(device);
 
-			SSLSocketFactory sslSocketFactory = SecurityUtil.getSSLSocketFactory(device,
-				authentication);
+			SSLSocketFactory sslSocketFactory = SecurityUtil.getSSLSocketFactory(device, authentication);
 
 			switch (gatewayProtocol) {
 			case MQTT:
@@ -90,9 +85,8 @@ extends AbstractCoreServiceSample {
 
 			sendAmbientMeasures(sensor, measureCapability);
 
-			receiveAmbientMeasures(device, measureCapability);
-		}
-		catch (IOException | GeneralSecurityException | IllegalStateException e) {
+			receiveAmbientMeasures(measureCapability, device);
+		} catch (IOException | GeneralSecurityException | IllegalStateException e) {
 			throw new SampleException(e.getMessage());
 		}
 	}
@@ -103,8 +97,7 @@ extends AbstractCoreServiceSample {
 
 		try {
 			gatewayCloud.connect(host);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			throw new IOException("Unable to connect to the Gateway Cloud", e);
 		}
 
@@ -117,11 +110,9 @@ extends AbstractCoreServiceSample {
 
 				try {
 					gatewayCloud.sendMeasure(measure);
-				}
-				catch (IOException e) {
+				} catch (IOException e) {
 					Console.printError(e.getMessage());
-				}
-				finally {
+				} finally {
 					Console.printSeparator();
 				}
 			}
@@ -130,17 +121,15 @@ extends AbstractCoreServiceSample {
 
 		try {
 			executor.awaitTermination(5000, TimeUnit.MILLISECONDS);
-		}
-		catch (InterruptedException e) {
+		} catch (InterruptedException e) {
 			throw new IOException("Interrupted exception", e);
-		}
-		finally {
+		} finally {
 			executor.shutdown();
 			gatewayCloud.disconnect();
 		}
 	}
 
-	private void receiveAmbientMeasures(final Device device, final Capability capability)
+	private void receiveAmbientMeasures(final Capability capability, final Device device)
 	throws IOException {
 		ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 		executor.schedule(new Runnable() {
@@ -148,12 +137,10 @@ extends AbstractCoreServiceSample {
 			@Override
 			public void run() {
 				try {
-					coreService.getLatestMeasures(device, capability, 25);
-				}
-				catch (IOException e) {
+					processingService.getLatestMeasures(capability, device, 25);
+				} catch (IOException e) {
 					Console.printError(e.getMessage());
-				}
-				finally {
+				} finally {
 					Console.printSeparator();
 				}
 			}
@@ -162,13 +149,12 @@ extends AbstractCoreServiceSample {
 
 		try {
 			executor.awaitTermination(1000, TimeUnit.MILLISECONDS);
-		}
-		catch (InterruptedException e) {
+		} catch (InterruptedException e) {
 			throw new IOException("Interrupted exception", e);
-		}
-		finally {
+		} finally {
 			executor.shutdown();
 			coreService.shutdown();
+			processingService.shutdown();
 		}
 	}
 

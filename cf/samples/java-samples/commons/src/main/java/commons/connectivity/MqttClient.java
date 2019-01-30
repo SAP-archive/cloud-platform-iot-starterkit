@@ -63,7 +63,7 @@ extends AbstractClient {
 		catch (MqttException e) {
 			String cause = e.getMessage();
 			if (e.getCause() != null) {
-				cause.concat(" : ").concat(e.getCause().getMessage());
+				cause = cause.concat(" : ").concat(e.getCause().getMessage());
 			}
 			String errorMessage = String.format("Unable to establish an MQTT connection - %1$s",
 				cause);

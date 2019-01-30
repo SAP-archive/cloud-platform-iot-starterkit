@@ -1,11 +1,11 @@
-{
-    "alternateId": "10",
-    "name": "Consumed Active Power",
-    "properties": [
-        {
-            "dataType": "float",
-            "name": "Consumed Active Power",
-            "unitOfMeasure": "KW"
-        }
-    ]
+{  
+   "alternateId":"10",
+   "name":"Consumed Active Power",
+   "properties":[  
+      {  
+         "dataType":"float",
+         "name":"ConsumedActivePower",
+         "unitOfMeasure":"KW"
+      }
+   ]
 }
