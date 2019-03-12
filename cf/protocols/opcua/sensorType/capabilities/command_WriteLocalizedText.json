@@ -1,0 +1,14 @@
+{
+    "alternateId": "WriteLocalizedText",
+    "name": "WriteLocalizedText",
+    "properties": [
+        {
+            "dataType": "string",
+            "name": "targetSensor"
+        },
+        {
+            "dataType": "string",
+            "name": "value"
+        }
+    ]
+}

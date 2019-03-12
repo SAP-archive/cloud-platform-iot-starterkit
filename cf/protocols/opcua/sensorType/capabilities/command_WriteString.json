@@ -1,0 +1,14 @@
+{
+    "alternateId": "WriteString",
+    "name": "WriteString",
+    "properties": [
+        {
+            "dataType": "string",
+            "name": "targetSensor"
+        },
+        {
+            "dataType": "string",
+            "name": "value"
+        }
+    ]
+}

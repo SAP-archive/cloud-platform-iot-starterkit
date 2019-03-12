@@ -1,0 +1,14 @@
+{
+    "alternateId": "WriteFloat",
+    "name": "WriteFloat",
+    "properties": [
+        {
+            "dataType": "string",
+            "name": "targetSensor"
+        },
+        {
+            "dataType": "float",
+            "name": "value"
+        }
+    ]
+}
