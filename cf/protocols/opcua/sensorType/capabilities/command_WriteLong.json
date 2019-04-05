@@ -1,14 +1,14 @@
 {
-    "alternateId": "Polling",
-    "name": "Polling",
+    "alternateId": "WriteLong",
+    "name": "WriteLong",
     "properties": [
         {
             "dataType": "string",
             "name": "targetSensor"
         },
         {
-            "dataType": "integer",
-            "name": "pollingInterval"
+            "dataType": "long",
+            "name": "value"
         }
     ]
 }
