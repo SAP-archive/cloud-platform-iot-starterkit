@@ -1,13 +1,13 @@
 {
-    "alternateId": "WriteUInteger",
-    "name": "WriteUInteger",
+    "alternateId": "WriteValue",
+    "name": "WriteValue",
     "properties": [
         {
             "dataType": "string",
             "name": "targetSensor"
         },
         {
-            "dataType": "integer",
+            "dataType": "string",
             "name": "value"
         }
     ]

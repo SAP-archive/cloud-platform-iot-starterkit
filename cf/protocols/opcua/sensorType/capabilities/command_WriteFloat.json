@@ -1,14 +1,14 @@
 {
-    "alternateId": "Polling",
-    "name": "Polling",
+    "alternateId": "WriteFloat",
+    "name": "WriteFloat",
     "properties": [
         {
             "dataType": "string",
             "name": "targetSensor"
         },
         {
-            "dataType": "integer",
-            "name": "pollingInterval"
+            "dataType": "float",
+            "name": "value"
         }
     ]
 }

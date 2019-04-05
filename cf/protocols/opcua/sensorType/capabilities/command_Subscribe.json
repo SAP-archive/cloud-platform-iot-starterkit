@@ -7,10 +7,6 @@
             "name": "targetSensor"
         },
         {
-            "dataType": "string",
-            "name": "targetCapability"
-        },
-        {
             "dataType": "double",
             "name": "publishingInterval"
         },

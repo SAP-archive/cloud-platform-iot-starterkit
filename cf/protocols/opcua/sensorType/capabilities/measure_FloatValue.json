@@ -1,0 +1,10 @@
+{  
+   "alternateId":"FloatValue",
+   "name":"FloatValue",
+   "properties":[  
+      {  
+         "dataType":"float",
+         "name":"FloatValue"
+      }
+   ]
+}

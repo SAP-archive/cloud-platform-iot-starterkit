@@ -1,0 +1,10 @@
+{  
+   "alternateId":"LongValue",
+   "name":"LongValue",
+   "properties":[  
+      {  
+         "dataType":"long",
+         "name":"LongValue"
+      }
+   ]
+}
