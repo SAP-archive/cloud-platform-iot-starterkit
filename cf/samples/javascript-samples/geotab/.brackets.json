@@ -1,0 +1,5 @@
+{
+    "jslint.options": {
+        "es6": true
+     }
+}

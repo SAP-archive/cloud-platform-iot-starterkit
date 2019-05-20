@@ -1,0 +1,12 @@
+{
+    "Geotab_database": "",
+    "Geotab_username": "",
+    "Geotab_password": "",
+    "SAP_instance": "IoT Service cloud instance, the host name without domain",
+    "SAP_landscape": "domain like eu10.cp.iot.sap",
+    "SAP_tenantID": "can be seen in the SAP IoT Service Cockpit",
+    "SAP_username": "the one used for logging in to the SAP IoT Service Cockpit, not root",
+    "SAP_password": "the one used for logging in to the SAP IoT Service Cockpit",
+    "SAP_router_device_pem_filename": "router-device_certificate.pem",
+    "SAP_router_device_pass_filename": "router-device_passphrase.txt"
+}
