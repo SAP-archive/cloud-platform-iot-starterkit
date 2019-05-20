@@ -1,0 +1,8 @@
+{
+  "name": "sap-iots-device-rest",
+  "version": "1.0.0",
+  "description": "A client posting data to a SAP Cloud Platform IoT REST gateway.",
+  "main": "index.js",
+  "author": "Mikhail Bessonov <mikhail.bessonov@sap.com>",
+  "license": "SAP development license"
+}
