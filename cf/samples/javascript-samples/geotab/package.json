@@ -1,0 +1,16 @@
+{
+    "name": "geotab-to-sap-iots-example",
+    "version": "1.0.0",
+    "description": "An application fetching data from a Geotab cloud instance and POSTing it to a SAP IoT Services instance.",
+    "author": "Mikhail Bessonov <mikhail.bessonov@sap.com>",
+    "license": "SEE LICENSE IN LICENSE",
+    "dependencies": {
+        "mg-api-node": "^1.2.0",
+        "node-persist": "^3.0.4",
+        "sap-iots-device-rest": "file:../sap-iots-device-rest",
+        "swagger-client": "^3.8.25"
+    },
+    "scripts": {
+        "start": "node geotab-to-sap-cloud.js"
+    }
+}

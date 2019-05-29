@@ -1,0 +1,12 @@
+{
+    "Geotab_database": "put your Geotab database name here",
+    "Geotab_username": "",
+    "Geotab_password": "",
+    "SAP_instance": "IoT Service instance without the domain name",
+    "SAP_landscape": "domain name, e.g. eu10.cp.iot.sap",
+    "SAP_tenantID": "a decimal number",
+    "SAP_username": "a user with admin rights for your IoT Service domain",
+    "SAP_password": "",
+    "SAP_router_device_pem_filename": "router-device_certificate.pem",
+    "SAP_router_device_pass_filename": "router-device_passphrase.txt"
+}
