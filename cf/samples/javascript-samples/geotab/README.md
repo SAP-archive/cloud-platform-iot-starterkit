@@ -29,6 +29,8 @@ Run `npm install` in this folder to fetch the other dependencies and install the
 
 ## Running the example
 
+Put the credentials for your Geotab and SAP IoT Service accounts into the `config.json` file.
+
 Run `npm start` in this folder.
 
 ## License
