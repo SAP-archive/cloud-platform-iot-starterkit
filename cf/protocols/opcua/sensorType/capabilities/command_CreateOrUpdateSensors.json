@@ -1,0 +1,38 @@
+{
+  "alternateId": "CreateOrUpdateSensors",
+  "name": "CreateOrUpdateSensors",
+  "properties": [
+    {
+      "name": "rootNodeId",
+      "dataType": "string"
+    },
+    {
+      "name": "sensorRegex",
+      "dataType": "string"
+    },
+    {
+      "name": "sensorTypeAlternateId",
+      "dataType": "string"
+    },
+    {
+      "name": "capabilityAlternateId",
+      "dataType": "string"
+    },
+    {
+      "name": "propertyRegex",
+      "dataType": "string"
+    },
+    {
+      "name": "periodicInterval",
+      "dataType": "integer"
+    },
+    {
+      "name": "publishingInterval",
+      "dataType": "double"
+    },
+    {
+      "name": "samplingInterval",
+      "dataType": "double"
+    }
+  ]
+}
