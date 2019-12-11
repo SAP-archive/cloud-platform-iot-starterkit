@@ -1,0 +1,15 @@
+{
+    "alternateId": "WriteSingleRegister",
+    "name": "WriteSingleRegister",
+    "properties": [
+        {
+            "dataType": "integer",
+            "name": "address"
+        },
+        {
+            "dataType": "integer",
+            "name": "value"
+        }
+    ]
+}
+

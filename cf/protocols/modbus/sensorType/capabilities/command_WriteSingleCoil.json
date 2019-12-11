@@ -1,0 +1,14 @@
+{
+    "alternateId": "WriteSingleCoil",
+    "name": "WriteSingleCoil",
+    "properties": [
+        {
+            "dataType": "integer",
+            "name": "address"
+        },
+        {
+            "dataType": "boolean",
+            "name": "value"
+        }
+    ]
+}
