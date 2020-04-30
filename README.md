@@ -17,4 +17,4 @@ This project is provided "as-is": there is no guarantee that raised issues will 
 
 ## License
 Copyright (c) 2015 SAP SE or an SAP affiliate company. All rights reserved. 
-This file is licensed under the Apache Software License, version 2.0 except as noted otherwise in the [LICENSE](LICENSE) file.
+This file is licensed under the SAP Sample Code License Agreement except as noted otherwise in the [LICENSE](LICENSE) file.
