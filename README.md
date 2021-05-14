@@ -1,3 +1,9 @@
+![](https://img.shields.io/badge/STATUS-NOT%20CURRENTLY%20MAINTAINED-red.svg?longCache=true&style=flat)
+
+# Important Notice
+This public repository is read-only and no longer maintained. For SAP IoT samples, refer to the [SAP IoT samples](https://github.com/SAP-samples/sap-iot-samples) repository on GitHub.com/SAP-samples.
+
+
 # Starter Kit for the SAP Cloud Platform Internet of Things
 
 The documentation and source code aim to provide building blocks and complete end-to-end examples for how to use the SAP Cloud Platform Internet of Things. 
